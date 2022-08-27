@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import utils from '../../utils';
 import { TextInput } from 'react-native-gesture-handler';
+import { applyMiddleware } from 'redux';
 
 const Container = styled.View`
   flex: 1
@@ -13,13 +14,14 @@ const Container = styled.View`
 `;
 
 const HeadContainer = styled.View`
+  flex: 0.5;
+  margin-top: 20px;
   height: 20%;
   width: 95%;
   padding-top: 5%;
   justify-content: space-around;
   flex-direction: row;
 `;
-
 const MainLogo = styled.Image`
   width: 180px;
   height: 50px;
@@ -36,12 +38,81 @@ const SearchContainer = styled.View`
 `;
 
 const SearchBar = styled.TextInput`
-  width: 90%;
-  height: 100%;
+  width: 95%;
   border: solid;
-  border-radius: 10px;
+  border-radius: 20px;
+  margin-left: 5%;
+  padding: 5px;
   background-color: #fff;
 `;
+
+const MainContainer = styled.View`
+  flex: 3.3;
+  align-items: center;
+  width: 100%;
+`;
+
+const Body_1Container = styled.View`
+  flex: 2.5;
+  width: 90%;
+  border: solid;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 8px;
+`;
+
+
+const Body_2Container = styled.View`
+  flex: 1.8;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+`;
+
+const AroundContainer = styled.View`
+  width: 42%;
+  margin: 4% 2% 4% 4%;
+  border: solid;
+  border-radius: 5px;
+  background-color: white;
+`;
+
+const BlankContainer = styled.View`
+  width: 42%;
+  margin: 4% 4% 4% 2%;
+  border: solid;
+  border-radius: 5px;
+  background-color: white;
+`;
+
+const StoreBtnContainer = styled.View`
+  flex: 0.8;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 3%;
+  width: 100%;
+  padding-left: 2%;
+  padding-right: 3%;
+`;
+
+const Martbtn = styled.Pressable`
+  width: 20%;
+  height: 80%;
+  margin-top: 1%;
+  border: solid;
+  border-radius: 12px;
+`;
+
+const MartLogo = styled.Image`
+  width: 100%;
+  height: 100%;
+  border-radius: 11px;
+`;
+
+const ServerImage = styled.Image`
+
+`;
+
 
 const Home = () => {
   const navigation = useNavigation();
@@ -53,10 +124,28 @@ const Home = () => {
           <MainLogo source={require('../../assets/logo.png')} />
         </MainLogoView>
         <SearchContainer>
-          <Feather name="search" size={25} color="black"/>
           <SearchBar onChangeText={onChangeText} value={text}/>
         </SearchContainer>
       </HeadContainer>
+      <MainContainer>
+        <Body_1Container>
+          
+        </Body_1Container>
+        <Body_2Container>
+          <AroundContainer>
+
+          </AroundContainer>
+          <BlankContainer>
+
+          </BlankContainer>
+        </Body_2Container>
+        <StoreBtnContainer>
+          <Martbtn><MartLogo source={require('../../assets/seven_eleven_2.png')} /></Martbtn>
+          <Martbtn><MartLogo source={require('../../assets/emart24_2.png')} /></Martbtn>
+          <Martbtn><MartLogo source={require('../../assets/cu_2.png')} /></Martbtn>
+          <Martbtn><MartLogo source={require('../../assets/gs25_2.png')} /></Martbtn>
+        </StoreBtnContainer>
+      </MainContainer>
     </Container>
   );
 };
