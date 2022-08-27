@@ -28,6 +28,7 @@ export default function App() {
     async function loadAssets() {
       try {
         const images = [
+          require('./assets/not_image.png'),
           require('./assets/logo.png'),
           require('./assets/cu.png'),
           require('./assets/emart24.png'),
