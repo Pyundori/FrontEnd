@@ -2,13 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import utils from '../../utils';
-import { TextInput } from 'react-native-gesture-handler';
 
 const Container = styled.View`
   flex: 1
   background-color: #68c2ff;
-  align-items: between;
+  align-items: space-between;
   justify-content: flex-start;
 `;
 
@@ -45,7 +43,7 @@ const SearchBar = styled.TextInput`
 
 const Home = () => {
   const navigation = useNavigation();
-  const [text, onChangeText] = React.useState("검색어를 입력하시오.");
+  const [text, onChangeText] = React.useState('검색어를 입력하시오.');
   return (
     <Container>
       <HeadContainer>
@@ -53,8 +51,8 @@ const Home = () => {
           <MainLogo source={require('../../assets/logo.png')} />
         </MainLogoView>
         <SearchContainer>
-          <Feather name="search" size={25} color="black"/>
-          <SearchBar onChangeText={onChangeText} value={text}/>
+          <Feather name="search" size={25} color="black" />
+          <SearchBar onChangeText={onChangeText} value={text} />
         </SearchContainer>
       </HeadContainer>
     </Container>
