@@ -9,7 +9,7 @@ const callApi = async (method, params = {}) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-  const URL = 'http://13.125.245.73:5000/api/product_query';
+  const URL = 'http://54.180.109.216:5000/api/product_query';
 
   if (method === 'get') {
     return await axios[method](URL, { headers, params });
@@ -24,9 +24,9 @@ export default {
    * @param {string} conv  편의점 이름
    * @param {string} dtypes 할인 타입 = {1N1, 2N1, 3N1, GIFT, SALE}
    * @param {string} searchWord 검색할 단어
-   * @param {string} page 검색 결과 페이지, 기본값 = 1
+   * @param {number} page 검색 결과 페이지, 기본값 = 1
    * @returns
    */
-  search: async (conv, dtypes, searchWord = '', page = 1) =>
-    await callApi('get', { venders: conv, dtypes: dtypes, products: searchWord, page: page }),
+  search: (conv, dtypes, searchWord = '', page = 1) =>
+    callApi('get', { venders: conv, dtypes: dtypes, products: searchWord, page: page }),
 };
