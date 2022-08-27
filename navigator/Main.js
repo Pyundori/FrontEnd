@@ -19,7 +19,7 @@ const Tabs = () => (
       headerShown: false,
       activeTintColor: '#0096FF',
       tabBarStyle: {
-        height: '7.5%',
+        height: 60,
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         backgroundColor: 'white',
