@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
 
-
 const Container = styled.View`
   flex: 1
   background-color: #68c2ff;
@@ -58,7 +57,6 @@ const Body_1Container = styled.View`
   border-radius: 8px;
 `;
 
-
 const Body_2Container = styled.View`
   flex: 1.8;
   flex-direction: row;
@@ -106,10 +104,7 @@ const MartLogo = styled.Image`
   border-radius: 11px;
 `;
 
-const ServerImage = styled.Image`
-
-`;
-
+const ServerImage = styled.Image``;
 
 const Home = () => {
   const navigation = useNavigation();
@@ -121,26 +116,28 @@ const Home = () => {
           <MainLogo source={require('../../assets/logo.png')} />
         </MainLogoView>
         <SearchContainer>
-          <SearchBar onChangeText={onChangeText} value={text}/>
+          <SearchBar onChangeText={onChangeText} value={text} />
         </SearchContainer>
       </HeadContainer>
       <MainContainer>
-        <Body_1Container>
-          
-        </Body_1Container>
+        <Body_1Container></Body_1Container>
         <Body_2Container>
-          <AroundContainer>
-
-          </AroundContainer>
-          <BlankContainer>
-
-          </BlankContainer>
+          <AroundContainer></AroundContainer>
+          <BlankContainer></BlankContainer>
         </Body_2Container>
         <StoreBtnContainer>
-          <Martbtn><MartLogo source={require('../../assets/seven_eleven_2.png')} /></Martbtn>
-          <Martbtn><MartLogo source={require('../../assets/emart24_2.png')} /></Martbtn>
-          <Martbtn><MartLogo source={require('../../assets/cu_2.png')} /></Martbtn>
-          <Martbtn><MartLogo source={require('../../assets/gs25_2.png')} /></Martbtn>
+          <Martbtn>
+            <MartLogo source={require('../../assets/seven_eleven_2.png')} />
+          </Martbtn>
+          <Martbtn>
+            <MartLogo source={require('../../assets/emart24_2.png')} />
+          </Martbtn>
+          <Martbtn>
+            <MartLogo source={require('../../assets/cu_2.png')} />
+          </Martbtn>
+          <Martbtn>
+            <MartLogo source={require('../../assets/gs25_2.png')} />
+          </Martbtn>
         </StoreBtnContainer>
       </MainContainer>
     </Container>

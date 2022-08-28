@@ -76,16 +76,7 @@ const ProductsCard = ({ item }) => {
   return (
     <CardContainer>
       <ImageContainer>
-        <ProductImage
-          resizeMode="contain"
-          source={
-            `${item.pImg[0] === '/'}`
-              ? { uri: 'https:' + item.pImg }
-              : `${item.pImg[4] === 's'}`
-              ? { uri: item.pImg }
-              : require('../assets/not_image.png')
-          }
-        />
+        <ProductImage resizeMode="contain" source={{ uri: item.pImg }} />
       </ImageContainer>
       <ProductDetail>
         <TitleView>
