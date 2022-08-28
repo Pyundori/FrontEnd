@@ -18,11 +18,12 @@ const Tabs = () => (
     screenOptions={({ route }) => ({
       headerShown: false,
       activeTintColor: '#0096FF',
-      tabBarStyle: {
-        height: 60,
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        backgroundColor: 'white',
+      tabStyle: {
+        paddingTop: 20,
+      },
+      labelStyle: {
+        textTransform: 'uppercase',
+        fontWeight: '600',
       },
       tabBarIcon: ({ focused }) => {
         const isAndroid = utils.isAndroid();
@@ -38,14 +39,7 @@ const Tabs = () => (
         } else if (route.name === 'Home') {
           iconName += 'home';
         }
-        return (
-          <Ionicons
-            name={iconName}
-            size={30}
-            color={focused ? '#0096FF' : '#68c2ff'}
-            options={{ tabBarShowLabel: `${focused ? true : false}` }}
-          />
-        );
+        return <Ionicons name={iconName} size={24} color={focused ? '#0096FF' : '#68c2ff'} />;
       },
     })}
   >

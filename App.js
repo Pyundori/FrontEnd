@@ -1,5 +1,4 @@
 import 'expo-dev-client';
-import { StatusBar } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -29,7 +28,6 @@ export default function App() {
     async function loadAssets() {
       try {
         const images = [
-          require('./assets/not_image.png'),
           require('./assets/logo.png'),
           require('./assets/cu.png'),
           require('./assets/emart24.png'),
@@ -52,8 +50,6 @@ export default function App() {
   return isLoading ? (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <StatusBar backgroundColor={'transparent'} translucent={true} />
-
         <Gate />
       </PersistGate>
     </Provider>

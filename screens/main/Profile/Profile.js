@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   }, //계정전화 변경사항저장 로그아웃 나눠주는 구분 줄
 
+
   input: {
     height: 50,
     margin: 10,
@@ -138,12 +139,12 @@ const styles = StyleSheet.create({
   button: {
     width: 340,
     height: 80,
+
     backgroundColor: '68c2ff',
     justifyContent: 'space-around',
     alignItems: 'center',
     marginBottom: 40,
   }, //프로필 사진 업로드 버튼
-
   title: {
     textAlign: 'center',
     marginVertical: 8,
@@ -155,3 +156,4 @@ const styles = StyleSheet.create({
 });
 
 export default Profile;
+
