@@ -9,7 +9,7 @@ const Container = styled.View`
   background-color: #68c2ff;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 40px;
+  padding-top: 40px;
 `;
 
 const BodyContainer = styled.View`

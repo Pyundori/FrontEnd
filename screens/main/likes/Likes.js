@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLikeProducts } from '../../../redux/userSlice';
+import { useSelector } from 'react-redux';
 import Likes from './LikesScreen';
 
 export default () => {
