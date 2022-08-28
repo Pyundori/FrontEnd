@@ -11,6 +11,7 @@ const Container = styled.View`
   background-color: #fff;
   align-items: center;
   justify-content: flex-start;
+  margin-top: 40px;
 `;
 const SearchBtnContainer = styled.View`
   flex-direction: row;

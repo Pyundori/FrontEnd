@@ -6,9 +6,9 @@ const productSlice = createSlice({
     search: {
       page: 1,
       products: [],
-      searchOptions: [], // 편의점: cu, gs25 ...
-      dTypes: [], // 행사 타입: 1N1, 2N1 ...
+      searchOptions: [],
     },
+    likes: 0,
   },
   reducers: {
     setSearchPage(state, action) {
@@ -22,15 +22,17 @@ const productSlice = createSlice({
       state.search.page += 1;
     },
     setProductLikes(state, action) {
-      const { payload } = action;
-      const product = state.search.products.find((product) => product.pName === payload);
+      const {
+        payload: { productId },
+      } = action;
+      const product = state.search.products.find((product) => product.id === productId);
       if (product) {
         if (product.isLike) {
           product.isLike = false;
-          product.likes -= 1;
+          state.likes -= 1;
         } else {
           product.isLike = true;
-          product.likes += 1;
+          state.likes += 1;
         }
       }
     },
