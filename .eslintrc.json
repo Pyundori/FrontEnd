@@ -1,0 +1,36 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "standard",
+    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+
+  // prettier plugin을 eslint 설정에 추가
+  "plugins": ["react", "prettier"],
+
+  // prettier 코드 스타일이 어긋나면 eslint에 걸리도록 처리
+  "rules": {
+    "prettier/prettier": "error",
+    "rules": {
+      "no-control-regex": 0
+    }
+  }
+}
