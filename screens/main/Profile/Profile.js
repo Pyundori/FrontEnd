@@ -1,69 +1,157 @@
-/* eslint-disable react/display-name */
 import React from 'react';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from '../screens/main/Home';
-import BackBtn from '../components/BackBtn';
-import Search from '../screens/main/search/Search';
-import Likes from '../screens/main/likes/Likes';
-import Profile from '../screens/main/Profile/Profile';
-import RecentList from '../screens/main/recentList/RecentList';
-import { Ionicons } from '@expo/vector-icons';
-import utils from '../utils';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  SafeAreaView,
+  Alert,
+  TextInput,
+  Dimensions,
+  TouchableOpacity,
+  StatusBar,
+} from 'react-native';
 
-const TabsNavigator = createBottomTabNavigator();
-const Tabs = () => (
-  <TabsNavigator.Navigator
-    initialRouteName="Home"
-    screenOptions={({ route }) => ({
-      headerShown: false,
-      activeTintColor: '#0096FF',
-      tabStyle: {
-        paddingTop: 20,
-      },
-      labelStyle: {
-        textTransform: 'uppercase',
-        fontWeight: '600',
-      },
-      tabBarIcon: ({ focused }) => {
-        const isAndroid = utils.isAndroid();
-        let iconName = `${isAndroid ? 'md-' : 'ios-'}`;
-        if (route.name === 'Search') {
-          iconName += 'search';
-        } else if (route.name === 'Likes') {
-          iconName += 'heart';
-        } else if (route.name === 'RecentList') {
-          iconName += 'pricetags';
-        } else if (route.name === 'Profile') {
-          iconName += 'person';
-        } else if (route.name === 'Home') {
-          iconName += 'home';
-        }
-        return <Ionicons name={iconName} size={24} color={focused ? '#0096FF' : '#68c2ff'} />;
-      },
-    })}
-  >
-    <TabsNavigator.Screen name="Search" component={Search} />
-    <TabsNavigator.Screen name="Likes" component={Likes} />
-    <TabsNavigator.Screen name="Home" component={Home} />
-    <TabsNavigator.Screen name="RecentList" component={RecentList} />
-    <TabsNavigator.Screen name="Profile" component={Profile} />
-  </TabsNavigator.Navigator>
-);
+import { FontAwesome } from '@expo/vector-icons';
 
-const MainNavigator = createStackNavigator();
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
-export default function Main() {
+const Separator = () => <View style={styles.separator} />;
+
+const Profile = () => {
+  const [Name, onChangeName] = React.useState(null);
+  const [Id, onChangeUserId] = React.useState(null);
+  const [Password, onChangeUserPassword] = React.useState(null);
+  const [Email, onChangeUserEmail] = React.useState(null);
+  StatusBar.setBarStyle('dark-content');
+  Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
+  StatusBar.setTranslucent(true);
   return (
-    <MainNavigator.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false }}>
-      <MainNavigator.Screen name="Tabs" component={Tabs} />
-      <MainNavigator.Screen
-        name="Search"
-        component={Search}
-        options={() => ({
-          headerBackImage: () => <BackBtn />,
-        })}
-      />
-    </MainNavigator.Navigator>
+    <View style={{ windth: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
+        >
+          <FontAwesome name="user-circle" size={80} color="#68c2ff" />
+        </TouchableOpacity>
+
+        <View>
+          <Text> Name</Text>
+          <TextInput
+            style={styles.input}
+            onChangeName={onChangeName}
+            value={Name}
+            placeholder="Please write down the Name"
+            keyboardType="default"
+          />
+
+          <Text> Id</Text>
+          <TextInput
+            style={styles.input}
+            onChangeUserId={onChangeUserId}
+            value={Id}
+            placeholder="Please write down the Id"
+            keyboardType="default"
+          />
+
+          <Text> Password</Text>
+          <TextInput
+            style={styles.input}
+            onChangeUserPassword={onChangeUserPassword}
+            value={Password}
+            placeholder="Please write down the Password"
+            keyboardType="numeric"
+          />
+
+          <Text> E-mail</Text>
+          <TextInput
+            style={styles.input}
+            onChangeUserEmailt={onChangeUserEmail}
+            value={Email}
+            placeholder="Please write down the email"
+            keyboardType="email-address"
+          />
+        </View>
+        <Separator />
+        <View>
+          <Button
+            title="변 경 사 항  저 장"
+            color="#68c2ff"
+            onPress={() => Alert.alert('변경사항 저장 중')}
+          />
+
+          <Separator />
+
+          <Button
+            title="계 정  전 환"
+            color="#68c2ff"
+            onPress={() => Alert.alert('계정 전환 메뉴변경사항 저장 중')}
+          />
+
+          <Separator />
+
+          <Button
+            title="로 그  아 웃"
+            color="#ff68c2"
+            onPress={() => Alert.alert('로그 아웃 하는 중')}
+          />
+        </View>
+      </SafeAreaView>
+    </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderRadius: 20,
+
+    justifyContent: 'center',
+    marginHorizontal: 18,
+
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 35,
+
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  }, //계정전화 변경사항저장 로그아웃 나눠주는 구분 줄
+
+  input: {
+    height: 50,
+    margin: 10,
+    marginBottom: 30,
+    borderWidth: 0.5,
+    padding: 10,
+    backgroundColor: 'white',
+    justifyContent: 'space-around',
+  }, //텍스트 입력 칸
+  button: {
+    width: 340,
+    height: 80,
+    backgroundColor: '68c2ff',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginBottom: 40,
+  }, //프로필 사진 업로드 버튼
+
+  title: {
+    textAlign: 'center',
+    marginVertical: 8,
+  },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});
+
+export default Profile;
