@@ -19,11 +19,13 @@ const ImageContainer = styled.View`
   border-radius: 10px;
   border: 1px solid #dadce0;
   padding: 2px;
+  margin: auto;
 `;
 
 const ProductImage = styled.Image`
   width: 100px;
   height: 100px;
+  margin: auto;
 `;
 
 const ProductDetail = styled.View`
@@ -70,10 +72,12 @@ const LikeBtn = styled.Pressable``;
 
 const ProductsCard = ({ item }) => {
   const [like, setLike] = useState(true);
+  console.log(item.pImg);
   return (
     <CardContainer>
       <ImageContainer>
         <ProductImage
+          resizeMode="contain"
           source={
             `${item.pImg[0] === '/'}`
               ? { uri: 'https:' + item.pImg }
