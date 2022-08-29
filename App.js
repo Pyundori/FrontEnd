@@ -28,6 +28,14 @@ export default function App() {
   useEffect(() => {
     async function loadAssets() {
       try {
+        const customFonts = {
+          sansBold: require('./assets/fonts/GmarketSansBold.otf'),
+          sansLight: require('./assets/fonts/GmarketSansLight.otf'),
+          sansMedium: require('./assets/fonts/GmarketSansMedium.otf'),
+          netmarbleB: require('./assets/fonts/netmarbleB.ttf'),
+          netmarbleL: require('./assets/fonts/netmarbleL.ttf'),
+          netmarbleM: require('./assets/fonts/netmarbleM.ttf'),
+        };
         const images = [
           require('./assets/not_image.png'),
           require('./assets/logo.png'),
@@ -36,7 +44,7 @@ export default function App() {
           require('./assets/gs25.png'),
           require('./assets/seven_eleven.png'),
         ];
-        const fonts = [Ionicons.font];
+        const fonts = [Ionicons.font, customFonts];
         const imagePromises = cacheImages(images);
         const fontPromises = cacheFonts(fonts);
         return Promise.all([...fontPromises, ...imagePromises]);
@@ -53,7 +61,6 @@ export default function App() {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <StatusBar backgroundColor={'transparent'} translucent={true} />
-
         <Gate />
       </PersistGate>
     </Provider>

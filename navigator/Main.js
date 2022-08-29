@@ -10,6 +10,7 @@ import Profile from '../screens/main/Profile/Profile';
 import RecentList from '../screens/main/recentList/RecentList';
 import { Ionicons } from '@expo/vector-icons';
 import utils from '../utils';
+import { Text } from 'react-native';
 
 const TabsNavigator = createBottomTabNavigator();
 const Tabs = () => (
@@ -17,13 +18,16 @@ const Tabs = () => (
     initialRouteName="Home"
     screenOptions={({ route }) => ({
       headerShown: false,
-      activeTintColor: '#0096FF',
       tabBarStyle: {
         height: 60,
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         backgroundColor: 'white',
       },
+      tabBarLabel: ({ focused }) =>
+        focused ? (
+          <Text style={{ color: '#0096FF', fontSize: 14, marginBottom: 7 }}>{route.name}</Text>
+        ) : null,
       tabBarIcon: ({ focused }) => {
         const isAndroid = utils.isAndroid();
         let iconName = `${isAndroid ? 'md-' : 'ios-'}`;
@@ -38,14 +42,8 @@ const Tabs = () => (
         } else if (route.name === 'Home') {
           iconName += 'home';
         }
-        return (
-          <Ionicons
-            name={iconName}
-            size={30}
-            color={focused ? '#0096FF' : '#68c2ff'}
-            options={{ tabBarShowLabel: `${focused ? true : false}` }}
-          />
-        );
+
+        return <Ionicons name={iconName} size={30} color={focused ? '#0096FF' : '#68c2ff'} />;
       },
     })}
   >
