@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -20,15 +20,15 @@ const windowHeight = Dimensions.get('window').height;
 const Separator = () => <View style={styles.separator} />;
 
 const Profile = () => {
-  const [Name, onChangeName] = React.useState(null);
-  const [Id, onChangeUserId] = React.useState(null);
-  const [Password, onChangeUserPassword] = React.useState(null);
-  const [Email, onChangeUserEmail] = React.useState(null);
+  const [Name, onChangeName] = useState(null);
+  const [Id, onChangeUserId] = useState(null);
+  const [Password, onChangeUserPassword] = useState(null);
+  const [Email, onChangeUserEmail] = useState(null);
   StatusBar.setBarStyle('dark-content');
   Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
   StatusBar.setTranslucent(true);
   return (
-    <View style={{ windth: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
+    <View style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
           style={styles.button}
@@ -59,10 +59,10 @@ const Profile = () => {
           <Text> Password</Text>
           <TextInput
             style={styles.input}
+            secureTextEntry={true}
             onChangeUserPassword={onChangeUserPassword}
             value={Password}
             placeholder="Please write down the Password"
-            keyboardType="numeric"
           />
 
           <Text> E-mail</Text>
