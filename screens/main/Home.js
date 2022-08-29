@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { KeyboardAvoidingView } from 'react-native';
 import styled from 'styled-components/native';
 
 const Container = styled.View`
@@ -28,18 +29,19 @@ const MainLogoView = styled.View``;
 
 const SearchContainer = styled.View`
   flex-direction: row;
-  width: 50%;
+  width: 48%;
   margin: auto;
   margin-left: 1%;
 `;
 
 const SearchBar = styled.TextInput`
   width: 95%;
-  border: solid;
+  border: 1px solid #e8e8e8;
   border-radius: 20px;
   margin-left: 5%;
   padding: 5px;
   background-color: #fff;
+  text-align: center;
 `;
 
 const MainContainer = styled.View`
@@ -51,7 +53,7 @@ const MainContainer = styled.View`
 const Body_1Container = styled.View`
   flex: 2.5;
   width: 90%;
-  border: solid;
+  border: 1px solid #e8e8e8;
   flex-direction: row;
   background-color: white;
   border-radius: 8px;
@@ -67,7 +69,7 @@ const Body_2Container = styled.View`
 const AroundContainer = styled.View`
   width: 42%;
   margin: 4% 2% 4% 4%;
-  border: solid;
+  border: 1px solid #e8e8e8;
   border-radius: 5px;
   background-color: white;
 `;
@@ -75,7 +77,7 @@ const AroundContainer = styled.View`
 const BlankContainer = styled.View`
   width: 42%;
   margin: 4% 4% 4% 2%;
-  border: solid;
+  border: 1px solid #e8e8e8;
   border-radius: 5px;
   background-color: white;
 `;
@@ -87,28 +89,25 @@ const StoreBtnContainer = styled.View`
   margin-bottom: 3%;
   width: 100%;
   padding-left: 2%;
-  padding-right: 3%;
+  padding-right: 2%;
 `;
 
-const Martbtn = styled.Pressable`
+const MartBtn = styled.TouchableOpacity`
   width: 20%;
   height: 80%;
   margin-top: 1%;
-  border: solid;
-  border-radius: 12px;
 `;
 
 const MartLogo = styled.Image`
   width: 100%;
   height: 100%;
-  border-radius: 11px;
+  border-radius: 12px;
 `;
 
 const ServerImage = styled.Image``;
 
-const Home = () => {
-  const navigation = useNavigation();
-  const [text, onChangeText] = React.useState('검색어를 입력하시오.');
+const Home = (focus) => {
+  const [text, onChangeText] = React.useState('');
   return (
     <Container>
       <HeadContainer>
@@ -116,7 +115,12 @@ const Home = () => {
           <MainLogo source={require('../../assets/logo.png')} />
         </MainLogoView>
         <SearchContainer>
-          <SearchBar onChangeText={onChangeText} value={text} />
+          <SearchBar
+            onChangeText={onChangeText}
+            value={text}
+            placeholder="검색어를 입력하시오."
+            maxLength={20}
+          />
         </SearchContainer>
       </HeadContainer>
       <MainContainer>
@@ -126,18 +130,18 @@ const Home = () => {
           <BlankContainer></BlankContainer>
         </Body_2Container>
         <StoreBtnContainer>
-          <Martbtn>
+          <MartBtn>
             <MartLogo source={require('../../assets/seven_eleven_2.png')} />
-          </Martbtn>
-          <Martbtn>
+          </MartBtn>
+          <MartBtn>
             <MartLogo source={require('../../assets/emart24_2.png')} />
-          </Martbtn>
-          <Martbtn>
+          </MartBtn>
+          <MartBtn>
             <MartLogo source={require('../../assets/cu_2.png')} />
-          </Martbtn>
-          <Martbtn>
+          </MartBtn>
+          <MartBtn>
             <MartLogo source={require('../../assets/gs25_2.png')} />
-          </Martbtn>
+          </MartBtn>
         </StoreBtnContainer>
       </MainContainer>
     </Container>
