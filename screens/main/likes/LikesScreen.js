@@ -9,7 +9,7 @@ const Container = styled.View`
   background-color: #68c2ff;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 40px;
+  padding-top: 40px;
 `;
 
 const BodyContainer = styled.View`
@@ -38,12 +38,13 @@ const LikeProductsContainer = styled.View`
 
 const NotLikeProductsView = styled.View`
   width: 100%;
-  height: 75%;
+  height: 85%;
   align-items: center;
   justify-content: center;
 `;
 const NotLikeProductsText = styled.Text`
-  font-size: 30px;
+  font-size: 25px;
+  color: #c8c8c8;
 `;
 
 const ProductsList = styled.FlatList`
@@ -52,7 +53,7 @@ const ProductsList = styled.FlatList`
   margin: 3% auto;
 `;
 
-const Likes = ({ likeProducts, getLikeProducts }) => {
+const Likes = ({ results }) => {
   const [like, setLike] = useState(true);
   const ProductsCardContainer = ({ item }) => {
     return <ProductsCard item={item} />;
@@ -65,16 +66,16 @@ const Likes = ({ likeProducts, getLikeProducts }) => {
           <Title>좋아요 상품</Title>
         </TitleContainer>
         <LikeProductsContainer>
-          {likeProducts[0] ? (
+          {results[0] ? (
             <ProductsList
-              data={likeProducts}
+              data={results}
               extraData={like}
               renderItem={ProductsCardContainer}
               keyExtractor={(_, idx) => idx.toString()}
             />
           ) : (
             <NotLikeProductsView>
-              <NotLikeProductsText>상품이 없어요...</NotLikeProductsText>
+              <NotLikeProductsText>아직 좋아요한 상품이 없어요!</NotLikeProductsText>
             </NotLikeProductsView>
           )}
         </LikeProductsContainer>

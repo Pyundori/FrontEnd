@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import { setLikeProducts } from './userSlice';
 
 const productSlice = createSlice({
   name: 'products',
   initialState: {
     search: {
       page: 1,
-      products: [],
-      searchOptions: [], // 편의점: cu, gs25 ...
+      products: [], // 검색탭에 보여질 상품들: 현재 10개씩 담길 예정.
+      venders: [], // 편의점: cu, gs25 ...
       dTypes: [], // 행사 타입: 1N1, 2N1 ...
+      pName: '', // 검색어
     },
   },
   reducers: {
@@ -23,28 +26,27 @@ const productSlice = createSlice({
     },
     setProductLikes(state, action) {
       const { payload } = action;
+      const dispatch = useDispatch();
       const product = state.search.products.find((product) => product.pName === payload);
       if (product) {
         if (product.isLike) {
           product.isLike = false;
+          dispatch(setLikeProducts(product));
           product.likes -= 1;
         } else {
           product.isLike = true;
+          dispatch(setLikeProducts(product));
           product.likes += 1;
         }
       }
     },
-    setSearchOptions(state, action) {
+    setConv(state, action) {
       const { payload } = action;
-      const searchOption = state.search.searchOptions.find(
-        (searchOption) => searchOption === payload,
-      );
-      if (searchOption) {
-        state.search.searchOptions = state.search.searchOptions.filter(
-          (searchOption) => searchOption !== payload,
-        );
+      const vender = state.search.venders.find((vender) => vender === payload);
+      if (vender) {
+        state.search.venders = state.search.venders.filter((vender) => vender !== payload);
       } else {
-        state.search.searchOptions.push(payload);
+        state.search.venders.push(payload);
       }
     },
   },

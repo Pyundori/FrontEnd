@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setLikeProducts } from '../redux/userSlice';
 
-const CardContainer = styled.View`
+const CardContainer = styled.SafeAreaView`
   width: 100%;
   border-radius: 10px;
-  padding: 5px
-  border: 1px solid #dadce0;
+  padding: 5px;
+  border: 1.5px solid #dadce0;
   align-items: flex-start;
   justify-content: center;
   flex-direction: row;
@@ -16,14 +18,16 @@ const CardContainer = styled.View`
 
 const ImageContainer = styled.View`
   width: 30%;
-  border-radius: 10px;
-  border: 1px solid #dadce0;
-  padding: 2px;
+  margin: auto;
+  margin-left: 0px;
 `;
 
 const ProductImage = styled.Image`
   width: 100px;
   height: 100px;
+  border-radius: 10px;
+  border: 1px solid #dadce0;
+  margin: auto;
 `;
 
 const ProductDetail = styled.View`
@@ -48,7 +52,8 @@ const ConvView = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 20px;
+  font-size: 15px;
+  font-family: sansBold;
   margin-left: 5%;
 `;
 const Price = styled.Text`
@@ -66,22 +71,19 @@ const LikeContainer = styled.View`
   justify-content: center;
 `;
 
-const LikeBtn = styled.Pressable``;
+const LikeBtn = styled.TouchableOpacity``;
 
 const ProductsCard = ({ item }) => {
   const [like, setLike] = useState(true);
+  const dispatch = useDispatch();
+  const handleLike = (item) => {
+    setLike(!like);
+    dispatch(setLikeProducts(item));
+  };
   return (
     <CardContainer>
       <ImageContainer>
-        <ProductImage
-          source={
-            `${item.pImg[0] === '/'}`
-              ? { uri: 'https:' + item.pImg }
-              : `${item.pImg[4] === 's'}`
-              ? { uri: item.pImg }
-              : require('../assets/not_image.png')
-          }
-        />
+        <ProductImage resizeMode="contain" source={{ uri: item.pImg }} />
       </ImageContainer>
       <ProductDetail>
         <TitleView>
@@ -96,7 +98,7 @@ const ProductsCard = ({ item }) => {
         </ConvView>
       </ProductDetail>
       <LikeContainer>
-        <LikeBtn onPress={() => setLike(!like)}>
+        <LikeBtn onPress={() => handleLike(item)}>
           <AntDesign name={like ? 'heart' : 'hearto'} size={28} color="red" />
         </LikeBtn>
       </LikeContainer>

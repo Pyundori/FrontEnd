@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLikeProducts } from '../../../redux/userSlice';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Likes from './LikesScreen';
 
 export default () => {
   const [results, setResults] = useState([]);
   const likeProducts = useSelector((state) => state.users.likeProducts);
+  useEffect(() => getLikeProducts(), [likeProducts]);
   const getLikeProducts = () => {
     try {
       setResults(likeProducts);
@@ -13,5 +13,5 @@ export default () => {
       console.warn(e);
     }
   };
-  return <Likes likeProducts={likeProducts} getLikeProducts={getLikeProducts} />;
+  return <Likes results={results} getLikeProducts={getLikeProducts} />;
 };
