@@ -8,7 +8,7 @@ import { TextInput } from 'react-native-gesture-handler';
 const Container = styled.View`
   flex: 1
   background-color: #68c2ff;
-  align-items: between;
+  align-items: space-between;
   justify-content: flex-start;
 `;
 
