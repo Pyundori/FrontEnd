@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import styled from 'styled-components/native';
+import api from '../../api';
 
 const Container = styled.View`
   flex: 1
@@ -52,6 +53,7 @@ const MainContainer = styled.View`
 
 const Body_1Container = styled.View`
   flex: 2.5;
+  flex-direction: row;
   width: 90%;
   border: 1px solid #e8e8e8;
   flex-direction: row;
@@ -104,10 +106,25 @@ const MartLogo = styled.Image`
   border-radius: 12px;
 `;
 
-const ServerImage = styled.Image``;
+const LikeView = styled.View`
+  width: 50%;
+  height: 100%;
+`;
+
+const ServerImage = styled.Image`
+  width: 100%;
+  height: 50%;
+`;
+
+const ServerText = styled.Text``;
 
 const Home = (focus) => {
   const [text, onChangeText] = React.useState('');
+  const Text = () => {
+    api.search('cu', '1N1');
+    const tmp = Text();
+    console.log(tmp.data);
+  };
   return (
     <Container>
       <HeadContainer>
@@ -124,7 +141,15 @@ const Home = (focus) => {
         </SearchContainer>
       </HeadContainer>
       <MainContainer>
-        <Body_1Container></Body_1Container>
+        <Body_1Container>
+          <LikeView>
+            <ServerImage source={require('../../assets/not_image.png')} />
+            <ServerText></ServerText>
+          </LikeView>
+          <LikeView>
+            <ServerImage source={require('../../assets/not_image.png')} />
+          </LikeView>
+        </Body_1Container>
         <Body_2Container>
           <AroundContainer></AroundContainer>
           <BlankContainer></BlankContainer>
