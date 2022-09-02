@@ -18,8 +18,6 @@ import { FontAwesome } from '@expo/vector-icons';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-
-
 const Separator = () => <View style={styles.separator} />;
 
 const Profile = () => {
