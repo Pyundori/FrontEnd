@@ -40,7 +40,7 @@ const productSlice = createSlice({
         }
       }
     },
-    setConv(state, action) {
+    setVenders(state, action) {
       const { payload } = action;
       const vender = state.search.venders.find((vender) => vender === payload);
       if (vender) {
@@ -52,7 +52,11 @@ const productSlice = createSlice({
   },
 });
 
+<<<<<<< HEAD
 export const { setSearchPage, increasePage, setProductLikes, setconv } =
+=======
+export const { setSearchPage, increasePage, setProductLikes, setVenders } =
+>>>>>>> d959d651034e27a9d2e9aebbbe95948e314eede6
   productSlice.actions;
 
 export default productSlice.reducer;

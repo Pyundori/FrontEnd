@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import styled from 'styled-components/native';
+import api from '../../api';
 
 const Container = styled.View`
   flex: 1
@@ -52,6 +53,7 @@ const MainContainer = styled.View`
 
 const Body_1Container = styled.View`
   flex: 2.5;
+  flex-direction: row;
   width: 90%;
   border: 1px solid #e8e8e8;
   flex-direction: row;
@@ -85,11 +87,11 @@ const BlankContainer = styled.View`
 const StoreBtnContainer = styled.View`
   flex: 0.8;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 3%;
   width: 100%;
-  padding-left: 2%;
-  padding-right: 2%;
+  padding-left: 5%;
+  padding-right: 5%;
 `;
 
 const MartBtn = styled.TouchableOpacity`
@@ -104,10 +106,48 @@ const MartLogo = styled.Image`
   border-radius: 12px;
 `;
 
-const ServerImage = styled.Image``;
+const LikeView = styled.View`
+  width: 50%;
+  height: 100%;
+  border-radius: 8px;
+`;
+
+const ServerImage = styled.Image`
+  width: 100%;
+  height: 50%;
+  border-radius: 8px;
+`;
+
+const ServerText = styled.Text`
+  font-size: 30px;
+`;
 
 const Home = (focus) => {
   const [text, onChangeText] = React.useState('');
+  const Text = async () => {
+    const tmp = await api.search('cu', '1N1');
+  };
+  const [image, setImage] = useState(require('../../assets/not_image.png'));
+  const [Pname, setPname] = useState(' ');
+  useEffect(() => {
+    const Text = async () => {
+      const tmp = await api.search('cu', '1N1');
+      setImage({ uri: tmp.data.data[0].pImg });
+      setPname({ text: tmp.data.data[0].pName });
+    };
+    Text();
+  }, []);
+
+  const render_text = useCallback(() => {
+    console.log('3', Pname);
+    return <ServerText></ServerText>;
+  }, [Pname]);
+
+  const render_img = useCallback(() => {
+    console.log('1', image);
+    return <ServerImage source={image} />;
+  }, [image]);
+  console.log('2', image);
   return (
     <Container>
       <HeadContainer>
@@ -124,7 +164,16 @@ const Home = (focus) => {
         </SearchContainer>
       </HeadContainer>
       <MainContainer>
-        <Body_1Container></Body_1Container>
+        <Body_1Container>
+          <LikeView>
+            {render_img()}
+            {render_text()}
+          </LikeView>
+          <LikeView>
+            {render_img()}
+            {render_text()}
+          </LikeView>
+        </Body_1Container>
         <Body_2Container>
           <AroundContainer></AroundContainer>
           <BlankContainer></BlankContainer>
