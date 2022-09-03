@@ -5,7 +5,7 @@ import { setIsLogined } from '../../redux/userSlice';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useEffect } from 'react';
-import axios from 'axios';
+import AuthSession from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -79,7 +79,9 @@ const ExBtnContainer = styled.View`
   justify-content: center;
 `;
 
-const KakaoBtn = styled.Pressable``;
+const KakaoBtn = styled.Pressable`
+  margin-bottom: 1%;
+`;
 const KakaoImg = styled.Image``;
 
 const GoogleBtn = styled.Pressable``;
@@ -87,23 +89,13 @@ const GoogleImg = styled.Image``;
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: '429326430308-cfli6dksco3dqfj13g0318415bf17136.apps.googleusercontent.com',
     iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
     androidClientId: '429326430308-6msf7vl7jpsetccfidsu1gj2t47tkpb8.apps.googleusercontent.com',
     webClientId: '429326430308-cfli6dksco3dqfj13g0318415bf17136.apps.googleusercontent.com',
   });
-  const loginKakao = async () => {
-    try {
-      const res = await axios.get(
-        'https://kauth.kakao.com/oauth/authorize?client_id=1f876c2cec349665dba6cd8b67eb5cd1&redirect_uri=https://auth.expo.io/@dltjrrbs2020/pyundori&response_type=code',
-        { withCredentials: true },
-      );
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
   useEffect(() => {
     if (response?.type === 'success') {
       const { authentication } = response;
@@ -127,7 +119,7 @@ const Home = ({ navigation }) => {
           </LoginBtnContainer>
         </LoginContainer>
         <ExBtnContainer>
-          <KakaoBtn onPress={loginKakao}>
+          <KakaoBtn onPress={() => navigation.navigate('KakaoLogin')}>
             <KakaoImg source={require('../../assets/kakao_login.png')} />
           </KakaoBtn>
           <GoogleBtn disabled={!request} onPress={() => promptAsync()}>
