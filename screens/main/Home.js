@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import styled from 'styled-components/native';
 import api from '../../api';
@@ -87,11 +87,11 @@ const BlankContainer = styled.View`
 const StoreBtnContainer = styled.View`
   flex: 0.8;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 3%;
   width: 100%;
-  padding-left: 2%;
-  padding-right: 2%;
+  padding-left: 5%;
+  padding-right: 5%;
 `;
 
 const MartBtn = styled.TouchableOpacity`
@@ -109,22 +109,45 @@ const MartLogo = styled.Image`
 const LikeView = styled.View`
   width: 50%;
   height: 100%;
+  border-radius: 8px;
 `;
 
 const ServerImage = styled.Image`
   width: 100%;
   height: 50%;
+  border-radius: 8px;
 `;
 
-const ServerText = styled.Text``;
+const ServerText = styled.Text`
+  font-size: 30px;
+`;
 
 const Home = (focus) => {
   const [text, onChangeText] = React.useState('');
-  const Text = () => {
-    api.search('cu', '1N1');
-    const tmp = Text();
-    console.log(tmp.data);
+  const Text = async () => {
+    const tmp = await api.search('cu', '1N1');
   };
+  const [image, setImage] = useState(require('../../assets/not_image.png'));
+  const [Pname, setPname] = useState(' ');
+  useEffect(() => {
+    const Text = async () => {
+      const tmp = await api.search('cu', '1N1');
+      setImage({ uri: tmp.data.data[0].pImg });
+      setPname({ text: tmp.data.data[0].pName });
+    };
+    Text();
+  }, []);
+
+  const render_text = useCallback(() => {
+    console.log('3', Pname);
+    return <ServerText></ServerText>;
+  }, [Pname]);
+
+  const render_img = useCallback(() => {
+    console.log('1', image);
+    return <ServerImage source={image} />;
+  }, [image]);
+  console.log('2', image);
   return (
     <Container>
       <HeadContainer>
@@ -143,11 +166,12 @@ const Home = (focus) => {
       <MainContainer>
         <Body_1Container>
           <LikeView>
-            <ServerImage source={require('../../assets/not_image.png')} />
-            <ServerText></ServerText>
+            {render_img()}
+            {render_text()}
           </LikeView>
           <LikeView>
-            <ServerImage source={require('../../assets/not_image.png')} />
+            {render_img()}
+            {render_text()}
           </LikeView>
         </Body_1Container>
         <Body_2Container>
