@@ -10,6 +10,7 @@ import {
   Dimensions,
   TouchableOpacity,
   StatusBar,
+  ScrollView
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setIsLogined } from '../../../redux/userSlice';
@@ -30,7 +31,7 @@ const Profile = () => {
   Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
   StatusBar.setTranslucent(true);
   return (
-    <View style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
+    <ScrollView style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
           style={styles.button}
@@ -40,39 +41,39 @@ const Profile = () => {
         </TouchableOpacity>
 
         <View>
-          <Text> Name</Text>
+          <Text>     Name</Text>
           <TextInput
             style={styles.input}
             onChangeName={onChangeName}
             value={Name}
-            placeholder="Please write down the Name"
+            placeholder="Please write down"
             keyboardType="default"
           />
 
-          <Text> Id</Text>
+          <Text>     Id</Text>
           <TextInput
             style={styles.input}
             onChangeUserId={onChangeUserId}
             value={Id}
-            placeholder="Please write down the Id"
+            placeholder="Please write down"
             keyboardType="default"
           />
 
-          <Text> Password</Text>
+          <Text>     Password</Text>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
             onChangeUserPassword={onChangeUserPassword}
             value={Password}
-            placeholder="Please write down the Password"
+            placeholder="Please write down"
           />
 
-          <Text> E-mail</Text>
+          <Text>     E-mail</Text>
           <TextInput
             style={styles.input}
             onChangeUserEmailt={onChangeUserEmail}
             value={Email}
-            placeholder="Please write down the email"
+            placeholder="Please write down"
             keyboardType="email-address"
           />
         </View>
@@ -94,10 +95,14 @@ const Profile = () => {
 
           <Separator />
 
-          <Button title="로 그  아 웃" color="#ff68c2" onPress={() => dispatch(setIsLogined())} />
+          <Button title="로 그  아 웃" 
+          color="#ff68c2"
+           onPress={() => dispatch(setIsLogined())} />
+
+          <Separator />
         </View>
       </SafeAreaView>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -105,19 +110,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderRadius: 20,
-
     justifyContent: 'center',
-    marginHorizontal: 18,
-
-    marginTop: 40,
-    marginLeft: 40,
-    marginRight: 40,
-    marginBottom: 65,
-
+    marginTop: '10%',
+    marginLeft: '10%',
+    marginRight: '10%',
+    marginBottom: '10%',
     backgroundColor: 'white',
     alignItems: 'center',
   },
-
   separator: {
     marginVertical: 8,
     borderBottomColor: '#737373',
@@ -125,21 +125,24 @@ const styles = StyleSheet.create({
   }, //계정전화 변경사항저장 로그아웃 나눠주는 구분 줄
 
   input: {
-    height: 50,
+    height: 45,
     margin: 10,
     marginBottom: 30,
+    marginLeft: 30,
+    marginRight: 30,
     borderWidth: 1.8,
     padding: 10,
     backgroundColor: 'white',
     justifyContent: 'space-around',
   }, //텍스트 입력 칸
   button: {
-    width: 340,
+    width: 90,
     height: 90,
     backgroundColor: '68c2ff',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginBottom: 40,
+    marginTop: 40,
+    marginBottom: 30,
   }, //프로필 사진 업로드 버튼
 
   title: {
