@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-
+import {useDispatch} from 'react-redux';
+import { setIsLogined } from '../../../redux/userSlice';
 import { FontAwesome } from '@expo/vector-icons';
 
 const windowWidth = Dimensions.get('window').width;
@@ -25,6 +26,7 @@ const Profile = () => {
   const [Password, onChangeUserPassword] = useState(null);
   const [Email, onChangeUserEmail] = useState(null);
   StatusBar.setBarStyle('dark-content');
+  const dispatch = useDispatch();
   Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
   StatusBar.setTranslucent(true);
   return (
@@ -34,11 +36,11 @@ const Profile = () => {
           style={styles.button}
           onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
         >
-          <FontAwesome name="user-circle" size={80} color="#68c2ff" />
+          <FontAwesome name="user-circle" size={90} color="#68c2ff" />
         </TouchableOpacity>
 
         <View>
-          <Text> Name</Text>
+          <Text>   Name</Text>
           <TextInput
             style={styles.input}
             onChangeName={onChangeName}
@@ -47,7 +49,7 @@ const Profile = () => {
             keyboardType="default"
           />
 
-          <Text> Id</Text>
+          <Text>   Id</Text>
           <TextInput
             style={styles.input}
             onChangeUserId={onChangeUserId}
@@ -56,7 +58,7 @@ const Profile = () => {
             keyboardType="default"
           />
 
-          <Text> Password</Text>
+          <Text>   Password</Text>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
@@ -65,7 +67,7 @@ const Profile = () => {
             placeholder="Please write down the Password"
           />
 
-          <Text> E-mail</Text>
+          <Text>   E-mail</Text>
           <TextInput
             style={styles.input}
             onChangeUserEmailt={onChangeUserEmail}
@@ -95,7 +97,7 @@ const Profile = () => {
           <Button
             title="로 그  아 웃"
             color="#ff68c2"
-            onPress={() => Alert.alert('로그 아웃 하는 중')}
+            onPress={() => dispatch(setIsLogined())}
           />
         </View>
       </SafeAreaView>
@@ -111,10 +113,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 18,
 
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 35,
+    marginTop: 40,
+    marginLeft: 40,
+    marginRight: 40,
+    marginBottom: 65,
 
     backgroundColor: 'white',
     alignItems: 'center',
@@ -130,14 +132,14 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 10,
     marginBottom: 30,
-    borderWidth: 0.5,
+    borderWidth: 1.8,
     padding: 10,
     backgroundColor: 'white',
     justifyContent: 'space-around',
   }, //텍스트 입력 칸
   button: {
     width: 340,
-    height: 80,
+    height: 90,
     backgroundColor: '68c2ff',
     justifyContent: 'space-around',
     alignItems: 'center',
