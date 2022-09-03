@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setIsLogined } from '../../../redux/userSlice';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -40,7 +40,7 @@ const Profile = () => {
         </TouchableOpacity>
 
         <View>
-          <Text>   Name</Text>
+          <Text> Name</Text>
           <TextInput
             style={styles.input}
             onChangeName={onChangeName}
@@ -49,7 +49,7 @@ const Profile = () => {
             keyboardType="default"
           />
 
-          <Text>   Id</Text>
+          <Text> Id</Text>
           <TextInput
             style={styles.input}
             onChangeUserId={onChangeUserId}
@@ -58,7 +58,7 @@ const Profile = () => {
             keyboardType="default"
           />
 
-          <Text>   Password</Text>
+          <Text> Password</Text>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
@@ -67,7 +67,7 @@ const Profile = () => {
             placeholder="Please write down the Password"
           />
 
-          <Text>   E-mail</Text>
+          <Text> E-mail</Text>
           <TextInput
             style={styles.input}
             onChangeUserEmailt={onChangeUserEmail}
@@ -94,11 +94,7 @@ const Profile = () => {
 
           <Separator />
 
-          <Button
-            title="로 그  아 웃"
-            color="#ff68c2"
-            onPress={() => dispatch(setIsLogined())}
-          />
+          <Button title="로 그  아 웃" color="#ff68c2" onPress={() => dispatch(setIsLogined())} />
         </View>
       </SafeAreaView>
     </View>
