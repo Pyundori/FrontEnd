@@ -52,7 +52,7 @@ const productSlice = createSlice({
   },
 });
 
-export const { setSearchPage, increasePage, setProductLikes, setSearchOptions } =
+export const { setSearchPage, increasePage, setProductLikes, setconv } =
   productSlice.actions;
 
 export default productSlice.reducer;
