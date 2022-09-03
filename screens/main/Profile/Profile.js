@@ -24,7 +24,9 @@ const Profile = () => {
   const [Id, onChangeUserId] = useState(null);
   const [Password, onChangeUserPassword] = useState(null);
   const [Email, onChangeUserEmail] = useState(null);
-
+  StatusBar.setBarStyle('dark-content');
+  Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
+  StatusBar.setTranslucent(true);
   return (
     <View style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
       <SafeAreaView style={styles.container}>

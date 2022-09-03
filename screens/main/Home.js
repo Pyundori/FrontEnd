@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { KeyboardAvoidingView } from 'react-native';
 import styled from 'styled-components/native';
-import api from '../../api';
 
 const Container = styled.View`
   flex: 1
@@ -109,11 +108,6 @@ const ServerImage = styled.Image``;
 
 const Home = (focus) => {
   const [text, onChangeText] = React.useState('');
-  const a = async () => {
-    const b = await api.search('cu', '1N1', 2);
-    console.log(b.data.data);
-  };
-  a();
   return (
     <Container>
       <HeadContainer>

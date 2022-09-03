@@ -1,5 +1,4 @@
 import axios from 'axios';
-import PropTypes from 'prop-types';
 /**
  *
  * @param {string} method
@@ -28,6 +27,6 @@ export default {
    * @param {number} page 검색 결과 페이지, 기본값 = 1
    * @returns
    */
-  search: async (conv, dtypes, searchWord = '', page = 1) =>
-    await callApi('get', { venders: conv, dtypes: dtypes, products: searchWord, page: page }),
+  search: (conv, dtypes, searchWord = '', page = 1) =>
+    callApi('get', { venders: conv, dtypes: dtypes, products: searchWord, page: page }),
 };
