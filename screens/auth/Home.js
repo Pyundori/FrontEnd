@@ -5,7 +5,6 @@ import { setIsLogined } from '../../redux/userSlice';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useEffect } from 'react';
-import AuthSession from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -120,6 +119,7 @@ const Home = ({ navigation }) => {
     if (response?.type === 'success') {
       const { authentication } = response;
       console.log(authentication);
+      dispatch(setIsLogined());
     }
   }, [response]);
   return (
@@ -130,7 +130,7 @@ const Home = ({ navigation }) => {
           <LoginInput placeholder={'ID'} />
           <LoginInput placeholder={'Password'} />
           <LoginBtnContainer>
-            <SignUpBtn onPress={() => navigation.navigate('SignIn')}>
+            <SignUpBtn onPress={() => navigation.navigate('SignUp')}>
               <SignUp>회원가입</SignUp>
             </SignUpBtn>
             <LoginBtn onPress={() => dispatch(setIsLogined())}>

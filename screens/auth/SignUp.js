@@ -7,13 +7,15 @@ const Container = styled.View`
   background-color: #68c2ff;
   align-items: center;
   justify-content: center;
-  padding-top: 45%;
+  padding-top: 5%;
 `;
 
 const BodyContainer = styled.View`
   height: 75%;
   width: 90%;
   align-items: flex-start;
+  background-color: #f8f8f8;
+  border-radius: 25px;
 `;
 
 const SignUp = ({ navigation }) => {

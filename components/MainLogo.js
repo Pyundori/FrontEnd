@@ -2,12 +2,12 @@ import styled from 'styled-components';
 
 const Logo = styled.Image`
   width: 170px;
-  height: 50px;
+  height: 60px;
 `;
 
 const LogoContainer = styled.View`
   width: 100%;
-  height: 10%;
+  height: 12%;
   justify-content: center;
   margin-left: 10%;
 `;
