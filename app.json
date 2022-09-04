@@ -12,7 +12,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dltjrrbs2020.pyundori"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",

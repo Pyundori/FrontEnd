@@ -9,7 +9,7 @@ const callApi = async (method, params = {}) => {
   const headers = {
     'Content-Type': 'application/json',
   };
-  const URL = 'http://54.180.109.216:5000/api/product_query';
+  const URL = 'http://py.pyundori.kro.kr:5000/api/product/query';
 
   if (method === 'get') {
     return await axios[method](URL, { headers, params });
