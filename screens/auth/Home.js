@@ -15,7 +15,7 @@ const Container = styled.View`
   background-color: #68c2ff;
   align-items: center;
   justify-content: center;
-  padding-top: 40%;
+  padding-top: 45%;
 `;
 
 const BodyContainer = styled.View`
@@ -28,7 +28,8 @@ const LoginContainer = styled.View`
   width: 100%;
   height: 30%;
   align-items: center;
-  margin-top: 5%;
+  margin-top: 8%;
+  margin-bottom: 20%;
 `;
 
 const LoginInput = styled.TextInput`
@@ -45,7 +46,7 @@ const LoginBtnContainer = styled.View`
   width: 80%
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 2%
+  margin-top: 3%
 `;
 const SignUpBtn = styled.Pressable`
   justify-content: center;
@@ -71,16 +72,35 @@ const Login = styled.Text`
   color: #fff;
 `;
 
+const BoundaryContainer = styled.View`
+  width: 100%
+  height: 30%
+  flex-direction: row;
+  align-items: center;
+  justify-content: center
+`;
+
+const BoundaryMargin = styled.View`
+  width: 40%
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.35);
+`;
+
+const BoundaryText = styled.Text`
+  width: 50px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.35);
+`;
+
 const ExBtnContainer = styled.View`
   width: 100%;
-  height: 70%;
-  margin-vertical: 2%;
+  height: 10%;
   align-items: center;
   justify-content: center;
 `;
 
 const KakaoBtn = styled.Pressable`
-  margin-bottom: 1%;
+  margin-bottom: 5%;
 `;
 const KakaoImg = styled.Image``;
 
@@ -92,7 +112,7 @@ const Home = ({ navigation }) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: '429326430308-cfli6dksco3dqfj13g0318415bf17136.apps.googleusercontent.com',
-    iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    iosClientId: '429326430308-rmb8a7t2si9mnk9816s5mf5rr82sn6pp.apps.googleusercontent.com',
     androidClientId: '429326430308-6msf7vl7jpsetccfidsu1gj2t47tkpb8.apps.googleusercontent.com',
     webClientId: '429326430308-cfli6dksco3dqfj13g0318415bf17136.apps.googleusercontent.com',
   });
@@ -110,7 +130,7 @@ const Home = ({ navigation }) => {
           <LoginInput placeholder={'ID'} />
           <LoginInput placeholder={'Password'} />
           <LoginBtnContainer>
-            <SignUpBtn>
+            <SignUpBtn onPress={() => navigation.navigate('SignIn')}>
               <SignUp>회원가입</SignUp>
             </SignUpBtn>
             <LoginBtn onPress={() => dispatch(setIsLogined())}>
@@ -118,11 +138,22 @@ const Home = ({ navigation }) => {
             </LoginBtn>
           </LoginBtnContainer>
         </LoginContainer>
+        <BoundaryContainer>
+          <BoundaryMargin />
+          <BoundaryText>OR</BoundaryText>
+          <BoundaryMargin />
+        </BoundaryContainer>
         <ExBtnContainer>
           <KakaoBtn onPress={() => navigation.navigate('KakaoLogin')}>
             <KakaoImg source={require('../../assets/kakao_login.png')} />
           </KakaoBtn>
-          <GoogleBtn disabled={!request} onPress={() => promptAsync()}>
+          <GoogleBtn
+            disabled={!request}
+            title="Login"
+            onPress={() => {
+              promptAsync();
+            }}
+          >
             <GoogleImg source={require('../../assets/google_login.png')} />
           </GoogleBtn>
         </ExBtnContainer>
