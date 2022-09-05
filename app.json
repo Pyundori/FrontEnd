@@ -1,16 +1,19 @@
 {
   "expo": {
     "name": "Pyundori",
+    "slug": "pyundori",
+    "scheme": "pyundori",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dltjrrbs2020.pyundori"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
@@ -19,12 +22,6 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.dltjrrbs2020.pyundori"
-    },
-    "androidStatusBar": {
-      "backgroundColor": "#000000"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }

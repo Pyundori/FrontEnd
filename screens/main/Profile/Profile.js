@@ -10,8 +10,10 @@ import {
   Dimensions,
   TouchableOpacity,
   StatusBar,
+  ScrollView
 } from 'react-native';
-
+import { useDispatch } from 'react-redux';
+import { setIsLogined } from '../../../redux/userSlice';
 import { FontAwesome } from '@expo/vector-icons';
 
 const windowWidth = Dimensions.get('window').width;
@@ -25,52 +27,53 @@ const Profile = () => {
   const [Password, onChangeUserPassword] = useState(null);
   const [Email, onChangeUserEmail] = useState(null);
   StatusBar.setBarStyle('dark-content');
+  const dispatch = useDispatch();
   Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
   StatusBar.setTranslucent(true);
   return (
-    <View style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
+    <ScrollView style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
         >
-          <FontAwesome name="user-circle" size={80} color="#68c2ff" />
+          <FontAwesome name="user-circle" size={90} color="#68c2ff" />
         </TouchableOpacity>
 
         <View>
-          <Text> Name</Text>
+          <Text>     Name</Text>
           <TextInput
             style={styles.input}
             onChangeName={onChangeName}
             value={Name}
-            placeholder="Please write down the Name"
+            placeholder="Please write down"
             keyboardType="default"
           />
 
-          <Text> Id</Text>
+          <Text>     Id</Text>
           <TextInput
             style={styles.input}
             onChangeUserId={onChangeUserId}
             value={Id}
-            placeholder="Please write down the Id"
+            placeholder="Please write down"
             keyboardType="default"
           />
 
-          <Text> Password</Text>
+          <Text>     Password</Text>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
             onChangeUserPassword={onChangeUserPassword}
             value={Password}
-            placeholder="Please write down the Password"
+            placeholder="Please write down"
           />
 
-          <Text> E-mail</Text>
+          <Text>     E-mail</Text>
           <TextInput
             style={styles.input}
             onChangeUserEmailt={onChangeUserEmail}
             value={Email}
-            placeholder="Please write down the email"
+            placeholder="Please write down"
             keyboardType="email-address"
           />
         </View>
@@ -92,14 +95,14 @@ const Profile = () => {
 
           <Separator />
 
-          <Button
-            title="로 그  아 웃"
-            color="#ff68c2"
-            onPress={() => Alert.alert('로그 아웃 하는 중')}
-          />
+          <Button title="로 그  아 웃" 
+          color="#ff68c2"
+           onPress={() => dispatch(setIsLogined())} />
+
+          <Separator />
         </View>
       </SafeAreaView>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -107,19 +110,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderRadius: 20,
-
     justifyContent: 'center',
-    marginHorizontal: 18,
-
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    marginBottom: 35,
-
+    marginTop: '10%',
+    marginLeft: '10%',
+    marginRight: '10%',
+    marginBottom: '10%',
     backgroundColor: 'white',
     alignItems: 'center',
   },
-
   separator: {
     marginVertical: 8,
     borderBottomColor: '#737373',
@@ -127,21 +125,24 @@ const styles = StyleSheet.create({
   }, //계정전화 변경사항저장 로그아웃 나눠주는 구분 줄
 
   input: {
-    height: 50,
+    height: 45,
     margin: 10,
     marginBottom: 30,
-    borderWidth: 0.5,
+    marginLeft: 30,
+    marginRight: 30,
+    borderWidth: 1.8,
     padding: 10,
     backgroundColor: 'white',
     justifyContent: 'space-around',
   }, //텍스트 입력 칸
   button: {
-    width: 340,
-    height: 80,
+    width: 90,
+    height: 90,
     backgroundColor: '68c2ff',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginBottom: 40,
+    marginTop: 40,
+    marginBottom: 30,
   }, //프로필 사진 업로드 버튼
 
   title: {

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Logo = styled.Image`
   width: 250px;
-  height: 60px;
+  height: 120px;
 `;
 
 const LogoContainer = styled.View`

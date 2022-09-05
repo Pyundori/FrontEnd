@@ -37,6 +37,9 @@ export default function App() {
           netmarbleM: require('./assets/fonts/netmarbleM.ttf'),
         };
         const images = [
+          require('./assets/google_login.png'),
+          require('./assets/google_login_pressed.png'),
+          require('./assets/kakao_login.png'),
           require('./assets/not_image.png'),
           require('./assets/logo.png'),
           require('./assets/cu.png'),
