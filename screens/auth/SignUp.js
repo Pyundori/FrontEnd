@@ -148,7 +148,7 @@ const SignUp = ({ navigation }) => {
   const [IdErrorMsg, setIdErrorMsg] = useState('');
   const [PwErrorMsg, setPwErrorMsg] = useState('');
   useEffect(() => {
-    if (isValidId && isValidPw && isValidPwCheck) {
+    if (id && isValidId && isValidPw && isValidPwCheck) {
       setIsFilled(true);
     } else if (isFilled === true) {
       setIsFilled(false);
