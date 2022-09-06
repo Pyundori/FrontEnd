@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components/native';
 import MainLogo from '../../../components/MainLogo';
 import ProductsCard from '../../../components/ProductsCard';
@@ -53,11 +53,11 @@ const ProductsList = styled.FlatList`
   margin: 3% auto;
 `;
 
-const Likes = ({ results }) => {
-  const [like, setLike] = useState(true);
+const Likes = ({ results, navigation, route }) => {
   const ProductsCardContainer = ({ item }) => {
-    return <ProductsCard item={item} />;
+    return <ProductsCard item={item} navigation={navigation} route={route} />;
   };
+
   return (
     <Container>
       <MainLogo />
@@ -69,7 +69,6 @@ const Likes = ({ results }) => {
           {results[0] ? (
             <ProductsList
               data={results}
-              extraData={like}
               renderItem={ProductsCardContainer}
               keyExtractor={(_, idx) => idx.toString()}
             />
