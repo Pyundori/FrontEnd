@@ -147,13 +147,14 @@ const SignUp = ({ navigation }) => {
   const [isFilled, setIsFilled] = useState(false);
   const [IdErrorMsg, setIdErrorMsg] = useState('');
   const [PwErrorMsg, setPwErrorMsg] = useState('');
+
   useEffect(() => {
     if (id && isValidId && isValidPw && isValidPwCheck) {
       setIsFilled(true);
     } else if (isFilled === true) {
       setIsFilled(false);
     }
-  }, [id, pw, pwCheck]);
+  }, [isValidId, isValidPw, isValidPwCheck]);
 
   return (
     <Container>

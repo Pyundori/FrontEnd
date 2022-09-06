@@ -115,39 +115,37 @@ const LikeView = styled.View`
 const ServerImage = styled.Image`
   width: 100%;
   height: 50%;
+  margin-top: 10%;
   border-radius: 8px;
 `;
 
 const ServerText = styled.Text`
-  font-size: 30px;
+  font-size: 15px;
 `;
 
 const Home = (focus) => {
   const [text, onChangeText] = React.useState('');
-  const Text = async () => {
+  const Run_Api = async () => {
     const tmp = await api.search('cu', '1N1');
   };
-  const [image, setImage] = useState(require('../../assets/not_image.png'));
-  const [Pname, setPname] = useState(' ');
-  useEffect(() => {
-    const Text = async () => {
+  const [Image, setImage] = useState(require('../../assets/not_image.png'));
+  const [Pname, setPname] = useState('1');
+  useEffect(async () => {
+    const Run_Api = async () => {
       const tmp = await api.search('cu', '1N1');
       setImage({ uri: tmp.data.data[0].pImg });
-      setPname({ text: tmp.data.data[0].pName });
+      setPname(tmp.data.data[0].pName);
     };
-    Text();
+    Run_Api();
   }, []);
 
   const render_text = useCallback(() => {
-    console.log('3', Pname);
-    return <ServerText></ServerText>;
+    return <ServerText>{Pname}</ServerText>;
   }, [Pname]);
 
   const render_img = useCallback(() => {
-    console.log('1', image);
-    return <ServerImage source={image} />;
-  }, [image]);
-  console.log('2', image);
+    return <ServerImage source={Image} />;
+  }, [Image]);
   return (
     <Container>
       <HeadContainer>

@@ -4,22 +4,16 @@ import React, { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useDispatch } from 'react-redux';
+import api from '../../api';
+import getEnvVars from '../../environment';
 import { setIsLogined } from '../../redux/userSlice';
 
-const REST_API_KEY = '1f876c2cec349665dba6cd8b67eb5cd1';
-
-// Expo용 URI
-// const REDIRECT_URI = 'https://auth.expo.io/@dltjrrbs2020/pyundori';
-
-// Production용 URI
-const REDIRECT_URI = 'http://py.pyundori.kro.kr:5000/kakao/oauth2/callback';
-
-const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
+const { kakaoRestApiKey, kakaoRedirectUri } = getEnvVars();
 
 export default KakaoLogin = ({ navigation }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const getCode = (target) => {
+  const getCode = async (target) => {
     const exp = 'code=';
     const condition = target.indexOf(exp);
     if (condition !== -1) {
@@ -33,17 +27,14 @@ export default KakaoLogin = ({ navigation }) => {
 
       const options = qs.stringify({
         grant_type: 'authorization_code',
-        client_id: REST_API_KEY,
-        redirect_uri: REDIRECT_URI,
+        client_id: kakaoRestApiKey,
+        redirect_uri: kakaoRedirectUri,
         code,
       });
+
       const tokenResponse = await axios.post(requestTokenUrl, options);
-      const token = tokenResponse.data.access_token;
-      const body = {
-        token,
-      };
-      const response = await axios.post(REDIRECT_URI, body);
-      console.log(response);
+      const { access_token } = tokenResponse.data;
+      const response = await api.kakaoLogin(access_token);
       await dispatch(setIsLogined());
     } catch (e) {
       console.log(e);
@@ -58,16 +49,18 @@ export default KakaoLogin = ({ navigation }) => {
         />
       ) : (
         <WebView
-          style={{ flex: 0 }}
+          style={{ flex: isLoading ? 0 : 1 }}
           source={{
-            uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`,
+            uri: `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestApiKey}&redirect_uri=${kakaoRedirectUri}&response_type=code&prompt=login`,
           }}
-          injectedJavaScript={INJECTED_JAVASCRIPT}
-          javaScriptEnabled
-          onMessage={(event) => {
-            const data = event.nativeEvent.url;
-            setIsLoading(true);
-            getCode(data);
+          onShouldStartLoadWithRequest={(event) => {
+            const { url } = event;
+            if (!url.includes('kakao.com')) {
+              setIsLoading(true);
+              getCode(url);
+              return false;
+            }
+            return true;
           }}
         />
       )}

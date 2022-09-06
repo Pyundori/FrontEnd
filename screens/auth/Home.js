@@ -2,11 +2,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import MainLogo from '../../components/auth/MainLogo';
 import { setIsLogined } from '../../redux/userSlice';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import { useEffect } from 'react';
-
-WebBrowser.maybeCompleteAuthSession();
+import GoogleLogin from '../../components/auth/GoogleLogin';
 
 const Container = styled.View`
   height: 100%;
@@ -108,20 +104,6 @@ const GoogleImg = styled.Image``;
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: '429326430308-cfli6dksco3dqfj13g0318415bf17136.apps.googleusercontent.com',
-    iosClientId: '429326430308-rmb8a7t2si9mnk9816s5mf5rr82sn6pp.apps.googleusercontent.com',
-    androidClientId: '429326430308-6msf7vl7jpsetccfidsu1gj2t47tkpb8.apps.googleusercontent.com',
-    webClientId: '429326430308-cfli6dksco3dqfj13g0318415bf17136.apps.googleusercontent.com',
-  });
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const { authentication } = response;
-      console.log(authentication);
-      dispatch(setIsLogined());
-    }
-  }, [response]);
   return (
     <Container>
       <MainLogo />
@@ -147,15 +129,7 @@ const Home = ({ navigation }) => {
           <KakaoBtn onPress={() => navigation.navigate('KakaoLogin')}>
             <KakaoImg source={require('../../assets/kakao_login.png')} />
           </KakaoBtn>
-          <GoogleBtn
-            disabled={!request}
-            title="Login"
-            onPress={() => {
-              promptAsync();
-            }}
-          >
-            <GoogleImg source={require('../../assets/google_login.png')} />
-          </GoogleBtn>
+          <GoogleLogin />
         </ExBtnContainer>
       </BodyContainer>
     </Container>
