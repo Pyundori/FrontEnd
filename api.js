@@ -85,7 +85,7 @@ export default {
    * @returns
    */
   search: (conv, dtypes, searchWord = '', page = 1) =>
-    callApi('get', '/api/product/query', null, {
+    callApi('get', '/api/product/query', null, '', {
       venders: conv,
       dtypes: dtypes,
       products: searchWord,
