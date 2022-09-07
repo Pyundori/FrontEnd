@@ -41,7 +41,7 @@ export default {
    * @param {string} token User jwt
    * @returns {object} res_code, token | jwt_tolen
    */
-  login: (id, pw, token) => callApi('post', '/api/user/signin', { id, pw, token }),
+  login: (id, pw) => callApi('post', '/api/user/signin', { id, pw }),
 
   /**
    *
@@ -64,11 +64,13 @@ export default {
    * @returns {boolean} true | false
    */
   isDuplicated: async (column, data) => {
-    const response = await callApi('get', '/api/user/check_dup', null, '', {
+    const {
+      data: { res_code },
+    } = await callApi('get', '/api/user/check_dup', null, '', {
       column,
       data,
     });
-    if (response.data.res_code === 201) {
+    if (res_code === 201) {
       return false;
     } else {
       return true;
