@@ -42,7 +42,6 @@ const Body_1Container = styled.View`
   flex-direction: row;
   width: 90%;
   border: 1px solid #e8e8e8;
-  flex-direction: row;
   background-color: white;
   border-radius: 8px;
 `;
@@ -69,7 +68,7 @@ const AroundImg = styled.Image`
   width: 70%;
   height: 50%;
   margin-left: 5%;
-  berder-radius: 5px;
+  border-radius: 5px;
   position: absolute;
 `;
 
@@ -128,7 +127,6 @@ const LikeView = styled.View`
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  flex-direction: center;
 `;
 
 const ServerImage = styled.Image`
@@ -168,7 +166,7 @@ const Home = (focus) => {
 
   const Render_All = ({ tmp }) => {
     return (
-      <LikeView style={{ flex: 'wrap' }}>
+      <LikeView>
         {Render_Img()}
         <ServerText>종류: {Dtype}</ServerText>
         <ServerText>
