@@ -1,9 +1,8 @@
 /* eslint-disable react/display-name */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/main/Home';
-import BackBtn from '../components/BackBtn';
 import Search from '../screens/main/search/Search';
 import Likes from '../screens/main/likes/Likes';
 import Profile from '../screens/main/Profile/Profile';
@@ -11,27 +10,11 @@ import RecentList from '../screens/main/recentList/RecentList';
 import { Ionicons } from '@expo/vector-icons';
 import utils from '../utils';
 import { Text } from 'react-native';
-import { setIsLike, setLikeProducts } from '../redux/userSlice';
-import { useDispatch } from 'react-redux';
 
 const TabsNavigator = createBottomTabNavigator();
-const tmpProducts = [];
 
 const Tabs = () => {
-  const dispatch = useDispatch();
-  const LikesTab = ({ navigation, route }) => {
-    useEffect(() => {
-      if (route.params !== undefined) {
-        if (navigation.isFocused() && route.params.valid) {
-          tmpProducts.push(route.params.item);
-          dispatch(setIsLike(route.params.item));
-        } else {
-          tmpProducts.forEach((product) => dispatch(setLikeProducts(product)));
-          tmpProducts.length = 0;
-          route.params = undefined;
-        }
-      }
-    }, []);
+  const LikesTab = ({ navigation }) => {
     return <Likes navigation={navigation} />;
   };
 

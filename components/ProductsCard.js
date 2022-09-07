@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setLikeProducts } from '../redux/userSlice';
 
 const CardContainer = styled.SafeAreaView`
   width: 100%;
@@ -78,12 +80,24 @@ const LikeContainer = styled.View`
 
 const LikeBtn = styled.TouchableOpacity``;
 
+let tmpProducts = [];
 const ProductsCard = ({ item, navigation }) => {
+  const dispatch = useDispatch();
   const [isValid, setIsValid] = useState(null);
-  const isLike = item.isLike;
+  const [isLike, setIsLike] = useState(true);
 
-  const handleLike = (item) => {
-    navigation.setParams({ item, valid: true });
+  useEffect(() => {
+    tmpProducts.forEach((product) => dispatch(setLikeProducts(product)));
+  }, [navigation.isFocused()]);
+
+  const handleLike = () => {
+    const isDuplicated = tmpProducts.find((product) => product.pName === item.pName);
+    if (isDuplicated) {
+      tmpProducts = tmpProducts.filter((product) => product.pName !== item.pName);
+    } else {
+      tmpProducts.push(item);
+    }
+    setIsLike(!isLike);
   };
 
   const imgStatusCheck = async (pImg) => {
@@ -136,5 +150,4 @@ const ProductsCard = ({ item, navigation }) => {
     </CardContainer>
   );
 };
-
 export default ProductsCard;

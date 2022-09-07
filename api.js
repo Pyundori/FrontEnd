@@ -68,7 +68,7 @@ export default {
       column,
       data,
     });
-    if (response.res_code === 201) {
+    if (response.data.res_code === 201) {
       return false;
     } else {
       return true;
@@ -83,7 +83,7 @@ export default {
    * @returns
    */
   search: (conv, dtypes, searchWord = '', page = 1) =>
-    callApi('get', '/api/product/query', {
+    callApi('get', '/api/product/query', null, {
       venders: conv,
       dtypes: dtypes,
       products: searchWord,
