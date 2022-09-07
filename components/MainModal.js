@@ -56,7 +56,7 @@ const MainModal = ({ navigation, modalVisible, setModalVisible, title, btnText }
   const dispatch = useDispatch();
   return (
     <ModalContainer>
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+      <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <ModalContainer>
           <ModalView>
             <ModalText>{title}</ModalText>

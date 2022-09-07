@@ -1,8 +1,12 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import MainLogo from '../../components/auth/MainLogo';
-import { setIsLogined } from '../../redux/userSlice';
+import { setIsLogined, setToken } from '../../redux/userSlice';
 import GoogleLogin from '../../components/auth/GoogleLogin';
+import api from '../../api';
+import { useEffect, useState } from 'react';
+import MainModal from '../../components/MainModal';
+import Loading from '../../components/Loading';
 
 const Container = styled.View`
   height: 100%;
@@ -56,6 +60,7 @@ const LoginBtn = styled.Pressable`
   background-color: #2687ff;
   border-radius: 10px;
   padding: 2% 6%;
+  opacity: ${(props) => (props.disabled ? 0.6 : 1)};
 `;
 
 const SignUp = styled.Text`
@@ -104,18 +109,66 @@ const GoogleImg = styled.Image``;
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
-  return (
+  const [id, setId] = useState('');
+  const [pw, setPw] = useState('');
+  const [isValid, setIsValid] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (id && pw) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [id, pw]);
+
+  const token = useSelector((state) => state.users.token);
+  const login = async () => {
+    try {
+      setIsLoading(true);
+      const {
+        data: { res_code, token },
+      } = await api.login(id, pw);
+      console.log(res_code);
+      if (res_code === 201) {
+        setIsLoading(false);
+        setToken(token);
+        dispatch(setIsLogined());
+      } else {
+        setIsLoading(false);
+        setModalVisible(true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return isLoading ? (
+    <Loading />
+  ) : (
     <Container>
       <MainLogo />
       <BodyContainer>
         <LoginContainer>
-          <LoginInput placeholder={'ID'} />
-          <LoginInput placeholder={'Password'} />
+          <LoginInput
+            placeholder={'ID'}
+            maxLength={20}
+            value={id}
+            onChangeText={(value) => setId(value)}
+          />
+          <LoginInput
+            placeholder={'Password'}
+            maxLength={16}
+            value={pw}
+            secureTextEntry={true}
+            onChangeText={(value) => setPw(value)}
+          />
           <LoginBtnContainer>
             <SignUpBtn onPress={() => navigation.navigate('SignUp')}>
               <SignUp>회원가입</SignUp>
             </SignUpBtn>
-            <LoginBtn onPress={() => dispatch(setIsLogined())}>
+            <LoginBtn disabled={!isValid} onPress={login}>
               <Login>로그인</Login>
             </LoginBtn>
           </LoginBtnContainer>
@@ -131,6 +184,13 @@ const Home = ({ navigation }) => {
           </KakaoBtn>
           <GoogleLogin />
         </ExBtnContainer>
+        <MainModal
+          navigation={navigation}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          title="로그인 실패"
+          btnText="다시 시도"
+        />
       </BodyContainer>
     </Container>
   );

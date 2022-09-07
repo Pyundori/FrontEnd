@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { Image, ActivityIndicator } from 'react-native';
+import { Image } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store, { persistor } from './redux/store';
 import Gate from './navigator/Gate';
+import Loading from './components/Loading';
 
 const cacheImages = (images) =>
   images.map((image) => {
@@ -68,6 +69,6 @@ export default function App() {
       </PersistGate>
     </Provider>
   ) : (
-    <ActivityIndicator color="blue" />
+    <Loading />
   );
 }
