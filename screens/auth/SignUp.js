@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import api from '../../api';
+import MainModal from '../../components/MainModal';
+import { setToken } from '../../redux/userSlice';
 import utils from '../../utils';
 
 const Container = styled.View`
@@ -33,11 +37,36 @@ const Title = styled.Text`
   color: #68c2ff;
 `;
 
-const SignUpContainer = styled.View`
+const ParamsContainer = styled.View`
   width: 100%
-  height: 88%
+  height: 70%
   align-items: center
   justify-content: flex-start
+`;
+
+const NicknameContainer = styled.View`
+  width: 85%;
+  height: 20%;
+  margin-top: 5%;
+`;
+
+const Nickname = styled.Text`
+  font-size: 16px;
+  color: #333333;
+`;
+
+const NicknameInput = styled.TextInput`
+  width: 100%;
+  margin-top: 3%;
+  border: 1px solid ${(props) => (props.isValidNickname ? '#333333' : 'red')};
+  border-radius: 5px;
+  padding: 2%
+  padding-left: 10px;
+  font-size: 16px;
+`;
+
+const NicknameInvalidText = styled.Text`
+  font-size: 14px;
 `;
 
 const IdContainer = styled.View`
@@ -115,11 +144,11 @@ const PwCheckInvalidText = styled.Text`
   font-size: 14px;
 `;
 
-const SignUpBtnContainer = styled.View`
+const SignUpContainer = styled.View`
   width: 100%
-  height: 30%
+  height: 25%
   align-items: center
-  justify-content: flex-end
+  justify-content: center
   padding-bottom: 15%
 `;
 
@@ -138,18 +167,44 @@ const SignUpText = styled.Text`
 `;
 
 const SignUp = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const [nickname, setNickname] = useState('');
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [pwCheck, setPwCheck] = useState('');
-  const [isValidId, setValidId] = useState(true);
-  const [isValidPw, setValidPw] = useState(true);
-  const [isValidPwCheck, setValidPwCheck] = useState(true);
+  const [isValidNickname, setIsValidNickname] = useState(true);
+  const [isValidId, setIsValidId] = useState(true);
+  const [isValidPw, setIsValidPw] = useState(true);
+  const [isValidPwCheck, setIsValidPwCheck] = useState(true);
   const [isFilled, setIsFilled] = useState(false);
-  const [IdErrorMsg, setIdErrorMsg] = useState('');
-  const [PwErrorMsg, setPwErrorMsg] = useState('');
+  const [nicknameErrorMsg, setNicknameErrorMsg] = useState('');
+  const [idErrorMsg, setIdErrorMsg] = useState('');
+  const [pwErrorMsg, setPwErrorMsg] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const signUp = async () => {
+    const isDuplicatedId = await api.isDuplicated('id', id);
+    const isDuplicatedNickname = await api.isDuplicated('name', nickname);
+    console.log(isDuplicatedId, isDuplicatedNickname);
+    if (isDuplicatedId || isDuplicatedNickname) {
+      isDuplicatedId && (setIsValidId(false), setIdErrorMsg('중복된 아이디입니다'));
+      isDuplicatedNickname &&
+        (setIsValidNickname(false), setNicknameErrorMsg('중복된 닉네임입니다'));
+    } else {
+      try {
+        const {
+          data: { token },
+        } = await api.signUp(id, pw, nickname);
+        dispatch(setToken(token));
+        setModalVisible(true);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
 
   useEffect(() => {
-    if (id && isValidId && isValidPw && isValidPwCheck) {
+    if (nickname && id && pw && pwCheck && isValidId && isValidPw && isValidPwCheck) {
       setIsFilled(true);
     } else if (isFilled === true) {
       setIsFilled(false);
@@ -162,7 +217,24 @@ const SignUp = ({ navigation }) => {
         <TitleContainer>
           <Title>회원가입</Title>
         </TitleContainer>
-        <SignUpContainer>
+        <ParamsContainer>
+          <NicknameContainer>
+            <Nickname>닉네임</Nickname>
+            <NicknameInput
+              placeholder={'닉네임을 입력해주세요'}
+              value={nickname}
+              onChangeText={(value) => {
+                setNickname(value);
+                utils.isNickname(value)
+                  ? setIsValidNickname(true)
+                  : (setIsValidNickname(false),
+                    setNicknameErrorMsg('2 ~ 12글자 닉네임  <영문자 or 한글로 시작>'));
+              }}
+              maxLength={12}
+              isValidNickname={isValidNickname}
+            />
+            <NicknameInvalidText>{!isValidNickname && nicknameErrorMsg}</NicknameInvalidText>
+          </NicknameContainer>
           <IdContainer>
             <Id>아이디</Id>
             <IdInput
@@ -171,13 +243,14 @@ const SignUp = ({ navigation }) => {
               onChangeText={(value) => {
                 setId(value);
                 utils.isId(value)
-                  ? setValidId(true)
-                  : (setValidId(false), setIdErrorMsg('6~20자 영문자 또는 숫자, 영문자로 시작'));
+                  ? setIsValidId(true)
+                  : (setIsValidId(false),
+                    setIdErrorMsg('6~20자 영문자 또는 숫자  <영문자로 시작>'));
               }}
               maxLength={20}
               isValidId={isValidId}
             />
-            <IdInvalidText>{!isValidId && IdErrorMsg}</IdInvalidText>
+            <IdInvalidText>{!isValidId && idErrorMsg}</IdInvalidText>
           </IdContainer>
           <PwContainer>
             <Pw>비밀번호</Pw>
@@ -187,16 +260,16 @@ const SignUp = ({ navigation }) => {
               onChangeText={(value) => {
                 setPw(value);
                 utils.isPassword(value)
-                  ? setValidPw(true)
-                  : (setValidPw(false),
+                  ? setIsValidPw(true)
+                  : (setIsValidPw(false),
                     setPwErrorMsg('8~16자 영문, 숫자, 특수문자를 최소 한가지씩 조합'));
-                value && value === pwCheck ? setValidPwCheck(true) : setValidPwCheck(false);
+                value && value === pwCheck ? setIsValidPwCheck(true) : setIsValidPwCheck(false);
               }}
               secureTextEntry={true}
-              maxLength={20}
+              maxLength={16}
               isValidPw={isValidPw}
             />
-            <PwInvalidText>{!isValidPw && PwErrorMsg}</PwInvalidText>
+            <PwInvalidText>{!isValidPw && pwErrorMsg}</PwInvalidText>
           </PwContainer>
           <PwCheckContainer>
             <PwCheck>비밀번호 재확인</PwCheck>
@@ -205,20 +278,29 @@ const SignUp = ({ navigation }) => {
               value={pwCheck}
               onChangeText={(value) => {
                 setPwCheck(value);
-                value && value === pw ? setValidPwCheck(true) : setValidPwCheck(false);
+                value && value === pw ? setIsValidPwCheck(true) : setIsValidPwCheck(false);
               }}
               secureTextEntry={true}
               maxLength={16}
               isValidPwCheck={isValidPwCheck}
             />
-            <PwCheckInvalidText>{!isValidPwCheck && '비밀번호가 달라요'}</PwCheckInvalidText>
+            <PwCheckInvalidText>
+              {!isValidPwCheck && '비밀번호를 다시 확인해주세요'}
+            </PwCheckInvalidText>
           </PwCheckContainer>
-          <SignUpBtnContainer>
-            <SignUpBtn disabled={!isFilled}>
-              <SignUpText>회원가입</SignUpText>
-            </SignUpBtn>
-          </SignUpBtnContainer>
+        </ParamsContainer>
+        <SignUpContainer>
+          <SignUpBtn disabled={!isFilled} onPress={() => signUp()}>
+            <SignUpText>회원가입</SignUpText>
+          </SignUpBtn>
         </SignUpContainer>
+        <MainModal
+          navigation={navigation}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          title="회원가입이 완료되었습니다"
+          btnText="로그인"
+        />
       </BodyContainer>
     </Container>
   );
