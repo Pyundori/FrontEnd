@@ -1,14 +1,20 @@
 import axios from 'axios';
 import qs from 'qs';
 import React, { useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import styled from 'styled-components';
 import { WebView } from 'react-native-webview';
 import { useDispatch } from 'react-redux';
 import api from '../../api';
 import getEnvVars from '../../environment';
 import { setIsLogined, setToken } from '../../redux/userSlice';
+import Loading from '../Loading';
 
 const { kakaoRestApiKey, kakaoRedirectUri } = getEnvVars();
+
+const Container = styled.View`
+  width: 100%
+  height: 100%
+`;
 
 export default KakaoLogin = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -32,41 +38,37 @@ export default KakaoLogin = ({ navigation }) => {
         code,
       });
 
-      const tokenResponse = await axios.post(requestTokenUrl, options);
-      const { access_token } = tokenResponse.data;
+      const {
+        data: { access_token },
+      } = await axios.post(requestTokenUrl, options);
       const {
         data: { token },
       } = await api.kakaoLogin(access_token);
-      await dispatch(setToken(token));
-      await dispatch(setIsLogined());
+      dispatch(setToken(token));
+      dispatch(setIsLogined());
     } catch (e) {
       console.log(e);
     }
   };
-  return (
-    <View style={{ width: '100%', height: '100%' }}>
-      {isLoading ? (
-        <ActivityIndicator
-          style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
-          size={50}
-        />
-      ) : (
-        <WebView
-          style={{ flex: isLoading ? 0 : 1 }}
-          source={{
-            uri: `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestApiKey}&redirect_uri=${kakaoRedirectUri}&response_type=code&prompt=login`,
-          }}
-          onShouldStartLoadWithRequest={(event) => {
-            const { url } = event;
-            if (!url.includes('kakao.com')) {
-              setIsLoading(true);
-              getCode(url);
-              return false;
-            }
-            return true;
-          }}
-        />
-      )}
-    </View>
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <Container>
+      <WebView
+        style={{ flex: isLoading ? 0 : 1 }}
+        source={{
+          uri: `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestApiKey}&redirect_uri=${kakaoRedirectUri}&response_type=code&prompt=login`,
+        }}
+        onShouldStartLoadWithRequest={(event) => {
+          const { url } = event;
+          if (!url.includes('kakao.com')) {
+            setIsLoading(true);
+            getCode(url);
+            return false;
+          }
+          return true;
+        }}
+      />
+    </Container>
   );
 };

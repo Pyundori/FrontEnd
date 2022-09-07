@@ -193,10 +193,13 @@ const SignUp = ({ navigation }) => {
     } else {
       try {
         const {
-          data: { token },
+          data: { res_code },
         } = await api.signUp(id, pw, nickname);
-        dispatch(setToken(token));
-        setModalVisible(true);
+        if (res_code === 201) {
+          setModalVisible(true);
+        } else {
+          throw new Error('서버 통신 오류');
+        }
       } catch (e) {
         console.log(e);
       }
