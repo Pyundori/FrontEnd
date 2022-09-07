@@ -6,7 +6,7 @@ import { WebView } from 'react-native-webview';
 import { useDispatch } from 'react-redux';
 import api from '../../api';
 import getEnvVars from '../../environment';
-import { setIsLogined } from '../../redux/userSlice';
+import { setIsLogined, setToken } from '../../redux/userSlice';
 
 const { kakaoRestApiKey, kakaoRedirectUri } = getEnvVars();
 
@@ -34,7 +34,10 @@ export default KakaoLogin = ({ navigation }) => {
 
       const tokenResponse = await axios.post(requestTokenUrl, options);
       const { access_token } = tokenResponse.data;
-      const response = await api.kakaoLogin(access_token);
+      const {
+        data: { token },
+      } = await api.kakaoLogin(access_token);
+      await dispatch(setToken(token));
       await dispatch(setIsLogined());
     } catch (e) {
       console.log(e);
