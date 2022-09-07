@@ -89,36 +89,33 @@ const userSlice = createSlice({
     token: '',
   },
   reducers: {
-    setIsLike(state, action) {
+    setLikeProducts(state, action) {
       const { payload } = action;
       const product = state.likeProducts.find((product) => product.pName === payload.pName);
       if (product) {
         if (product.isLike) {
           product.isLike = false;
+          state.likeProducts = state.likeProducts.filter(
+            (product) => product.pName !== payload.pName,
+          );
         } else {
           product.isLike = true;
+          state.likeProducts.push(payload);
         }
-      }
-    },
-
-    setLikeProducts(state, action) {
-      const { payload } = action;
-      const product = state.likeProducts.find((product) => product.pName === payload.pName);
-      if (product) {
-        state.likeProducts = state.likeProducts.filter(
-          (product) => product.pName !== payload.pName,
-        );
-      } else {
-        state.likeProducts.push(payload);
       }
     },
 
     setIsLogined(state, action) {
       state.isLogined = !state.isLogined;
     },
+
+    setToken(state, action) {
+      const { payload } = action;
+      state.token = payload;
+    },
   },
 });
 
-export const { setIsLike, setLikeProducts, setIsLogined } = userSlice.actions;
+export const { setLikeProducts, setIsLogined, setToken } = userSlice.actions;
 
 export default userSlice.reducer;
