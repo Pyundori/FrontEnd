@@ -25,14 +25,14 @@ const Tabs = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          height: 60,
+          height: '10%',
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
           backgroundColor: 'white',
         },
         tabBarLabel: ({ focused }) =>
           focused ? (
-            <Text style={{ color: '#0096FF', fontSize: 14, marginBottom: 7 }}>{route.name}</Text>
+            <Text style={{ color: '#0096FF', fontSize: 14, marginBottom: '1%' }}>{route.name}</Text>
           ) : null,
         tabBarIcon: ({ focused }) => {
           const isAndroid = utils.isAndroid();
