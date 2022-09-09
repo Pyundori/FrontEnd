@@ -1,18 +1,25 @@
 import axios from 'axios';
 import qs from 'qs';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import styled from 'styled-components';
 import { WebView } from 'react-native-webview';
 import { useDispatch } from 'react-redux';
-import { setIsLogined } from '../../redux/userSlice';
+import api from '../../api';
+import getEnvVars from '../../environment';
+import { setIsLogined, setToken } from '../../redux/userSlice';
+import Loading from '../Loading';
 
-const REST_API_KEY = '1f876c2cec349665dba6cd8b67eb5cd1';
-const REDIRECT_URI = 'https://auth.expo.io/@dltjrrbs2020/pyundori';
+const { kakaoRestApiKey, kakaoRedirectUri } = getEnvVars();
 
-const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
+const Container = styled.View`
+  width: 100%
+  height: 100%
+`;
 
 export default KakaoLogin = ({ navigation }) => {
-  const getCode = (target) => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const getCode = async (target) => {
     const exp = 'code=';
     const condition = target.indexOf(exp);
     if (condition !== -1) {
@@ -26,32 +33,42 @@ export default KakaoLogin = ({ navigation }) => {
 
       const options = qs.stringify({
         grant_type: 'authorization_code',
-        client_id: REST_API_KEY,
-        redirect_uri: REDIRECT_URI,
+        client_id: kakaoRestApiKey,
+        redirect_uri: kakaoRedirectUri,
         code,
       });
-      await navigation.goBack();
-      const tokenResponse = await axios.post(requestTokenUrl, options);
-      const ACCESS_TOKEN = tokenResponse.data.access_token;
-      console.log(tokenResponse.data);
+
+      const {
+        data: { access_token },
+      } = await axios.post(requestTokenUrl, options);
+      const {
+        data: { token },
+      } = await api.kakaoLogin(access_token);
+      dispatch(setToken(token));
+      dispatch(setIsLogined());
     } catch (e) {
       console.log(e);
     }
   };
-  return (
-    <View style={{ flex: 1 }}>
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <Container>
       <WebView
-        style={{ flex: 1 }}
+        style={{ flex: isLoading ? 0 : 1 }}
         source={{
-          uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&prompt=login`,
+          uri: `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestApiKey}&redirect_uri=${kakaoRedirectUri}&response_type=code&prompt=login`,
         }}
-        injectedJavaScript={INJECTED_JAVASCRIPT}
-        javaScriptEnabled
-        onMessage={(event) => {
-          const data = event.nativeEvent.url;
-          getCode(data);
+        onShouldStartLoadWithRequest={(event) => {
+          const { url } = event;
+          if (!url.includes('kakao.com')) {
+            setIsLoading(true);
+            getCode(url);
+            return false;
+          }
+          return true;
         }}
       />
-    </View>
+    </Container>
   );
 };

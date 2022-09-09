@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setLikeProducts } from '../redux/userSlice';
 
@@ -22,11 +23,17 @@ const ImageContainer = styled.View`
   margin-left: 0px;
 `;
 
-const ProductImage = styled.Image`
-  width: 100px;
-  height: 100px;
+const ImageView = styled.View`
+  width: 100px
+  height: 100px
   border-radius: 10px;
   border: 1px solid #dadce0;
+  margin: auto;
+`;
+
+const ProductImage = styled.Image`
+  width: 90px;
+  height: 90px;
   margin: auto;
 `;
 
@@ -73,17 +80,55 @@ const LikeContainer = styled.View`
 
 const LikeBtn = styled.TouchableOpacity``;
 
-const ProductsCard = ({ item }) => {
-  const [like, setLike] = useState(true);
+let tmpProducts = [];
+const ProductsCard = ({ item, navigation }) => {
   const dispatch = useDispatch();
-  const handleLike = (item) => {
-    setLike(!like);
-    dispatch(setLikeProducts(item));
+  const [isValid, setIsValid] = useState(null);
+  const [isLike, setIsLike] = useState(true);
+
+  useEffect(() => {
+    tmpProducts.forEach((product) => dispatch(setLikeProducts(product)));
+  }, [navigation.isFocused()]);
+
+  const handleLike = () => {
+    const isDuplicated = tmpProducts.find((product) => product.pName === item.pName);
+    if (isDuplicated) {
+      tmpProducts = tmpProducts.filter((product) => product.pName !== item.pName);
+    } else {
+      tmpProducts.push(item);
+    }
+    setIsLike(!isLike);
   };
+
+  const imgStatusCheck = async (pImg) => {
+    try {
+      const res = await axios.get(pImg, {
+        validateStatus: (status) => {
+          return status === 200 || 404; // 상태 코드가 200 또는 404인 경우에만 에러 없음.
+        },
+      });
+      if (res.status === 200) {
+        setIsValid(true);
+      } else {
+        setIsValid(false);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    imgStatusCheck(item.pImg);
+  }, []);
+
   return (
     <CardContainer>
       <ImageContainer>
-        <ProductImage resizeMode="contain" source={{ uri: item.pImg }} />
+        <ImageView>
+          <ProductImage
+            source={isValid ? { uri: item.pImg } : require('../assets/not_image.png')}
+          />
+        </ImageView>
       </ImageContainer>
       <ProductDetail>
         <TitleView>
@@ -99,11 +144,10 @@ const ProductsCard = ({ item }) => {
       </ProductDetail>
       <LikeContainer>
         <LikeBtn onPress={() => handleLike(item)}>
-          <AntDesign name={like ? 'heart' : 'hearto'} size={28} color="red" />
+          <AntDesign name={isLike ? 'heart' : 'hearto'} size={28} color="red" />
         </LikeBtn>
       </LikeContainer>
     </CardContainer>
   );
 };
-
 export default ProductsCard;
