@@ -87,7 +87,7 @@ export default {
   /**
    *
    * @param {*} token jwt
-   * @param {*} col 'Password' or 'email'
+   * @param {*} col 'password' or 'name'
    * @param {*} data Value
    * @returns
    */
