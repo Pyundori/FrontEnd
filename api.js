@@ -63,10 +63,10 @@ export default {
    * @param {string} data User's input value
    * @returns {boolean} true | false
    */
-  isDuplicated: async (column, data) => {
+  isDuplicated: (column, data) => {
     const {
       data: { res_code },
-    } = await callApi('get', '/api/user/check_dup', null, '', {
+    } = callApi('get', '/api/user/check_dup', null, '', {
       column,
       data,
     });
@@ -76,6 +76,22 @@ export default {
       return true;
     }
   },
+
+  /**
+   *
+   * @param {string} token jwt
+   * @returns User's Data
+   */
+  getUserData: (token) => callApi('post', '/api/user/get', { token }),
+
+  /**
+   *
+   * @param {*} token jwt
+   * @param {*} col 'Password' or 'email'
+   * @param {*} data Value
+   * @returns
+   */
+  modifyUserData: (token, col, data) => callApi('post', '/api/user/modify', { token, col, data }),
   /**
    *
    * @param {string} conv  편의점 이름
