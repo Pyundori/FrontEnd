@@ -228,10 +228,8 @@ const SignUp = ({ navigation }) => {
               value={nickname}
               onChangeText={(value) => {
                 setNickname(value);
-                utils.isNickname(value)
-                  ? setIsValidNickname(true)
-                  : (setIsValidNickname(false),
-                    setNicknameErrorMsg('2 ~ 12글자 닉네임  <영문자 or 한글로 시작>'));
+                setIsValidNickname(utils.isNickname(value));
+                setNicknameErrorMsg('2 ~ 12글자 닉네임  <영문자 or 한글로 시작>');
               }}
               maxLength={12}
               isValidNickname={isValidNickname}
@@ -245,10 +243,8 @@ const SignUp = ({ navigation }) => {
               value={id}
               onChangeText={(value) => {
                 setId(value);
-                utils.isId(value)
-                  ? setIsValidId(true)
-                  : (setIsValidId(false),
-                    setIdErrorMsg('6~20자 영문자 또는 숫자  <영문자로 시작>'));
+                setIsValidId(utils.isId(value));
+                setIdErrorMsg('6~20자 영문자 또는 숫자  <영문자로 시작>');
               }}
               maxLength={20}
               isValidId={isValidId}
@@ -262,10 +258,8 @@ const SignUp = ({ navigation }) => {
               value={pw}
               onChangeText={(value) => {
                 setPw(value);
-                utils.isPassword(value)
-                  ? setIsValidPw(true)
-                  : (setIsValidPw(false),
-                    setPwErrorMsg('8~16자 영문, 숫자, 특수문자를 최소 한가지씩 조합'));
+                setIsValidPw(utils.isPassword(value));
+                setPwErrorMsg('8~16자 영문, 숫자, 특수문자를 최소 한가지씩 조합');
                 value && value === pwCheck ? setIsValidPwCheck(true) : setIsValidPwCheck(false);
               }}
               secureTextEntry={true}

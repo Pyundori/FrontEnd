@@ -16,7 +16,7 @@ const GoogleBtn = styled.Pressable`
 
 const GoogleImg = styled.Image``;
 
-const GoogleLogin = () => {
+const GoogleLogin = ({ setIsLoading }) => {
   const dispatch = useDispatch();
   const { expoClientId, iosClientId, androidClientId, webClientId } = getEnvVars();
 
@@ -33,10 +33,12 @@ const GoogleLogin = () => {
     } = await api.googleLogin(accessToken);
     dispatch(setToken(token));
     dispatch(setIsLogined());
+    setIsLoading(false);
   };
 
   useEffect(() => {
     if (response?.type === 'success') {
+      setIsLoading(true);
       const { authentication } = response;
       const { accessToken } = authentication;
       console.log(authentication);
