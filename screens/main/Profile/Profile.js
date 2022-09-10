@@ -10,11 +10,12 @@ import {
   Dimensions,
   TouchableOpacity,
   StatusBar,
-  ScrollView
+  ScrollView,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIsLogined } from '../../../redux/userSlice';
 import { FontAwesome } from '@expo/vector-icons';
+import api from '../../../api';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -30,6 +31,15 @@ const Profile = () => {
   const dispatch = useDispatch();
   Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
   StatusBar.setTranslucent(true);
+
+  const token = useSelector((state) => state.users.token);
+  console.log(token);
+
+  const a = async () => {
+    const { data } = await api.getUserData(token);
+    console.log(data);
+  };
+  a();
   return (
     <ScrollView style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
       <SafeAreaView style={styles.container}>
@@ -41,7 +51,7 @@ const Profile = () => {
         </TouchableOpacity>
 
         <View>
-          <Text>     Name</Text>
+          <Text> Name</Text>
           <TextInput
             style={styles.input}
             onChangeName={onChangeName}
@@ -50,7 +60,7 @@ const Profile = () => {
             keyboardType="default"
           />
 
-          <Text>     Id</Text>
+          <Text> Id</Text>
           <TextInput
             style={styles.input}
             onChangeUserId={onChangeUserId}
@@ -59,7 +69,7 @@ const Profile = () => {
             keyboardType="default"
           />
 
-          <Text>     Password</Text>
+          <Text> Password</Text>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
@@ -68,7 +78,7 @@ const Profile = () => {
             placeholder="Please write down"
           />
 
-          <Text>     E-mail</Text>
+          <Text> E-mail</Text>
           <TextInput
             style={styles.input}
             onChangeUserEmailt={onChangeUserEmail}
@@ -95,9 +105,7 @@ const Profile = () => {
 
           <Separator />
 
-          <Button title="로 그  아 웃" 
-          color="#ff68c2"
-           onPress={() => dispatch(setIsLogined())} />
+          <Button title="로 그  아 웃" color="#ff68c2" onPress={() => dispatch(setIsLogined())} />
 
           <Separator />
         </View>
