@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   SafeAreaView,
   Alert,
   TextInput,
@@ -24,10 +23,9 @@ const Separator = () => <View style={styles.separator} />;
 
 const Profile = () => {
   const [Name, onChangeName] = useState(null);
-  const [Id, onChangeUserId] = useState(null);
   const [Password, onChangeUserPassword] = useState(null);
-  const [Email, onChangeUserEmail] = useState(null);
-  StatusBar.setBarStyle('dark-content');
+
+  StatusBar.setBarStyle('white-content');
   const dispatch = useDispatch();
   Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
   StatusBar.setTranslucent(true);
@@ -41,17 +39,20 @@ const Profile = () => {
   };
   a();
   return (
-    <ScrollView style={{ width: windowWidth, height: windowHeight, backgroundColor: '#68c2ff' }}>
-      <SafeAreaView style={styles.container}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
-        >
-          <FontAwesome name="user-circle" size={90} color="#68c2ff" />
-        </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
+          >
+            <FontAwesome name="user-circle" size={100} color="#68c2ff" />
+          </TouchableOpacity>
+        </View>
 
         <View>
           <Text> Name</Text>
+
           <TextInput
             style={styles.input}
             onChangeName={onChangeName}
@@ -59,16 +60,6 @@ const Profile = () => {
             placeholder="Please write down"
             keyboardType="default"
           />
-
-          <Text> Id</Text>
-          <TextInput
-            style={styles.input}
-            onChangeUserId={onChangeUserId}
-            value={Id}
-            placeholder="Please write down"
-            keyboardType="default"
-          />
-
           <Text> Password</Text>
           <TextInput
             style={styles.input}
@@ -76,82 +67,104 @@ const Profile = () => {
             onChangeUserPassword={onChangeUserPassword}
             value={Password}
             placeholder="Please write down"
-          />
-
-          <Text> E-mail</Text>
-          <TextInput
-            style={styles.input}
-            onChangeUserEmailt={onChangeUserEmail}
-            value={Email}
-            placeholder="Please write down"
-            keyboardType="email-address"
+            keyboardType="default"
           />
         </View>
-        <Separator />
+
         <View>
-          <Button
-            title="변 경 사 항  저 장"
-            color="#68c2ff"
+          <TouchableOpacity
+            style={styles.modbutton}
             onPress={() => Alert.alert('변경사항 저장 중')}
-          />
+          >
+            <Text style={styles.headline}> 변 경 사 항 저 장 중 </Text>
+          </TouchableOpacity>
 
           <Separator />
-
-          <Button
-            title="계 정  전 환"
-            color="#68c2ff"
-            onPress={() => Alert.alert('계정 전환 메뉴변경사항 저장 중')}
-          />
-
-          <Separator />
-
-          <Button title="로 그  아 웃" color="#ff68c2" onPress={() => dispatch(setIsLogined())} />
-
-          <Separator />
+          <TouchableOpacity style={styles.logoutbutton} onPress={() => dispatch(setIsLogined())}>
+            <Text style={styles.headline}> 로 그 아 웃 </Text>
+          </TouchableOpacity>
         </View>
-      </SafeAreaView>
-    </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: windowWidth,
+    height: windowHeight,
+    backgroundColor: '#68c2ff',
+  },
+
+  header: {
+    height: '83%',
     borderRadius: 20,
     justifyContent: 'center',
-    marginTop: '10%',
-    marginLeft: '10%',
-    marginRight: '10%',
+    marginTop: '15%',
+    marginLeft: '8%',
+    marginRight: '8%',
     marginBottom: '10%',
     backgroundColor: 'white',
     alignItems: 'center',
   },
+
   separator: {
+    marginTop: '6%',
+    marginBottom: '6%',
     marginVertical: 8,
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
   }, //계정전화 변경사항저장 로그아웃 나눠주는 구분 줄
 
   input: {
-    height: 45,
-    margin: 10,
-    marginBottom: 30,
-    marginLeft: 30,
-    marginRight: 30,
+    width: 250,
+    height: 50,
+    marginTop: '6%',
+    marginBottom: '12%',
+    marginLeft: '10%',
+    marginRight: '10%',
     borderWidth: 1.8,
+    borderRadius: 20,
     padding: 10,
     backgroundColor: 'white',
     justifyContent: 'space-around',
   }, //텍스트 입력 칸
+
   button: {
-    width: 90,
-    height: 90,
+    width: 120,
+    height: 120,
     backgroundColor: '68c2ff',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: 40,
-    marginBottom: 30,
+
+    marginBottom: '15%',
   }, //프로필 사진 업로드 버튼
+  headline: {
+    textAlign: 'center',
+    fontSize: 18,
+    marginTop: 0,
+    width: 200,
+    color: 'white',
+  }, //버튼내부 글자
+
+  modbutton: {
+    alignItems: 'center',
+    backgroundColor: '#68c2ff',
+    padding: 10,
+    height: 50,
+    width: 200,
+    borderRadius: 20,
+    marginTop: 20,
+  }, //변경사항 버튼
+
+  logoutbutton: {
+    alignItems: 'center',
+    backgroundColor: '#ff68c2',
+    padding: 10,
+    height: 50,
+    width: 200,
+    borderRadius: 20,
+  }, //로그아웃 버튼
 
   title: {
     textAlign: 'center',
