@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import MainLogo from '../../../components/MainLogo';
 import ProductsCard from '../../../components/ProductsCard';
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   height: 100%;
   width: 100%;
   background-color: #68c2ff;
