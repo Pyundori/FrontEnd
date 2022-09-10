@@ -1,19 +1,20 @@
 import api from '../../api';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { setIsLogined } from '../../redux/userSlice';
+import { setIsLogined, setToken } from '../../redux/userSlice';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
+import Loading from '../Loading';
 import getEnvVars from '../../environment';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const GoogleBtn = styled.Pressable`
   opacity: ${(props) => (props.disabled ? '0.6' : '1')};
 `;
-const GoogleImg = styled.Image``;
 
-WebBrowser.maybeCompleteAuthSession();
+const GoogleImg = styled.Image``;
 
 const GoogleLogin = () => {
   const dispatch = useDispatch();
@@ -26,28 +27,27 @@ const GoogleLogin = () => {
     webClientId,
   });
 
-  const googleMainLogin = async (token) => {
-    const response = await api.googleLogin(token);
-    console.log(response);
-    await dispatch(setIsLogined());
+  const googleMainLogin = async (accessToken) => {
+    const {
+      data: { token },
+    } = await api.googleLogin(accessToken);
+    dispatch(setToken(token));
+    dispatch(setIsLogined());
   };
 
   useEffect(() => {
     if (response?.type === 'success') {
-      const { accessToken } = response.authentication;
+      const { authentication } = response;
+      const { accessToken } = authentication;
+      console.log(authentication);
       googleMainLogin(accessToken);
     }
   }, [response]);
 
-  return request ? (
+  return (
     <GoogleBtn onPress={() => promptAsync()}>
       <GoogleImg source={require('../../assets/google_login.png')} />
     </GoogleBtn>
-  ) : (
-    <ActivityIndicator
-      style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
-      size={50}
-    />
   );
 };
 
