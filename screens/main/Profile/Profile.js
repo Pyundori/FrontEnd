@@ -1,44 +1,42 @@
-import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
-  TextInput,
-  Dimensions,
-  TouchableOpacity,
-  StatusBar,
-  ScrollView,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsLogined } from '../../../redux/userSlice';
+import { setIsLogined, setToken } from '../../../redux/userSlice';
 import { FontAwesome } from '@expo/vector-icons';
 import api from '../../../api';
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import utils from '../../../utils';
+import ExternalProfile from './ExternalProfile';
 
 const Separator = () => <View style={styles.separator} />;
 
-const Profile = () => {
-  const [Name, onChangeName] = useState(null);
-  const [Password, onChangeUserPassword] = useState(null);
+const Profile = ({ navigation }) => {
+  const [name, onChangeName] = useState(null);
+  const [password, onChangePassword] = useState(null);
+  const [userData, setUserData] = useState('');
 
-  StatusBar.setBarStyle('white-content');
+  console.log(name);
+
   const dispatch = useDispatch();
-  Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
-  StatusBar.setTranslucent(true);
-
   const token = useSelector((state) => state.users.token);
-  console.log(token);
-
   const a = async () => {
     const { data } = await api.getUserData(token);
-    console.log(data);
+    setUserData(data);
   };
-  a();
-  return (
+
+  useEffect(() => {
+    a();
+  }, []);
+
+  const modifyData = async () => {
+    utils.isNickname(name) && (await api.modifyUserData(token, 'name', name));
+    utils.isPassword(password) && (await api.modifyUserData(token, 'password', password));
+  };
+
+  return userData.login === 'google' ? (
+    <ExternalProfile userData={userData} />
+  ) : userData.login === 'kakao' ? (
+    <ExternalProfile userData={userData} />
+  ) : (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View>
@@ -46,42 +44,47 @@ const Profile = () => {
             style={styles.button}
             onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
           >
-            <FontAwesome name="user-circle" size={100} color="#68c2ff" />
+            <FontAwesome name="user-circle" size={120} color="#68c2ff" />
           </TouchableOpacity>
         </View>
-
-        <View>
-          <Text> Name</Text>
-
+        <View style={styles.inputContainer}>
+          <View style={{ width: '100%', alignItems: 'flex-start' }}>
+            <Text> Name</Text>
+          </View>
           <TextInput
             style={styles.input}
-            onChangeName={onChangeName}
-            value={Name}
+            onChangeText={(value) => onChangeName(value)}
+            value={name}
             placeholder="Please write down"
             keyboardType="default"
           />
-          <Text> Password</Text>
+          <View style={{ width: '100%', alignItems: 'flex-start' }}>
+            <Text> Password</Text>
+          </View>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
-            onChangeUserPassword={onChangeUserPassword}
-            value={Password}
+            onChangeText={(value) => onChangePassword(value)}
+            value={password}
             placeholder="Please write down"
             keyboardType="default"
           />
         </View>
 
         <View>
-          <TouchableOpacity
-            style={styles.modbutton}
-            onPress={() => Alert.alert('변경사항 저장 중')}
-          >
-            <Text style={styles.headline}> 변 경 사 항 저 장 중 </Text>
+          <TouchableOpacity style={styles.modbutton} onPress={modifyData}>
+            <Text style={styles.headline}> 변경사항 저장 중 </Text>
           </TouchableOpacity>
 
           <Separator />
-          <TouchableOpacity style={styles.logoutbutton} onPress={() => dispatch(setIsLogined())}>
-            <Text style={styles.headline}> 로 그 아 웃 </Text>
+          <TouchableOpacity
+            style={styles.logoutbutton}
+            onPress={() => {
+              dispatch(setToken(''));
+              dispatch(setIsLogined());
+            }}
+          >
+            <Text style={styles.headline}> 로그아웃 </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -91,26 +94,25 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: windowWidth,
-    height: windowHeight,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#68c2ff',
   },
 
   header: {
-    height: '83%',
+    width: '93%',
+    height: '90%',
     borderRadius: 20,
     justifyContent: 'center',
-    marginTop: '15%',
-    marginLeft: '8%',
-    marginRight: '8%',
-    marginBottom: '10%',
-    backgroundColor: 'white',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
 
   separator: {
-    marginTop: '6%',
-    marginBottom: '6%',
+    marginTop: '3%',
+    marginBottom: '3%',
     marginVertical: 8,
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -130,29 +132,35 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   }, //텍스트 입력 칸
 
+  inputContainer: {
+    width: '65%',
+    height: '40%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   button: {
     width: 120,
     height: 120,
     backgroundColor: '68c2ff',
     justifyContent: 'space-around',
     alignItems: 'center',
-
     marginBottom: '15%',
   }, //프로필 사진 업로드 버튼
   headline: {
     textAlign: 'center',
     fontSize: 18,
     marginTop: 0,
-    width: 200,
+
     color: 'white',
   }, //버튼내부 글자
 
   modbutton: {
     alignItems: 'center',
     backgroundColor: '#68c2ff',
-    padding: 10,
-    height: 50,
-    width: 200,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    padding: 8,
     borderRadius: 20,
     marginTop: 20,
   }, //변경사항 버튼
@@ -160,9 +168,9 @@ const styles = StyleSheet.create({
   logoutbutton: {
     alignItems: 'center',
     backgroundColor: '#ff68c2',
-    padding: 10,
-    height: 50,
-    width: 200,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    padding: 8,
     borderRadius: 20,
   }, //로그아웃 버튼
 
