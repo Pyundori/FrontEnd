@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setLikeProducts } from '../redux/userSlice';
+import { useIsFocused } from '@react-navigation/native';
 
 const CardContainer = styled.SafeAreaView`
   width: 100%;
@@ -81,26 +82,46 @@ const LikeContainer = styled.View`
 const LikeBtn = styled.TouchableOpacity``;
 
 let tmpProducts = [];
-const ProductsCard = ({ item, navigation }) => {
+const ProductsCard = ({ item, likeProducts }) => {
   const dispatch = useDispatch();
-  const [isValid, setIsValid] = useState(null);
-  const [isLike, setIsLike] = useState(true);
+  const isFocused = useIsFocused();
+  const [isImgValid, setIsImgValid] = useState(undefined);
+  const [isLike, setIsLike] = useState(false);
 
-  useEffect(() => {
-    tmpProducts.forEach((product) => dispatch(setLikeProducts(product)));
-  }, [navigation.isFocused()]);
+  // Search 탭에서만 가져오는 param
+  if (likeProducts) {
+    useEffect(() => {
+      const isLikeProduct = likeProducts.find((product) => product.pName === item.pName);
+      isLikeProduct ? setIsLike(true) : setIsLike(false);
+      CheckImgStatus(item.pImg);
+    }, [likeProducts]);
+  } else {
+    useEffect(() => {
+      setIsLike(true);
+      CheckImgStatus(item.pImg);
+    }, [item]);
+    useEffect(() => {
+      tmpProducts.forEach((product) => dispatch(setLikeProducts(product)));
+      tmpProducts = [];
+    }, [isFocused]);
+  }
 
   const handleLike = () => {
-    const isDuplicated = tmpProducts.find((product) => product.pName === item.pName);
-    if (isDuplicated) {
-      tmpProducts = tmpProducts.filter((product) => product.pName !== item.pName);
+    if (likeProducts) {
+      setIsLike(!isLike);
+      dispatch(setLikeProducts(item));
     } else {
-      tmpProducts.push(item);
+      const isDuplicated = tmpProducts.find((product) => product.pName === item.pName);
+      if (isDuplicated) {
+        tmpProducts = tmpProducts.filter((product) => product.pName !== item.pName);
+      } else {
+        tmpProducts.push(item);
+      }
+      setIsLike(!isLike);
     }
-    setIsLike(!isLike);
   };
 
-  const imgStatusCheck = async (pImg) => {
+  const CheckImgStatus = async (pImg) => {
     try {
       const res = await axios.get(pImg, {
         validateStatus: (status) => {
@@ -108,25 +129,21 @@ const ProductsCard = ({ item, navigation }) => {
         },
       });
       if (res.status === 200) {
-        setIsValid(true);
+        setIsImgValid(true);
       } else {
-        setIsValid(false);
+        setIsImgValid(false);
       }
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    imgStatusCheck(item.pImg);
-  }, []);
-
   return (
     <CardContainer>
       <ImageContainer>
         <ImageView>
           <ProductImage
-            source={isValid ? { uri: item.pImg } : require('../assets/not_image.png')}
+            source={isImgValid ? { uri: item.pImg } : require('../assets/not_image.png')}
           />
         </ImageView>
       </ImageContainer>
