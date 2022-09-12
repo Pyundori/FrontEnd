@@ -16,7 +16,7 @@ const Container = styled.View`
   background-color: #68c2ff;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 40px;
+  padding-top: 10%;
 `;
 
 const HeadContainer = styled.View`
@@ -52,6 +52,7 @@ const Body_2Container = styled.View`
 
 const AroundContainer = styled.View`
   width: 42%;
+  height: 87%;
   margin: 4% 2% 4% 4%;
   border: 1px solid #e8e8e8;
   border-radius: 5px;
@@ -61,37 +62,56 @@ const AroundContainer = styled.View`
   justify-content: space-between;
 `;
 
-const AroundImg = styled.Image`
-  width: 70%;
+const AroundView = styled.View`
+  width: 100%;
   height: 50%;
-  margin-left: 5%;
+  position: absolute;
+`;
+
+const AroundImg = styled.Image`
+  width: 75%;
+  height: 95%;
   border-radius: 5px;
+`;
+
+const BBBB = styled.View`
+  width: 55%;
+  height: 53%;
+  margin: 30% 0% 0% 47%;
   position: absolute;
 `;
 
 const SearchIcon = styled.Image`
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  padding: 1px;
+`;
+
+const BtnView = styled.View`
   width: 55%;
-  height: 47%;
-  margin-left: 45%;
-  margin-top: 30%;
+  height: 15%;
+  margin: 90% 0% 0% 40%;
   position: absolute;
 `;
 
 const AroundBtn = styled.Pressable`
-  width: 70%;
-  height: 20%;
+  width: 100%;
+  height: 100%;
+  margin: auto;
   border-radius: 20px;
   background-color: #68c2ff;
-  margin: 90% 0% 0% 29%;
-  padding: 5% 5% 5% 12%;
 `;
+
 const AroundText = styled.Text`
   font-size: 20px;
   color: white;
+  margin: auto;
 `;
 
 const BlankContainer = styled.View`
   width: 42%;
+  height: 87%;
   margin: 4% 4% 4% 2%;
   border: 1px solid #e8e8e8;
   border-radius: 5px;
@@ -101,9 +121,9 @@ const BlankContainer = styled.View`
 const StoreBtnContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 3%;
+  margin-bottom: 5%;
   width: 100%;
-  height: 15%;
+  height: 13%;
   padding-left: 5%;
   padding-right: 5%;
 `;
@@ -189,45 +209,53 @@ const Home = (focus) => {
 
   return (
     <Container>
-      <Mainlogo />
-      <MainContainer>
-        <Body_1Container>
-          {item[0] ? (
-            <LikeList
-              scrollEnabled={true}
-              data={item}
-              horizontal={true}
-              renderItem={({ item }) => <MainCard item={item} />}
-            />
-          ) : (
-            <ServerImage source={require('../../assets/not_image.png')} />
-          )}
-        </Body_1Container>
-        <Body_2Container>
-          <AroundContainer>
-            <AroundImg source={require('../../assets/AroundVender.png')} />
-            <SearchIcon source={require('../../assets/search.png')} />
-            <AroundBtn>
-              <AroundText>찾아보기</AroundText>
-            </AroundBtn>
-          </AroundContainer>
-          <BlankContainer></BlankContainer>
-        </Body_2Container>
-        <StoreBtnContainer>
-          <MartBtn>
-            <MartLogo source={require('../../assets/seven_eleven_2.png')} />
-          </MartBtn>
-          <MartBtn>
-            <MartLogo source={require('../../assets/emart24_2.png')} />
-          </MartBtn>
-          <MartBtn>
-            <MartLogo source={require('../../assets/cu_2.png')} />
-          </MartBtn>
-          <MartBtn>
-            <MartLogo source={require('../../assets/gs25_2.png')} />
-          </MartBtn>
-        </StoreBtnContainer>
-      </MainContainer>
+      <SafeAreaView>
+        <Mainlogo />
+        <MainContainer>
+          <Body_1Container>
+            {item[0] ? (
+              <LikeList
+                scrollEnabled={true}
+                data={item}
+                horizontal={true}
+                renderItem={({ item }) => <MainCard item={item} />}
+              />
+            ) : (
+              <ServerImage source={require('../../assets/not_image.png')} />
+            )}
+          </Body_1Container>
+          <Body_2Container>
+            <AroundContainer>
+              <AroundView>
+                <AroundImg source={require('../../assets/AroundVender.png')} />
+              </AroundView>
+              <BBBB>
+                <SearchIcon source={require('../../assets/search.png')} />
+              </BBBB>
+              <BtnView>
+                <AroundBtn>
+                  <AroundText>찾아보기</AroundText>
+                </AroundBtn>
+              </BtnView>
+            </AroundContainer>
+            <BlankContainer></BlankContainer>
+          </Body_2Container>
+          <StoreBtnContainer>
+            <MartBtn>
+              <MartLogo source={require('../../assets/seven_eleven_2.png')} />
+            </MartBtn>
+            <MartBtn>
+              <MartLogo source={require('../../assets/emart24_2.png')} />
+            </MartBtn>
+            <MartBtn>
+              <MartLogo source={require('../../assets/cu_2.png')} />
+            </MartBtn>
+            <MartBtn>
+              <MartLogo source={require('../../assets/gs25_2.png')} />
+            </MartBtn>
+          </StoreBtnContainer>
+        </MainContainer>
+      </SafeAreaView>
     </Container>
   );
 };
