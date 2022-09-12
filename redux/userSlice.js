@@ -93,15 +93,11 @@ const userSlice = createSlice({
       const { payload } = action;
       const product = state.likeProducts.find((product) => product.pName === payload.pName);
       if (product) {
-        if (product.isLike) {
-          product.isLike = false;
-          state.likeProducts = state.likeProducts.filter(
-            (product) => product.pName !== payload.pName,
-          );
-        } else {
-          product.isLike = true;
-          state.likeProducts.push(payload);
-        }
+        state.likeProducts = state.likeProducts.filter(
+          (product) => product.pName !== payload.pName,
+        );
+      } else {
+        state.likeProducts.push(payload);
       }
     },
 
