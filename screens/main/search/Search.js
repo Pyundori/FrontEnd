@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/native';
 import api from '../../../api';
@@ -24,7 +25,10 @@ function Search() {
   const [searchText, setSearchText] = useState('');
   const [venderOptions, setVenderOptions] = useState(['전체']);
   const [saleOptions, setSaleOptions] = useState(['전체']);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchData, setSearchData] = useState([]);
+  const [searchDataCnt, setSearchDataCnt] = useState(0);
 
   useEffect(() => {
     history && setSearchData(history);
@@ -72,33 +76,63 @@ function Search() {
   };
 
   const searchProduct = async () => {
-    const localVenders = {
-      전체: ['gs25', 'cu', 'seven_eleven', 'emart24'],
-      GS25: ['gs25'],
-      CU: ['gs25'],
-      세븐: ['seven_eleven'],
-      이마트: ['emart24'],
-    };
+    try {
+      const localVenders = {
+        전체: ['gs25', 'cu', 'seven_eleven', 'emart24'],
+        GS25: ['gs25'],
+        CU: ['cu'],
+        세븐: ['seven_eleven'],
+        이마트: ['emart24'],
+      };
 
-    const localSales = {
-      전체: ['1N1', '2N1', '3N1', 'SALE'],
-      '1+1': ['1N1'],
-      '2+1': ['2N1'],
-      '3+1': ['3N1'],
-      할인: ['SALE'],
-    };
+      const localSales = {
+        전체: ['1N1', '2N1', '3N1', 'SALE'],
+        '1+1': ['1N1'],
+        '2+1': ['2N1'],
+        '3+1': ['3N1'],
+        할인: ['SALE'],
+      };
 
-    const vender = venderOptions.map((option) => localVenders[option]);
-    const sale = saleOptions.map((option) => localSales[option]);
-    const {
-      data: { data },
-    } = await api.search(vender[0].join(','), sale[0].join(','), searchText, 1);
-    setSearchData(data);
-    dispatch(setVenders(venderOptions));
-    dispatch(setSales(saleOptions));
-    dispatch(setSearchWord(searchText));
-    dispatch(setHistory(data));
-    dispatch(setOnSearch(false));
+      const vender = venderOptions.map((option) => localVenders[option]);
+      const sale = saleOptions.map((option) => localSales[option]);
+      const { data } = await api.search(vender[0].join(','), sale[0].join(','), searchText, page);
+      const apiData = data.data;
+      setSearchData([...searchData, ...apiData]);
+      setSearchDataCnt(data.data_cnt);
+      dispatch(setVenders(venderOptions));
+      dispatch(setSales(saleOptions));
+      dispatch(setSearchWord(searchText));
+      dispatch(setHistory(apiData));
+      dispatch(setOnSearch(false));
+      setPage(page + 1);
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onSubmitEditing = async () => {
+    if (isLoading) {
+      return;
+    } else {
+      setIsLoading(true);
+      await searchProduct();
+    }
+  };
+
+  const onEndReached = async () => {
+    if (isLoading || searchData.length < 10) {
+      return;
+    } else {
+      setIsLoading(true);
+      await searchProduct();
+    }
+  };
+
+  const onFocus = () => {
+    dispatch(setOnSearch(true));
+    setPage(1);
+    setSearchData([]);
   };
 
   return (
@@ -114,8 +148,8 @@ function Search() {
             defaultValue={searchWord}
             onChangeText={(value) => setSearchText(value)}
             returnKeyType="search"
-            onSubmitEditing={searchProduct}
-            onFocus={() => dispatch(setOnSearch(true))}
+            onSubmitEditing={onSubmitEditing}
+            onFocus={onFocus}
             maxLength={40}
           />
         </SearchContainer>
@@ -195,11 +229,19 @@ function Search() {
       ) : (
         <BodyContainer>
           {searchData[0] ? (
-            <ProductLists
-              data={searchData}
-              renderItem={({ item }) => <ProductsCard item={item} likeProducts={likeProducts} />}
-              keyExtractor={(_, idx) => idx.toString()}
-            />
+            <ProductContainer>
+              <ProductCntContainer>
+                <ProductCnt>검색결과: {searchDataCnt}개</ProductCnt>
+              </ProductCntContainer>
+              <ProductLists
+                data={searchData}
+                onEndReached={onEndReached}
+                onEndReachedThreshold={0.8}
+                renderItem={({ item }) => <ProductsCard item={item} likeProducts={likeProducts} />}
+                keyExtractor={(_, idx) => idx.toString()}
+                ListFooterComponent={isLoading && <ActivityIndicator size={40} color="#68c2ff" />}
+              />
+            </ProductContainer>
           ) : (
             <NoSearchDataView>
               <NoSearchData>검색결과가 없어요!</NoSearchData>
@@ -211,7 +253,7 @@ function Search() {
   );
 }
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   width: 100%
   height: 100%
   background-color: #68c2ff;
@@ -328,7 +370,8 @@ const SearchBar = styled.TextInput`
   padding: 7px;
   padding-left: 15px;
   background-color: #fff;
-  font-size: 16px;
+  font-size: 18px;
+  font-family: netmarbleM;
 `;
 
 const ClearBtn = styled.Button`
@@ -339,10 +382,27 @@ const LatelySearchBoard = styled.View``;
 
 const FamousSearchBoard = styled.View``;
 
+const ProductContainer = styled.View`
+  width: 100%
+  height: 100%
+  align-items: center;
+`;
+
+const ProductCntContainer = styled.View`
+  width: 95%
+  height: 10%
+  margin-left: 5%
+  justify-content: center;
+`;
+
+const ProductCnt = styled.Text`
+  font-size: 25px;
+  font-family: netmarbleB;
+`;
+
 const ProductLists = styled.FlatList`
   width: 95%;
-  height: 10%;
-  margin: 3% auto;
+  margin: auto;
 `;
 
 const NoSearchDataView = styled.View`
