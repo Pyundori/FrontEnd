@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import utils from '../utils';
 import { Text } from 'react-native';
 import Setting from '../screens/main/setting/Setting';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TabsNavigator = createBottomTabNavigator();
 
@@ -22,6 +23,8 @@ const Tabs = () => {
     return <Profile navigation={navigation} />;
   };
 
+  const insets = useSafeAreaInsets();
+
   return (
     <TabsNavigator.Navigator
       initialRouteName="Home"
@@ -29,14 +32,14 @@ const Tabs = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          height: '8%',
+          height: 60 + insets.bottom,
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
           backgroundColor: 'white',
         },
         tabBarLabel: ({ focused }) =>
           focused ? (
-            <Text style={{ color: '#0096FF', fontSize: 14, marginBottom: '3%' }}>{route.name}</Text>
+            <Text style={{ color: '#0096FF', fontSize: 14, marginBottom: '5%' }}>{route.name}</Text>
           ) : null,
         tabBarIcon: ({ focused }) => {
           const isAndroid = utils.isAndroid();
