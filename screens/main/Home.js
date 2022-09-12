@@ -1,56 +1,53 @@
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import React, { useEffect, useState, useCallback } from 'react';
-import { KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import api from '../../api';
 import { Asset } from 'expo-asset';
+import Mainlogo from '../../components/MainLogo';
+import MainCard from '../../components/MainCard';
 
 const Container = styled.View`
-  flex: 1
+  width: 100%;
+  height: 100%;
   background-color: #68c2ff;
-  align-items: space-between;
+  align-items: center;
   justify-content: flex-start;
+  padding-top: 40px;
 `;
 
 const HeadContainer = styled.View`
-  flex: 0.5;
-  margin-top: 20px;
+  margin-top: 6%;
   height: 20%;
-  width: 95%;
-  padding-top: 5%;
-  justify-content: space-around;
-  flex-direction: row;
+  width: 90%;
+  justify-content: center;
+  border: solid;
 `;
-const MainLogo = styled.Image`
-  width: 180px;
-  height: 50px;
-  margin: auto;
-`;
-
-const MainLogoView = styled.View``;
 
 const MainContainer = styled.View`
-  flex: 3.3;
+  width: 100%;
+  height: 90%;
   align-items: center;
   width: 100%;
 `;
 
 const Body_1Container = styled.View`
-  flex: 2.5;
   flex-direction: row;
-  width: 90%;
+  width: 89%;
+  height: 47%;
   border: 1px solid #e8e8e8;
   background-color: white;
   border-radius: 8px;
 `;
 
 const Body_2Container = styled.View`
-  flex: 1.8;
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
+  height: 35%;
 `;
 
 const AroundContainer = styled.View`
@@ -102,11 +99,11 @@ const BlankContainer = styled.View`
 `;
 
 const StoreBtnContainer = styled.View`
-  flex: 0.8;
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 3%;
   width: 100%;
+  height: 15%;
   padding-left: 5%;
   padding-right: 5%;
 `;
@@ -140,6 +137,12 @@ const ServerText = styled.Text`
   font-size: 15px;
 `;
 
+const LikeList = styled.FlatList`
+  width: 10%;
+  height: 100%;
+  border-radius: 8px;
+`;
+
 const Home = (focus) => {
   const [text, onChangeText] = React.useState('');
   const [Dtype, setDtype] = useState('');
@@ -148,15 +151,16 @@ const Home = (focus) => {
   const [Pprice, setPprice] = useState('');
   const [Vender, setVender] = useState('');
 
+  const Run_Api = async () => {
+    const tmp = await api.search('cu', '1N1');
+    setDtype(tmp.data.data[0].dType);
+    setImage({ uri: tmp.data.data[0].pImg });
+    setPname(tmp.data.data[0].pName);
+    setPprice(tmp.data.data[0].pPrice);
+    setVender(tmp.data.data[0].vender);
+  };
+
   useEffect(() => {
-    const Run_Api = async () => {
-      const tmp = await api.search('cu', '1N1');
-      setDtype(tmp.data.data[0].dType);
-      setImage({ uri: tmp.data.data[0].pImg });
-      setPname(tmp.data.data[0].pName);
-      setPprice(tmp.data.data[0].pPrice);
-      setVender(tmp.data.data[0].vender);
-    };
     Run_Api();
   }, []);
 
@@ -181,17 +185,23 @@ const Home = (focus) => {
 
   const List = [Dtype, Pname, Pprice, Vender];
 
+  const item = useSelector((state) => state.users.likeProducts);
+
   return (
     <Container>
-      <HeadContainer>
-        <MainLogoView>
-          <MainLogo source={require('../../assets/logo.png')} />
-        </MainLogoView>
-      </HeadContainer>
+      <Mainlogo />
       <MainContainer>
         <Body_1Container>
-          <FlatList data={List} renderItem={Render_All} />
-          <FlatList data={List} renderItem={Render_All} />
+          {item[0] ? (
+            <LikeList
+              scrollEnabled={true}
+              data={item}
+              horizontal={true}
+              renderItem={({ item }) => <MainCard item={item} />}
+            />
+          ) : (
+            <ServerImage source={require('../../assets/not_image.png')} />
+          )}
         </Body_1Container>
         <Body_2Container>
           <AroundContainer>
