@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setLikeProducts } from '../redux/userSlice';
 import { useIsFocused } from '@react-navigation/native';
+import utils from '../utils';
 
 const CardContainer = styled.SafeAreaView`
   width: 100%;
@@ -85,20 +86,20 @@ let tmpProducts = [];
 const ProductsCard = ({ item, likeProducts }) => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const [isImgValid, setIsImgValid] = useState(undefined);
   const [isLike, setIsLike] = useState(false);
+  const [isValidImg, setIsValidImg] = useState(undefined);
 
   // Search 탭에서만 가져오는 param
   if (likeProducts) {
     useEffect(() => {
       const isLikeProduct = likeProducts.find((product) => product.pName === item.pName);
       isLikeProduct ? setIsLike(true) : setIsLike(false);
-      CheckImgStatus(item.pImg);
+      CheckImgStatus(item);
     }, [likeProducts]);
   } else {
     useEffect(() => {
       setIsLike(true);
-      CheckImgStatus(item.pImg);
+      CheckImgStatus(item);
     }, [item]);
     useEffect(() => {
       tmpProducts.forEach((product) => dispatch(setLikeProducts(product)));
@@ -121,21 +122,8 @@ const ProductsCard = ({ item, likeProducts }) => {
     }
   };
 
-  const CheckImgStatus = async (pImg) => {
-    try {
-      const res = await axios.get(pImg, {
-        validateStatus: (status) => {
-          return status === 200 || 404; // 상태 코드가 200 또는 404인 경우에만 에러 없음.
-        },
-      });
-      if (res.status === 200) {
-        setIsImgValid(true);
-      } else {
-        setIsImgValid(false);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  const CheckImgStatus = async (item) => {
+    setIsValidImg(await utils.CheckImgStatus(item.pImg));
   };
 
   return (
@@ -143,7 +131,7 @@ const ProductsCard = ({ item, likeProducts }) => {
       <ImageContainer>
         <ImageView>
           <ProductImage
-            source={isImgValid ? { uri: item.pImg } : require('../assets/not_image.png')}
+            source={isValidImg ? { uri: item.pImg } : require('../assets/not_image.png')}
           />
         </ImageView>
       </ImageContainer>
