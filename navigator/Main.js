@@ -15,10 +15,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const TabsNavigator = createBottomTabNavigator();
 
 const Tabs = () => {
-  const LikesTab = ({ navigation }) => {
-    return <Likes navigation={navigation} />;
-  };
-
   const ProfileTab = ({ navigation }) => {
     return <Profile navigation={navigation} />;
   };
@@ -60,7 +56,7 @@ const Tabs = () => {
       })}
     >
       <TabsNavigator.Screen name="Search" component={Search} />
-      <TabsNavigator.Screen name="Likes" component={LikesTab} />
+      <TabsNavigator.Screen name="Likes" component={Likes} />
       <TabsNavigator.Screen name="Home" component={Home} />
       <TabsNavigator.Screen name="Profile" component={ProfileTab} />
       <TabsNavigator.Screen name="Setting" component={Setting} />

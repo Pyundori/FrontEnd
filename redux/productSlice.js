@@ -7,10 +7,11 @@ const productSlice = createSlice({
   initialState: {
     search: {
       page: 1,
-      products: [], // 검색탭에 보여질 상품들: 현재 10개씩 담길 예정.
-      venders: [], // 편의점: cu, gs25 ...
-      dTypes: [], // 행사 타입: 1N1, 2N1 ...
-      pName: '', // 검색어
+      onSearch: true,
+      history: [], // 검색탭에서 마지막으로 검색된 상품들
+      venders: ['전체'], // 편의점: cu, gs25 ...
+      sales: ['전체'], // 행사 타입: 1N1, 2N1 ...
+      searchWord: '', // 검색어
     },
   },
   reducers: {
@@ -24,6 +25,12 @@ const productSlice = createSlice({
     increasePage(state, action) {
       state.search.page += 1;
     },
+
+    setOnSearch(state, action) {
+      const { payload } = action;
+      state.search.onSearch = payload;
+    },
+
     setProductLikes(state, action) {
       const { payload } = action;
       const dispatch = useDispatch();
@@ -40,18 +47,38 @@ const productSlice = createSlice({
         }
       }
     },
+
     setVenders(state, action) {
       const { payload } = action;
-      const vender = state.search.venders.find((vender) => vender === payload);
-      if (vender) {
-        state.search.venders = state.search.venders.filter((vender) => vender !== payload);
-      } else {
-        state.search.venders.push(payload);
-      }
+      state.search.venders = payload;
+    },
+
+    setSales(state, action) {
+      const { payload } = action;
+      state.search.sales = payload;
+    },
+
+    setSearchWord(state, action) {
+      const { payload } = action;
+      state.search.searchWord = payload;
+    },
+
+    setHistory(state, action) {
+      const { payload } = action;
+      state.search.history = payload;
     },
   },
 });
 
-export const { setSearchPage, increasePage, setProductLikes, setVenders } = productSlice.actions;
+export const {
+  setSearchPage,
+  increasePage,
+  setOnSearch,
+  setProductLikes,
+  setVenders,
+  setSales,
+  setSearchWord,
+  setHistory,
+} = productSlice.actions;
 
 export default productSlice.reducer;

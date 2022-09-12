@@ -66,7 +66,7 @@ export default {
   isDuplicated: (column, data) => {
     const {
       data: { res_code },
-    } = callApi('get', '/api/user/check_dup', null, '', {
+    } = callApi('get', '/api/user/check_dup', '', '', {
       column,
       data,
     });
@@ -100,11 +100,11 @@ export default {
    * @param {number} page 검색 결과 페이지, 기본값 = 1
    * @returns
    */
-  search: (conv, dtypes, searchWord = '', page = 1) =>
-    callApi('get', '/api/product/query', null, '', {
-      venders: conv,
-      dtypes: dtypes,
+  search: (venders, dtypes, searchWord = '', page = 1) =>
+    callApi('get', '/api/product/query', '', '', {
+      venders,
+      dtypes,
       products: searchWord,
-      page: page,
+      page,
     }),
 };

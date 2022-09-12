@@ -57,7 +57,7 @@ const SignUpBtn = styled.Pressable`
 const LoginBtn = styled.Pressable`
   justify-content: center;
   align-items: center;
-  background-color: #2687ff;
+  background-color: #0096ff;
   border-radius: 10px;
   padding: 2% 6%;
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
