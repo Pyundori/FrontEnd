@@ -57,7 +57,7 @@ const SignUpBtn = styled.Pressable`
 const LoginBtn = styled.Pressable`
   justify-content: center;
   align-items: center;
-  background-color: #2687ff;
+  background-color: #0096ff;
   border-radius: 10px;
   padding: 2% 6%;
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
@@ -123,7 +123,6 @@ const Home = ({ navigation }) => {
     }
   }, [id, pw]);
 
-  const token = useSelector((state) => state.users.token);
   const login = async () => {
     try {
       setIsLoading(true);
@@ -133,7 +132,7 @@ const Home = ({ navigation }) => {
       console.log(res_code);
       if (res_code === 201) {
         setIsLoading(false);
-        setToken(token);
+        dispatch(setToken(token));
         dispatch(setIsLogined());
       } else {
         setIsLoading(false);
@@ -182,7 +181,7 @@ const Home = ({ navigation }) => {
           <KakaoBtn onPress={() => navigation.navigate('KakaoLogin')}>
             <KakaoImg source={require('../../assets/kakao_login.png')} />
           </KakaoBtn>
-          <GoogleLogin />
+          <GoogleLogin setIsLoading={setIsLoading} />
         </ExBtnContainer>
         <MainModal
           navigation={navigation}

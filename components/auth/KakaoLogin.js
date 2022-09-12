@@ -38,9 +38,9 @@ export default KakaoLogin = ({ navigation }) => {
         code,
       });
 
-      const {
-        data: { access_token },
-      } = await axios.post(requestTokenUrl, options);
+      const { data } = await axios.post(requestTokenUrl, options);
+      console.log(data);
+      const { access_token } = data;
       const {
         data: { token },
       } = await api.kakaoLogin(access_token);

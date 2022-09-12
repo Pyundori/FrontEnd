@@ -1,115 +1,118 @@
-import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
-  TextInput,
-  Dimensions,
-  TouchableOpacity,
-  StatusBar,
-} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { setIsLogined } from '../../../redux/userSlice';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsLogined, setToken } from '../../../redux/userSlice';
 import { FontAwesome } from '@expo/vector-icons';
-
-
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import api from '../../../api';
+import utils from '../../../utils';
+import ExternalProfile from './ExternalProfile';
 
 const Separator = () => <View style={styles.separator} />;
 
-const Profile = () => {
-  const [Name, onChangeName] = useState(null);
-  const [Password, onChangeUserPassword] = useState(null);
+const Profile = ({ navigation }) => {
+  const [name, onChangeName] = useState(null);
+  const [password, onChangePassword] = useState(null);
+  const [userData, setUserData] = useState('');
 
+  console.log(name);
 
-  
-  StatusBar.setBarStyle('white-content');
   const dispatch = useDispatch();
-  Platform.OS === 'android' && StatusBar.setBackgroundColor('transparent');
-  StatusBar.setTranslucent(true);
-  return (
- 
-      <SafeAreaView style={styles.container}>
+  const token = useSelector((state) => state.users.token);
+  const a = async () => {
+    const { data } = await api.getUserData(token);
+    setUserData(data);
+  };
 
-        <View style ={styles.header}>
+  useEffect(() => {
+    a();
+  }, []);
+
+  const modifyData = async () => {
+    utils.isNickname(name) && (await api.modifyUserData(token, 'name', name));
+    utils.isPassword(password) && (await api.modifyUserData(token, 'password', password));
+  };
+
+  return userData.login === 'google' ? (
+    <ExternalProfile userData={userData} />
+  ) : userData.login === 'kakao' ? (
+    <ExternalProfile userData={userData} />
+  ) : (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
         <View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}   >
-          <FontAwesome name="user-circle" size={100} color="#68c2ff" />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
+          >
+            <FontAwesome name="user-circle" size={120} color="#68c2ff" />
+          </TouchableOpacity>
         </View>
-
-        <View>
-          <Text>          Name</Text>
+        <View style={styles.inputContainer}>
+          <View style={{ width: '100%', alignItems: 'flex-start' }}>
+            <Text> Name</Text>
+          </View>
           <TextInput
             style={styles.input}
-            onChangeName={onChangeName}
-            value={Name}
+            onChangeText={(value) => onChangeName(value)}
+            value={name}
             placeholder="Please write down"
             keyboardType="default"
           />
-
-          <Text>          Password</Text>
+          <View style={{ width: '100%', alignItems: 'flex-start' }}>
+            <Text> Password</Text>
+          </View>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
-            onChangeUserPassword={onChangeUserPassword}
-            value={Password}
+            onChangeText={(value) => onChangePassword(value)}
+            value={password}
             placeholder="Please write down"
             keyboardType="default"
           />
-      
         </View>
 
         <View>
-        <TouchableOpacity
-        style={styles.modbutton}
-        onPress={() => Alert.alert('변경사항 저장 중')}>
-        <Text style={styles.headline}> 변 경 사 항  저 장  중 </Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.modbutton} onPress={modifyData}>
+            <Text style={styles.headline}> 변경사항 저장 중 </Text>
+          </TouchableOpacity>
 
           <Separator />
-
           <TouchableOpacity
-        style={styles.logoutbutton}
-        onPress={() => dispatch(setIsLogined())}>
-        <Text style={styles.headline}> 로 그  아 웃 </Text>
-      </TouchableOpacity>
-
+            style={styles.logoutbutton}
+            onPress={() => {
+              dispatch(setToken(''));
+              dispatch(setIsLogined());
+            }}
+          >
+            <Text style={styles.headline}> 로그아웃 </Text>
+          </TouchableOpacity>
         </View>
-        </View>
-      </SafeAreaView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-
-    width: windowWidth, 
-    height: windowHeight, 
-    backgroundColor: '#68c2ff' 
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#68c2ff',
   },
 
-  header:{
-    height: '83%',
+  header: {
+    width: '93%',
+    height: '90%',
     borderRadius: 20,
     justifyContent: 'center',
-    marginTop: '15%',
-    marginLeft: '8%',
-    marginRight: '8%',
-    marginBottom: '10%',
-    backgroundColor: 'white',
     alignItems: 'center',
-
+    backgroundColor: 'white',
   },
 
   separator: {
-    marginTop:'6%',
-    marginBottom:'6%',
+    marginTop: '3%',
+    marginBottom: '3%',
     marginVertical: 8,
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -123,12 +126,18 @@ const styles = StyleSheet.create({
     marginLeft: '10%',
     marginRight: '10%',
     borderWidth: 1.8,
-    borderRadius : 20,
+    borderRadius: 20,
     padding: 10,
     backgroundColor: 'white',
     justifyContent: 'space-around',
-
   }, //텍스트 입력 칸
+
+  inputContainer: {
+    width: '65%',
+    height: '40%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
   button: {
     width: 120,
@@ -136,36 +145,34 @@ const styles = StyleSheet.create({
     backgroundColor: '68c2ff',
     justifyContent: 'space-around',
     alignItems: 'center',
- 
     marginBottom: '15%',
   }, //프로필 사진 업로드 버튼
   headline: {
-    textAlign: 'center', 
+    textAlign: 'center',
     fontSize: 18,
     marginTop: 0,
-    width: 200,
-    color : 'white'
- 
-  },//버튼내부 글자
 
-  modbutton:{
-    alignItems: "center",
-    backgroundColor:"#68c2ff",
-    padding:10,
-    height: 50,
-    width: 200,
-    borderRadius : 20,
-    marginTop : 20
-  },//변경사항 버튼
+    color: 'white',
+  }, //버튼내부 글자
 
-  logoutbutton:{
-    alignItems: "center",
-    backgroundColor:"#ff68c2",
-    padding:10,
-    height: 50,
-    width: 200,
-    borderRadius : 20,
-  },//로그아웃 버튼
+  modbutton: {
+    alignItems: 'center',
+    backgroundColor: '#68c2ff',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    padding: 8,
+    borderRadius: 20,
+    marginTop: 20,
+  }, //변경사항 버튼
+
+  logoutbutton: {
+    alignItems: 'center',
+    backgroundColor: '#ff68c2',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    padding: 8,
+    borderRadius: 20,
+  }, //로그아웃 버튼
 
   title: {
     textAlign: 'center',
@@ -175,8 +182,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-
-
 });
 
 export default Profile;

@@ -6,17 +6,20 @@ import Home from '../screens/main/Home';
 import Search from '../screens/main/search/Search';
 import Likes from '../screens/main/likes/Likes';
 import Profile from '../screens/main/Profile/Profile';
-import RecentList from '../screens/main/recentList/RecentList';
 import { Ionicons } from '@expo/vector-icons';
 import utils from '../utils';
 import { Text } from 'react-native';
+import Setting from '../screens/main/setting/Setting';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const TabsNavigator = createBottomTabNavigator();
 
 const Tabs = () => {
-  const LikesTab = ({ navigation }) => {
-    return <Likes navigation={navigation} />;
+  const ProfileTab = ({ navigation }) => {
+    return <Profile navigation={navigation} />;
   };
+
+  const insets = useSafeAreaInsets();
 
   return (
     <TabsNavigator.Navigator
@@ -25,14 +28,14 @@ const Tabs = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          height: '10%',
+          height: 60 + insets.bottom,
           borderTopLeftRadius: 25,
           borderTopRightRadius: 25,
           backgroundColor: 'white',
         },
         tabBarLabel: ({ focused }) =>
           focused ? (
-            <Text style={{ color: '#0096FF', fontSize: 14, marginBottom: '1%' }}>{route.name}</Text>
+            <Text style={{ color: '#0096FF', fontSize: 14, marginBottom: '5%' }}>{route.name}</Text>
           ) : null,
         tabBarIcon: ({ focused }) => {
           const isAndroid = utils.isAndroid();
@@ -41,8 +44,8 @@ const Tabs = () => {
             iconName += 'search';
           } else if (route.name === 'Likes') {
             iconName += 'heart';
-          } else if (route.name === 'RecentList') {
-            iconName += 'pricetags';
+          } else if (route.name === 'Setting') {
+            iconName += 'settings-sharp';
           } else if (route.name === 'Profile') {
             iconName += 'person';
           } else if (route.name === 'Home') {
@@ -53,10 +56,10 @@ const Tabs = () => {
       })}
     >
       <TabsNavigator.Screen name="Search" component={Search} />
-      <TabsNavigator.Screen name="Likes" component={LikesTab} />
+      <TabsNavigator.Screen name="Likes" component={Likes} />
       <TabsNavigator.Screen name="Home" component={Home} />
-      <TabsNavigator.Screen name="RecentList" component={RecentList} />
-      <TabsNavigator.Screen name="Profile" component={Profile} />
+      <TabsNavigator.Screen name="Profile" component={ProfileTab} />
+      <TabsNavigator.Screen name="Setting" component={Setting} />
     </TabsNavigator.Navigator>
   );
 };

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Platform } from 'react-native';
 
 export default {
@@ -18,5 +19,21 @@ export default {
   isPassword: (password) => {
     const regExp = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
     return regExp.test(password);
+  },
+  CheckImgStatus: async (pImg) => {
+    try {
+      const res = await axios.get(pImg, {
+        validateStatus: (status) => {
+          return status === 200 || 404; // 상태 코드가 200 또는 404인 경우에만 에러 없음.
+        },
+      });
+      if (res.status === 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

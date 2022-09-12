@@ -63,10 +63,10 @@ export default {
    * @param {string} data User's input value
    * @returns {boolean} true | false
    */
-  isDuplicated: async (column, data) => {
+  isDuplicated: (column, data) => {
     const {
       data: { res_code },
-    } = await callApi('get', '/api/user/check_dup', null, '', {
+    } = callApi('get', '/api/user/check_dup', '', '', {
       column,
       data,
     });
@@ -76,6 +76,22 @@ export default {
       return true;
     }
   },
+
+  /**
+   *
+   * @param {string} token jwt
+   * @returns User's Data
+   */
+  getUserData: (token) => callApi('post', '/api/user/get', { token }),
+
+  /**
+   *
+   * @param {*} token jwt
+   * @param {*} col 'password' or 'name'
+   * @param {*} data Value
+   * @returns
+   */
+  modifyUserData: (token, col, data) => callApi('post', '/api/user/modify', { token, col, data }),
   /**
    *
    * @param {string} conv  편의점 이름
@@ -84,11 +100,11 @@ export default {
    * @param {number} page 검색 결과 페이지, 기본값 = 1
    * @returns
    */
-  search: (conv, dtypes, searchWord = '', page = 1) =>
-    callApi('get', '/api/product/query', null, '', {
-      venders: conv,
-      dtypes: dtypes,
+  search: (venders, dtypes, searchWord = '', page = 1) =>
+    callApi('get', '/api/product/query', '', '', {
+      venders,
+      dtypes,
       products: searchWord,
-      page: page,
+      page,
     }),
 };

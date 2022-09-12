@@ -1,192 +1,346 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Text } from 'react-native';
-import { useSelector, useStore } from 'react-redux';
+import { ActivityIndicator } from 'react-native';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/native';
-import LogoBtn from '../../../components/LogoBtn';
-import conv from '../../../conv';
-import MartDataFilter from "../../../Data/MartDataFilter";
-import SaleDataFilter from "../../../Data/SaleDataFilter";
-import { element } from 'prop-types';
+import api from '../../../api';
+import MainLogo from '../../../components/MainLogo';
+import ProductsCard from '../../../components/ProductsCard';
+import SearchOptionBtn from '../../../components/SearchOptionBtn';
+import {
+  setHistory,
+  setOnSearch,
+  setSales,
+  setSearchWord,
+  setVenders,
+} from '../../../redux/productSlice';
 
-function Search_Filter() {
-  const a = useSelector((state) => state.products.search);
-  console.log(a);
+function Search() {
+  const dispatch = useDispatch();
+  const likeProducts = useSelector((state) => state.users.likeProducts, shallowEqual);
+  const { onSearch, history, venders, sales, searchWord } = useSelector(
+    (state) => state.products.search,
+    shallowEqual,
+  );
+
   const [searchText, setSearchText] = useState('');
-
-  const [duplicated, setDuplicated] = useState(["전체"]);
+  const [venderOptions, setVenderOptions] = useState(['전체']);
+  const [saleOptions, setSaleOptions] = useState(['전체']);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchData, setSearchData] = useState([]);
+  const [searchDataCnt, setSearchDataCnt] = useState(0);
 
   useEffect(() => {
-    if(duplicated.length === 4 || duplicated.length === 0) {
-      setDuplicated(["전체"]);
-    }
-  }, [duplicated]);
+    history && setSearchData(history);
+    venders && setVenderOptions(venders);
+    sales && setSaleOptions(sales);
+    searchWord && setSearchText(searchWord);
+  }, []);
 
-  const handleDuplicated = (e) => {
-    console.log(e.target.value);
-    const isIncludes = duplicated.find((el) => el === e.target.value);
+  const handleVender = (vender) => {
+    const isDuplicated = venderOptions.find((option) => option === vender);
+    const isAll = venderOptions.find((option) => option === '전체');
+    if (vender === '전체') {
+      setVenderOptions(['전체']);
+    } else if (isAll) {
+      setVenderOptions([vender]);
+    } else if (isDuplicated && venderOptions.length !== 1) {
+      setVenderOptions(venderOptions.filter((option) => option !== vender));
+    } else if (
+      (isDuplicated && venderOptions.length === 1) ||
+      (!isDuplicated && venderOptions.length === 3)
+    ) {
+      setVenderOptions(['전체']);
+    } else {
+      setVenderOptions([...venderOptions, vender]);
+    }
+  };
 
-    if (e.target.value === "전체") {
-      setDuplicated(["전체"])
+  const handleSale = async (sale) => {
+    const isDuplicated = saleOptions.find((option) => option === sale);
+    const isAll = saleOptions.find((option) => option === '전체');
+    if (sale === '전체') {
+      setSaleOptions(['전체']);
+    } else if (isAll) {
+      setSaleOptions([sale]);
+    } else if (isDuplicated && saleOptions.length !== 1) {
+      setSaleOptions(saleOptions.filter((option) => option !== sale));
+    } else if (
+      (isDuplicated && saleOptions.length === 1) ||
+      (!isDuplicated && saleOptions.length === 3)
+    ) {
+      setSaleOptions(['전체']);
+    } else {
+      setSaleOptions([...saleOptions, sale]);
     }
-    else if (isIncludes) {
-      setDuplicated(duplicated.filter((el) => el !== e.target.value));
+  };
+
+  const searchProduct = async () => {
+    try {
+      const localVenders = {
+        전체: ['gs25', 'cu', 'seven_eleven', 'emart24'],
+        GS25: ['gs25'],
+        CU: ['cu'],
+        세븐: ['seven_eleven'],
+        이마트: ['emart24'],
+      };
+
+      const localSales = {
+        전체: ['1N1', '2N1', '3N1', 'SALE'],
+        '1+1': ['1N1'],
+        '2+1': ['2N1'],
+        '3+1': ['3N1'],
+        할인: ['SALE'],
+      };
+
+      const vender = venderOptions.map((option) => localVenders[option]);
+      const sale = saleOptions.map((option) => localSales[option]);
+      const { data } = await api.search(vender[0].join(','), sale[0].join(','), searchText, page);
+      const apiData = data.data;
+      setSearchData([...searchData, ...apiData]);
+      setSearchDataCnt(data.data_cnt);
+      dispatch(setVenders(venderOptions));
+      dispatch(setSales(saleOptions));
+      dispatch(setSearchWord(searchText));
+      dispatch(setHistory(apiData));
+      dispatch(setOnSearch(false));
+      setPage(page + 1);
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e);
     }
-    else if (duplicated.length > 0) {
-      setDuplicated([...duplicated.filter((el) => el !== "전체"), e.target.value, ]);
+  };
+
+  const onSubmitEditing = async () => {
+    if (isLoading) {
+      return;
+    } else {
+      setIsLoading(true);
+      await searchProduct();
     }
-  }
+  };
+
+  const onEndReached = async () => {
+    if (isLoading || searchData.length < 10) {
+      return;
+    } else {
+      setIsLoading(true);
+      await searchProduct();
+    }
+  };
+
+  const onFocus = () => {
+    dispatch(setOnSearch(true));
+    setPage(1);
+    setSearchData([]);
+  };
 
   return (
     <Container>
-      <UpperContainer>
-        <MainLogoView>
-          <MainLogo source={require('../../../assets/logo.png')} />
-        </MainLogoView>
+      <LogoContainer>
+        <Logo source={require('../../../assets/logo.png')} />
+      </LogoContainer>
+      <HeadContainer>
         <SearchContainer>
           <SearchBar
             placeholder="검색어를 입력하세요"
             Value={searchText}
+            defaultValue={searchWord}
             onChangeText={(value) => setSearchText(value)}
+            returnKeyType="search"
+            onSubmitEditing={onSubmitEditing}
+            onFocus={onFocus}
             maxLength={40}
           />
         </SearchContainer>
-      </UpperContainer>
-      <MiddleContainer>
-        <MartSearchContainer>
-          <MartTitleContainer>
-            <Title>마트 검색</Title>
-          </MartTitleContainer>
-          <MartButtoncontainer>
-            <MartAttriBtn>
-              {MartDataFilter.map((el, index) => (
-                <AttriBtn
-                  title = {el.value}
-                  key = {index}
-                  type = "button"
-                  onClick = {handleDuplicated}
-                  value = {el.value}
-                  backgroundColor = { duplicated.find((element) => element === el.value)} >
-                  </AttriBtn>
-              ))}
-            </MartAttriBtn>
-          </MartButtoncontainer>
-        </MartSearchContainer>
-        <SaleSearchContainer>
-          <SaleTitleContainer>
-            <Title>할인 검색</Title>
-          </SaleTitleContainer>
-          <SaleButtonContainer>
-            <SaleAttriBtn>
-              {SaleDataFilter.map((el, index) => (
-                <AttriBtn
-                  title = {el.value}
-                  key = {index}
-                  type = "button"
-                  onClick = {handleDuplicated}
-                  value = {el.value}
-                  backgroundColor = { duplicated.find((element) => element === el.value)} >
-                  </AttriBtn>
-              ))}
-            </SaleAttriBtn>
-          </SaleButtonContainer>
-        </SaleSearchContainer>
-      </MiddleContainer> 
-      <BottomContainer>
-        <LatelySearchViewContainer>
-          <LatelySearchTitle>
-            <Title>최근 검색어</Title>
-            <ClearBtn
-              title = "전체 삭제"
-              type = "button"
-              onClick = {null}>
-              </ClearBtn>
-          </LatelySearchTitle>
-          <LatelySearchBoard>
-
-          </LatelySearchBoard>
-        </LatelySearchViewContainer>
-        <FamousSearchViewContainer>
-          <FamousSearchTitle>
-            <Title>인기 검색어</Title>
-          </FamousSearchTitle>
-          <FamousSearchBoard>
-            
-          </FamousSearchBoard>
-        </FamousSearchViewContainer>
-      </BottomContainer> 
+      </HeadContainer>
+      {onSearch ? (
+        <BodyContainer>
+          <MiddleContainer>
+            <VenderSearchContainer>
+              <VenderTitleContainer>
+                <Title>편의점 검색</Title>
+              </VenderTitleContainer>
+              <VenderBtnContainer>
+                <SearchOptionBtn
+                  venderText="전체"
+                  handleVender={handleVender}
+                  venderOptions={venderOptions}
+                />
+                <SearchOptionBtn
+                  venderText="세븐"
+                  handleVender={handleVender}
+                  venderOptions={venderOptions}
+                />
+                <SearchOptionBtn
+                  venderText="이마트"
+                  handleVender={handleVender}
+                  venderOptions={venderOptions}
+                />
+                <SearchOptionBtn
+                  venderText="CU"
+                  handleVender={handleVender}
+                  venderOptions={venderOptions}
+                />
+                <SearchOptionBtn
+                  venderText="GS25"
+                  handleVender={handleVender}
+                  venderOptions={venderOptions}
+                />
+              </VenderBtnContainer>
+            </VenderSearchContainer>
+            <SaleSearchContainer>
+              <SaleTitleContainer>
+                <Title>할인 검색</Title>
+              </SaleTitleContainer>
+              <SaleBtnContainer>
+                <SearchOptionBtn
+                  saleText="전체"
+                  handleSale={handleSale}
+                  saleOptions={saleOptions}
+                />
+                <SearchOptionBtn saleText="1+1" handleSale={handleSale} saleOptions={saleOptions} />
+                <SearchOptionBtn saleText="2+1" handleSale={handleSale} saleOptions={saleOptions} />
+                <SearchOptionBtn saleText="3+1" handleSale={handleSale} saleOptions={saleOptions} />
+                <SearchOptionBtn
+                  saleText="할인"
+                  handleSale={handleSale}
+                  saleOptions={saleOptions}
+                />
+              </SaleBtnContainer>
+            </SaleSearchContainer>
+          </MiddleContainer>
+          <BottomContainer>
+            <LatelySearchViewContainer>
+              <LatelySearchTitle>
+                <Title>최근 검색어</Title>
+                <ClearBtn title="전체 삭제" type="button" onClick={null}></ClearBtn>
+              </LatelySearchTitle>
+              <LatelySearchBoard></LatelySearchBoard>
+            </LatelySearchViewContainer>
+            <FamousSearchViewContainer>
+              <FamousSearchTitle>
+                <Title>인기 검색어</Title>
+              </FamousSearchTitle>
+              <FamousSearchBoard></FamousSearchBoard>
+            </FamousSearchViewContainer>
+          </BottomContainer>
+        </BodyContainer>
+      ) : (
+        <BodyContainer>
+          {searchData[0] ? (
+            <ProductContainer>
+              <ProductCntContainer>
+                <ProductCnt>검색결과: {searchDataCnt}개</ProductCnt>
+              </ProductCntContainer>
+              <ProductLists
+                data={searchData}
+                onEndReached={onEndReached}
+                onEndReachedThreshold={0.8}
+                renderItem={({ item }) => <ProductsCard item={item} likeProducts={likeProducts} />}
+                keyExtractor={(_, idx) => idx.toString()}
+                ListFooterComponent={isLoading && <ActivityIndicator size={40} color="#68c2ff" />}
+              />
+            </ProductContainer>
+          ) : (
+            <NoSearchDataView>
+              <NoSearchData>검색결과가 없어요!</NoSearchData>
+            </NoSearchDataView>
+          )}
+        </BodyContainer>
+      )}
     </Container>
   );
-};
+}
 
-const Container = styled.View`
-  flex: 1
+const Container = styled.SafeAreaView`
+  width: 100%
+  height: 100%
   background-color: #68c2ff;
-  align-items: space-between;
+  align-items: center;
   justify-content: flex-start;
+  padding-top: 40px
 `;
 
-const UpperContainer = styled.View`
-  flex: 0.12;
-  margin-top: 15px;
-  height: 10%;
-  width: 95%;
-  padding-top: 5%;
-  justify-content: space-around;
+const LogoContainer = styled.View`
+  width: 100%;
+  height: 12%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2%;
+`;
+
+const Logo = styled.Image`
+  width: 170px;
+  height: 60px;
+`;
+
+const BodyContainer = styled.View`
+  width: 93%;
+  height: 81%;
+  background-color: #fff;
+  align-items: center;
+  border-radius: 25px;
+`;
+
+const HeadContainer = styled.View`
+  height: 8%;
+  width: 93%;
+  justify-content: center;
+  align-items: center;
 `;
 
 const MiddleContainer = styled.View`
-  flex: 0.25;
-  width: 95%;
-  height: 10%;
-  justify-content: flex-start;
-  background-color: white;
-  border-radius: 8px;
-  margin-left: 1%;
-  margin-right: 2.4%;
-  margin-top: 1%
+  width: 90%;
+  height: 35%;
+  align-items: center;
 `;
 
 const BottomContainer = styled.View`
-  flex: 0.6;
-  width: 95%;
-  height: 10%;
+  width: 100%;
+  height: 65%;
   justify-content: flex-start;
   background-color: white;
   border-radius: 8px;
-  margin-top: 2%;
-  margin-left: 1%;
-  margin-right: 2.4%;
 `;
-
-const MainLogoView = styled.View``;
 
 const SearchContainer = styled.View`
-  flex-direction: row;
-  width: 48%;
-  margin: auto;
-  margin-left: 1%;
+  width: 95%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 `;
 
-const MartSearchContainer = styled.View``;
+const VenderSearchContainer = styled.View`
+  width: 100%;
+  height: 50%;
+  align-items: flex-start;
+`;
 
-const SaleSearchContainer = styled.View``;
+const SaleSearchContainer = styled.View`
+  width: 100%;
+  height: 50%;
+  align-items: flex-start;
+`;
 
-const MartTitleContainer = styled.View`
-  margin-left: 5%;
-  margin-top: 2%;
+const VenderTitleContainer = styled.View`
+  margin-top: 3%;
+  align-items: flex-start;
 `;
 
 const SaleTitleContainer = styled.View`
-  margin-left: 5%;
-  margin-top: 2%;
+  margin-top: 3%;
+  align-items: flex-start;
 `;
 
-const MartButtoncontainer = styled.View`
-  width: 85%;
+const VenderBtnContainer = styled.View`
+  flex-direction: row;
+  margin-top: 10px;
 `;
 
-const SaleButtonContainer = styled.View`
-  width: 85%;
+const SaleBtnContainer = styled.View`
+  flex-direction: row;
+  margin-top: 10px;
 `;
 
 const LatelySearchViewContainer = styled.View``;
@@ -210,64 +364,14 @@ const Title = styled.Text`
   color: #68c2ff;
 `;
 
-const MainLogo = styled.Image`
-  width: 180px;
-  height: 50px;
-  margin-left: 25%;
-  margin-right: 50%;
-`;
-
 const SearchBar = styled.TextInput`
-  width: 303px;
-  border-radius: 18px;
-  margin-left: 40%;
-  margin-right: 50%;
-  padding: 5px;
+  width: 100%;
+  border-radius: 20px;
+  padding: 7px;
+  padding-left: 15px;
   background-color: #fff;
-  text-align: left;
-`;
-
-const MartAttriBtn = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 2%;
-  width: 85%;
-  padding-left: 5%;
-  padding-right: 2%;
-  padding-top: 3%
-`;
-
-const SaleAttriBtn = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 2%;
-  width: 85%;
-  padding-left: 5%;
-  padding-right: 2%;
-  padding-top: 3%
-  `;
-
-const AttriBtn = styled.Button`
-  margin: 0 3px;
-  padding: 6px 12px;
-  font-size: 14px;
-  font-weight: 400;
-
-  color: ${({ backgroundColor }) => (backgroundColor ? "white" : "black")};
-  background-color: ${({ backgroundColor }) =>
-    backgroundColor ? "#428bca" : "#fff"};
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  outline: none;
-  cursor: pointer;
-
-  &:hover {
-    color: #333;
-    color: ${({ backgroundColor }) => (backgroundColor ? "white" : "black")};
-    background-color: ${({ backgroundColor }) =>
-      backgroundColor ? "#428bca" : "#e6e6e6"};
-    border-color: #adadad;
-  }
+  font-size: 18px;
+  font-family: netmarbleM;
 `;
 
 const ClearBtn = styled.Button`
@@ -278,4 +382,39 @@ const LatelySearchBoard = styled.View``;
 
 const FamousSearchBoard = styled.View``;
 
-export default Search_Filter;
+const ProductContainer = styled.View`
+  width: 100%
+  height: 100%
+  align-items: center;
+`;
+
+const ProductCntContainer = styled.View`
+  width: 95%
+  height: 10%
+  margin-left: 5%
+  justify-content: center;
+`;
+
+const ProductCnt = styled.Text`
+  font-size: 25px;
+  font-family: netmarbleB;
+`;
+
+const ProductLists = styled.FlatList`
+  width: 95%;
+  margin: auto;
+`;
+
+const NoSearchDataView = styled.View`
+  width: 100%;
+  height: 85%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoSearchData = styled.Text`
+  font-size: 25px;
+  color: #c8c8c8;
+`;
+
+export default Search;
