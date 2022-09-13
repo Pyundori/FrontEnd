@@ -89,7 +89,7 @@ function Search() {
         전체: ['1N1', '2N1', '3N1', 'SALE'],
         '1+1': ['1N1'],
         '2+1': ['2N1'],
-        '3+1': ['3N1'],
+        덤증정: ['GIFT'],
         할인: ['SALE'],
       };
 
@@ -201,7 +201,11 @@ function Search() {
                 />
                 <SearchOptionBtn saleText="1+1" handleSale={handleSale} saleOptions={saleOptions} />
                 <SearchOptionBtn saleText="2+1" handleSale={handleSale} saleOptions={saleOptions} />
-                <SearchOptionBtn saleText="3+1" handleSale={handleSale} saleOptions={saleOptions} />
+                <SearchOptionBtn
+                  saleText="덤증정"
+                  handleSale={handleSale}
+                  saleOptions={saleOptions}
+                />
                 <SearchOptionBtn
                   saleText="할인"
                   handleSale={handleSale}
