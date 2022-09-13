@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setLikeProducts } from '../redux/userSlice';
 import { useIsFocused } from '@react-navigation/native';
@@ -11,25 +10,41 @@ import utils from '../utils';
 const CardContainer = styled.SafeAreaView`
   width: 100%;
   border-radius: 10px;
-  padding: 5px;
-  border: 1.5px solid #dadce0;
+  padding: 0px 5px 5px 5px;
+  border: 1.5px solid ${(props) => props.borderColor};
   align-items: flex-start;
   justify-content: center;
   flex-direction: row;
-  margin-vertical: 2%;
+  margin-vertical: 1.5%;
 `;
 
 const ImageContainer = styled.View`
   width: 30%;
+  align-items: center;
   margin: auto;
   margin-left: 0px;
+`;
+
+const SaleTypeContainer = styled.View`
+  width: 90%
+  align-items: center;
+  justify-content: center;
+  background-color: ${(props) => props.bgColor};
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+`;
+
+const SaleTypeText = styled.Text`
+  font-size: 17px;
+  color: #fff
+  font-family: sansBold;
 `;
 
 const ImageView = styled.View`
   width: 100px
   height: 100px
   border-radius: 10px;
-  border: 1px solid #dadce0;
+  border: 1px solid ${(props) => props.borderColor};
   margin: auto;
 `;
 
@@ -39,8 +54,8 @@ const ProductImage = styled.Image`
   margin: auto;
 `;
 
-const ProductDetail = styled.View`
-  width: 50%;
+const ProductContainer = styled.View`
+  width: 55%;
   align-items: center;
   margin: auto;
 `;
@@ -70,8 +85,13 @@ const Price = styled.Text`
   margin-left: 5%;
 `;
 const Conv = styled.Text`
-  font-size: 18px;
+  font-size: 16px;
+  font-family: sansBold;
+  color: ${(props) => props.color}
   margin-left: 2%;
+  padding: 0 5%
+  border-radius: 10px
+  background-color: ${(props) => props.bgColor};
 `;
 
 const LikeContainer = styled.View`
@@ -83,6 +103,42 @@ const LikeContainer = styled.View`
 const LikeBtn = styled.TouchableOpacity``;
 
 let tmpProducts = [];
+
+const dTypeToText = {
+  '1N1': '1+1',
+  '2N1': '2+1',
+  GIFT: '덤증정',
+  SALE: '할인',
+};
+
+const dTypeToColor = {
+  '1N1': '#EB5353',
+  '2N1': '#FFB200',
+  GIFT: '#36AE7C',
+  SALE: '#187498',
+};
+
+const venderToText = {
+  seven_eleven: '7-ELEVEN',
+  emart24: 'Emart24',
+  cu: 'CU',
+  gs25: 'GS25',
+};
+
+const venderToTextColor = {
+  seven_eleven: '#1B932A',
+  emart24: '#FFB718',
+  cu: '#652F8D',
+  gs25: '#007CFF',
+};
+
+const venderToBgColor = {
+  seven_eleven: '#F07D00',
+  emart24: '#58585A',
+  cu: '#ACCD3D',
+  gs25: '#00D4EA',
+};
+
 const ProductsCard = ({ item, likeProducts }) => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -107,6 +163,7 @@ const ProductsCard = ({ item, likeProducts }) => {
     }, [isFocused]);
   }
 
+  // 좋아요 버튼 콜백
   const handleLike = () => {
     if (likeProducts) {
       setIsLike(!isLike);
@@ -122,20 +179,24 @@ const ProductsCard = ({ item, likeProducts }) => {
     }
   };
 
+  // 이미지를 불러올 수 없으면 false
   const CheckImgStatus = async (item) => {
     setIsValidImg(await utils.CheckImgStatus(item.pImg));
   };
 
   return (
-    <CardContainer>
+    <CardContainer borderColor={dTypeToColor[item.dType]}>
       <ImageContainer>
-        <ImageView>
+        <SaleTypeContainer bgColor={dTypeToColor[item.dType]}>
+          <SaleTypeText>{dTypeToText[item.dType]}</SaleTypeText>
+        </SaleTypeContainer>
+        <ImageView borderColor={dTypeToColor[item.dType]}>
           <ProductImage
             source={isValidImg ? { uri: item.pImg } : require('../assets/not_image.png')}
           />
         </ImageView>
       </ImageContainer>
-      <ProductDetail>
+      <ProductContainer>
         <TitleView>
           <Title>{item.pName}</Title>
         </TitleView>
@@ -144,9 +205,11 @@ const ProductsCard = ({ item, likeProducts }) => {
         </PriceView>
         <ConvView>
           <FontAwesome name="map-marker" size={18} color="orange" style={{ marginLeft: '5%' }} />
-          <Conv>{item.vender}</Conv>
+          <Conv bgColor={venderToBgColor[item.vender]} color={venderToTextColor[item.vender]}>
+            {venderToText[item.vender]}
+          </Conv>
         </ConvView>
-      </ProductDetail>
+      </ProductContainer>
       <LikeContainer>
         <LikeBtn onPress={() => handleLike(item)}>
           <AntDesign name={isLike ? 'heart' : 'hearto'} size={28} color="red" />
