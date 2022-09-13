@@ -1,7 +1,5 @@
-import react from 'react';
 import styled from 'styled-components/native';
-import React, { useEffect, useState, useCallback } from 'react';
-import Home from '../screens/main/Home';
+import React from 'react';
 import utils from '../utils';
 
 const Container = styled.View`
