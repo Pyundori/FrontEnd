@@ -47,7 +47,7 @@ const GoogleLogin = ({ setIsLoading }) => {
   }, [response]);
 
   return (
-    <GoogleBtn onPress={() => promptAsync()}>
+    <GoogleBtn disabled={!request} onPress={() => promptAsync()}>
       <GoogleImg source={require('../../assets/google_login.png')} />
     </GoogleBtn>
   );
