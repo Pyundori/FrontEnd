@@ -31,11 +31,9 @@ const MainContainer = styled.View`
   width: 100%;
   height: 90%;
   align-items: center;
-  width: 100%;
 `;
 
 const Body_1Container = styled.View`
-  flex-direction: row;
   width: 89%;
   height: 47%;
   border: 1px solid #e8e8e8;
@@ -148,8 +146,7 @@ const LikeView = styled.View`
 
 const ServerImage = styled.Image`
   width: 100%;
-  height: 42%;
-  margin-top: 10%;
+  height: 80%;
   border-radius: 8px;
 `;
 
@@ -158,8 +155,7 @@ const ServerText = styled.Text`
 `;
 
 const LikeList = styled.FlatList`
-  width: 10%;
-  height: 100%;
+  width: 100%
   border-radius: 8px;
 `;
 
@@ -205,24 +201,23 @@ const Home = (focus) => {
 
   const List = [Dtype, Pname, Pprice, Vender];
 
-  const item = useSelector((state) => state.users.likeProducts);
+  const likeProducts = useSelector((state) => state.users.likeProducts);
 
   return (
     <Container>
-      <SafeAreaView>
+      <SafeAreaView style={{ width: '100%', height: '100%' }}>
         <Mainlogo />
         <MainContainer>
           <Body_1Container>
-            {item[0] ? (
+            {likeProducts[0] ? (
               <LikeList
                 pagingEnabled={true}
-                scrollEnabled={true}
-                data={item}
+                data={likeProducts}
                 horizontal={true}
                 renderItem={({ item }) => <MainCard item={item} />}
               />
             ) : (
-              <ServerImage source={require('../../assets/not_image.png')} />
+              <ServerImage resizeMode="contain" source={require('../../assets/not_image.png')} />
             )}
           </Body_1Container>
           <Body_2Container>
