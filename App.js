@@ -23,7 +23,6 @@ const cacheImages = (images) =>
 const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 
 export default function App() {
-  App.displayName = 'Pyundori';
   const [isLoading, setIsLoading] = useState(false);
   const handleFinish = () => setIsLoading(true);
   useEffect(() => {

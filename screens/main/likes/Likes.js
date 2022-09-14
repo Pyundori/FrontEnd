@@ -14,11 +14,12 @@ const Container = styled.SafeAreaView`
 `;
 
 const BodyContainer = styled.View`
-  height: 89%;
   width: 93%;
+  height: 90%;
   background-color: #fff;
   align-items: flex-start;
-  border-radius: 25px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
 `;
 
 const TitleContainer = styled.View`
