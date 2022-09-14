@@ -1,187 +1,136 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import styled from 'styled-components';
+import { SafeAreaView, useNavigation,} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsLogined, setToken } from '../../../redux/userSlice';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
 import api from '../../../api';
-import utils from '../../../utils';
-import ExternalProfile from './ExternalProfile';
 
-const Separator = () => <View style={styles.separator} />;
+const Container = styled.View`
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: #68c2ff;
+`;
 
-const Profile = ({ navigation }) => {
-  const [name, onChangeName] = useState(null);
-  const [password, onChangePassword] = useState(null);
-  const [userData, setUserData] = useState('');
+const MainLogo = styled.Image`
+  width: 180px;
+  height: 58px;
+  margin-bottom: 10%;
 
-  console.log(name);
+`;
+
+const MainLogoView = styled.View``;
+
+const Innercontaniner = styled.View`
+  
+  width: 93%;
+  height: 78%;
+  border-radius: 10px;
+  background-color: white;
+`;
+
+const ExternalText = styled.Text`
+text-align: center;
+margin-top: 15%;
+font-size: 20px;
+color: black;
+font-weight: bold;
+`;
+
+const InformationText = styled.Text`
+  margin-top: 10%;
+  margin-left: 15%;
+  font-size: 20px;
+  color: #68c2ff;
+  width: 100%; 
+  align-items: flex-start; 
+`;
+  //text-align: center;
+
+
+
+const Modbtn = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+  background-color: #68c2ff
+  height: 50px;
+  width: 200px;
+  border-radius : 20px;
+  margin: auto;
+
+
+`;
+
+const Logoutbtn = styled.TouchableOpacity`
+
+  backgroundColor: #ff68c2;
+  justify-content: center;
+  height: 50px;
+  width: 200px;
+  border-radius : 20px;
+  margin: auto;
+
+  `;
+
+ const  Textbtn = styled.Text`
+   text-align: center;
+   font-size: 18px;
+   width: 200px;
+   color : white;
+  `;
+ 
+
+
+const Profile = ( )=> {
 
   const dispatch = useDispatch();
+  
+  const navigation = useNavigation();
+
+  const [userData, setUserData] = useState('');
+
   const token = useSelector((state) => state.users.token);
   const a = async () => {
     const { data } = await api.getUserData(token);
     setUserData(data);
+    console.log(data);
   };
 
   useEffect(() => {
     a();
   }, []);
 
-  const modifyData = async () => {
-    utils.isNickname(name) && (await api.modifyUserData(token, 'name', name));
-    utils.isPassword(password) && (await api.modifyUserData(token, 'password', password));
-  };
-
-  return userData.login === 'google' ? (
-    <ExternalProfile userData={userData} />
-  ) : userData.login === 'kakao' ? (
-    <ExternalProfile userData={userData} />
-  ) : (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => alert('프로필 사진 업데이트 기능 추가 중')}
-          >
-            <FontAwesome name="user-circle" size={120} color="#68c2ff" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.inputContainer}>
-          <View style={{ width: '100%', alignItems: 'flex-start' }}>
-            <Text> Name</Text>
-          </View>
-          <TextInput
-            style={styles.input}
-            onChangeText={(value) => onChangeName(value)}
-            value={name}
-            placeholder="Please write down"
-            keyboardType="default"
-          />
-          <View style={{ width: '100%', alignItems: 'flex-start' }}>
-            <Text> Password</Text>
-          </View>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            onChangeText={(value) => onChangePassword(value)}
-            value={password}
-            placeholder="Please write down"
-            keyboardType="default"
-          />
-        </View>
-
-        <View>
-          <TouchableOpacity style={styles.modbutton} onPress={modifyData}>
-            <Text style={styles.headline}> 변경사항 저장 중 </Text>
-          </TouchableOpacity>
-
-          <Separator />
-          <TouchableOpacity
-            style={styles.logoutbutton}
+ 
+  return(
+  <SafeAreaView>
+    <Container>  
+        <MainLogoView>
+          <MainLogo source={require('../../../assets/logo.png')} />
+        </MainLogoView>
+      <Innercontaniner>
+          <ExternalText> 현재 접속한 회원정보 </ExternalText>
+          <InformationText> 계정 연동 : {userData.login} </InformationText>
+          <InformationText> Id : {userData.id} </InformationText>
+          <InformationText> Name : {userData.name} </InformationText>
+          <Modbtn 
+             onPress={() => {
+        
+              
+              }}>
+            <Textbtn> 변경사항 수정 </Textbtn>
+          </Modbtn>          
+          <Logoutbtn
             onPress={() => {
               dispatch(setToken(''));
-              dispatch(setIsLogined());
-            }}
-          >
-            <Text style={styles.headline}> 로그아웃 </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
-  );
+              dispatch(setIsLogined());}}>
+             <Textbtn> 로그아웃 </Textbtn>
+          </Logoutbtn>
+        </Innercontaniner>
+    </Container>
+  </SafeAreaView>
+
+  )
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#68c2ff',
-  },
-
-  header: {
-    width: '93%',
-    height: '90%',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-
-  separator: {
-    marginTop: '3%',
-    marginBottom: '3%',
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  }, //계정전화 변경사항저장 로그아웃 나눠주는 구분 줄
-
-  input: {
-    width: 250,
-    height: 50,
-    marginTop: '6%',
-    marginBottom: '12%',
-    marginLeft: '10%',
-    marginRight: '10%',
-    borderWidth: 1.8,
-    borderRadius: 20,
-    padding: 10,
-    backgroundColor: 'white',
-    justifyContent: 'space-around',
-  }, //텍스트 입력 칸
-
-  inputContainer: {
-    width: '65%',
-    height: '40%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  button: {
-    width: 120,
-    height: 120,
-    backgroundColor: '68c2ff',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: '15%',
-  }, //프로필 사진 업로드 버튼
-  headline: {
-    textAlign: 'center',
-    fontSize: 18,
-    marginTop: 0,
-
-    color: 'white',
-  }, //버튼내부 글자
-
-  modbutton: {
-    alignItems: 'center',
-    backgroundColor: '#68c2ff',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    padding: 8,
-    borderRadius: 20,
-    marginTop: 20,
-  }, //변경사항 버튼
-
-  logoutbutton: {
-    alignItems: 'center',
-    backgroundColor: '#ff68c2',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    padding: 8,
-    borderRadius: 20,
-  }, //로그아웃 버튼
-
-  title: {
-    textAlign: 'center',
-    marginVertical: 8,
-  },
-  fixToText: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-});
 
 export default Profile;
