@@ -28,12 +28,16 @@ const GoogleLogin = ({ setIsLoading }) => {
   });
 
   const googleMainLogin = async (accessToken) => {
-    const {
-      data: { token },
-    } = await api.googleLogin(accessToken);
-    dispatch(setToken(token));
-    dispatch(setIsLogined());
-    setIsLoading(false);
+    try {
+      const {
+        data: { token },
+      } = await api.googleLogin(accessToken);
+      dispatch(setToken(token));
+      dispatch(setIsLogined());
+      setIsLoading(false);
+    } catch (e) {
+      console.log('Local Token Request Error', e);
+    }
   };
 
   useEffect(() => {

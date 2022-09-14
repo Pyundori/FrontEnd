@@ -1,26 +1,29 @@
 import styled from 'styled-components/native';
 import React from 'react';
 import utils from '../utils';
+import { Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 const Container = styled.View`
-  width: 160px;
-  height: 98%;
-  border-radius: 8px;
-  margin: 3px;
+  width: ${width / 1.13}px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 `;
 
 const LikeContainer = styled.View`
-  height: 100%;
-  width: 160px;
+  height: 95%;
+  width: 95%
   border-radius: 8px;
   border: 1px solid #dadce0;
-  margin: auto;
 `;
 
 const LikeImg = styled.Image`
   width: 100%;
   height: 55%;
   border-radius: 8px;
+  margin-top: 5px;
 `;
 
 const ServerText = styled.Text`
@@ -38,7 +41,7 @@ const MainCard = ({ item }) => {
     <Container>
       {util ? (
         <LikeContainer>
-          <LikeImg source={{ uri: item.pImg }} />
+          <LikeImg resizeMode="contain" source={{ uri: item.pImg }} />
           <ServerText>{item.vender}</ServerText>
           <ServerText>{item.dType}</ServerText>
           <ServerText>{item.pName}</ServerText>
@@ -46,7 +49,7 @@ const MainCard = ({ item }) => {
         </LikeContainer>
       ) : (
         <LikeContainer>
-          <LikeImg source={{ uri: item.pImg }} />
+          <LikeImg resizeMode="contain" source={{ uri: item.pImg }} />
           <IosServerText>{item.vender}</IosServerText>
           <IosServerText>{item.dType}</IosServerText>
           <IosServerText>{item.pName}</IosServerText>
