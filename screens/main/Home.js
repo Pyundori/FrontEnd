@@ -215,6 +215,7 @@ const Home = (focus) => {
           <Body_1Container>
             {item[0] ? (
               <LikeList
+                pagingEnabled={true}
                 scrollEnabled={true}
                 data={item}
                 horizontal={true}
