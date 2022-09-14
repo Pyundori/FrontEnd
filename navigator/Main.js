@@ -11,16 +11,12 @@ import utils from '../utils';
 import { Text } from 'react-native';
 import Setting from '../screens/main/setting/Setting';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ModifyProfile from '../screens/main/Profile/ModifyProfile';
 
 const TabsNavigator = createBottomTabNavigator();
 
 const Tabs = () => {
-  const ProfileTab = ({ navigation }) => {
-    return <Profile navigation={navigation} />;
-  };
-
   const insets = useSafeAreaInsets();
-
   return (
     <TabsNavigator.Navigator
       initialRouteName="Home"
@@ -58,7 +54,7 @@ const Tabs = () => {
       <TabsNavigator.Screen name="Search" component={Search} />
       <TabsNavigator.Screen name="Likes" component={Likes} />
       <TabsNavigator.Screen name="Home" component={Home} />
-      <TabsNavigator.Screen name="Profile" component={ProfileTab} />
+      <TabsNavigator.Screen name="Profile" component={Profile} />
       <TabsNavigator.Screen name="Setting" component={Setting} />
     </TabsNavigator.Navigator>
   );
@@ -68,6 +64,7 @@ const MainNavigator = createStackNavigator();
 export default function Main() {
   return (
     <MainNavigator.Navigator initialRouteName="Tabs" screenOptions={{ headerShown: false }}>
+      <MainNavigator.Screen name="ModifyProfile" component={ModifyProfile} />
       <MainNavigator.Screen name="Tabs" component={Tabs} />
     </MainNavigator.Navigator>
   );
