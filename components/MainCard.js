@@ -6,7 +6,7 @@ const Container = styled.View`
   width: 160px;
   height: 98%;
   border-radius: 8px;
-  margin: 4px;
+  margin: 3px;
 `;
 
 const LikeContainer = styled.View`
