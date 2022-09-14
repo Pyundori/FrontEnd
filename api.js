@@ -63,10 +63,10 @@ export default {
    * @param {string} data User's input value
    * @returns {boolean} true | false
    */
-  isDuplicated: (column, data) => {
+  isDuplicated: async (column, data) => {
     const {
       data: { res_code },
-    } = callApi('get', '/api/user/check_dup', '', '', {
+    } = await callApi('get', '/api/user/check_dup', '', '', {
       column,
       data,
     });
