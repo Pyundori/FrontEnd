@@ -56,33 +56,64 @@ const ProductImage = styled.Image`
 `;
 
 const ProductContainer = styled.View`
-  width: 55%;
+  width: 62%;
   height: 100%;
   justify-content: center;
 `;
-const TitleView = styled.View`
+const NameView = styled.View`
   width: 100%;
+  height: 40%
   align-items: flex-start;
-  margin-bottom: 2%;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px
 `;
 const PriceView = styled.View`
   width: 100%;
   align-items: flex-start;
-  margin-bottom: 13%;
+  margin-bottom: 2px;
 `;
 const ConvView = styled.View`
   flex-direction: row;
   width: 100%;
-  justify-content: flex-start;
   align-items: center;
 `;
 
+const BrandView = styled.View`
+  width: 100%;
+  margin: auto;
+  margin-bottom: 10px;
+`;
+const Brand = styled.Text`
+  font-size: 15px;
+  margin-left: 5%;
+  font-family: netmarbleM;
+  letter-spacing: 0.5px;
+`;
+
+const TitleView = styled.View`
+  width: 100%;
+  margin: auto;
+`;
 const Title = styled.Text`
   font-size: 15px;
   font-family: sansBold;
   margin-left: 5%;
   letter-spacing: 0.5px;
+  line-height: 19px;
 `;
+
+const WeightView = styled.View`
+  width: 100%;
+  margin: auto;
+`;
+const Weight = styled.Text`
+  font-size: 15px;
+  font-family: netmarbleM;
+  margin-left: 5%;
+  letter-spacing: 0.5px;
+`;
+
 const Price = styled.Text`
   font-size: 17px;
   font-family: netmarbleM;
@@ -206,9 +237,23 @@ const ProductsCard = ({ item, likeProducts }) => {
         </ImageView>
       </ImageContainer>
       <ProductContainer>
-        <TitleView>
-          <Title>{item.pName}</Title>
-        </TitleView>
+        <NameView>
+          <BrandView>
+            <Brand>{item.pName.replace(/[)$][\w\W]+$/, '')}</Brand>
+          </BrandView>
+          <TitleView>
+            <Title>
+              {item.pName.replace(/[\w가-힣]{1,}[)]/, '').replace(/[0-9]{1,}[\w가-힣]*$/, '\n$&')}
+            </Title>
+          </TitleView>
+          <WeightView>
+            <Weight>
+              {item.pName.match(/[^0-9]{1,}[\w]+$/)
+                ? item.pName.replace(/[^0-9]{1,}[\w]+$/, '')
+                : ''}
+            </Weight>
+          </WeightView>
+        </NameView>
         <PriceView>
           <Price>{item.pPrice} 원</Price>
         </PriceView>
