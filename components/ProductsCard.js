@@ -9,6 +9,7 @@ import utils from '../utils';
 
 const CardContainer = styled.SafeAreaView`
   width: 100%;
+  height: 128px
   border-radius: 10px;
   padding: 0px 5px 5px 5px;
   border: 1.5px solid ${(props) => props.borderColor};
@@ -56,17 +57,18 @@ const ProductImage = styled.Image`
 
 const ProductContainer = styled.View`
   width: 55%;
-  align-items: center;
-  margin: auto;
+  height: 100%;
+  justify-content: center;
 `;
 const TitleView = styled.View`
   width: 100%;
   align-items: flex-start;
-  margin-bottom: 4%;
+  margin-bottom: 2%;
 `;
 const PriceView = styled.View`
   width: 100%;
   align-items: flex-start;
+  margin-bottom: 13%;
 `;
 const ConvView = styled.View`
   flex-direction: row;
@@ -79,17 +81,20 @@ const Title = styled.Text`
   font-size: 15px;
   font-family: sansBold;
   margin-left: 5%;
+  letter-spacing: 0.5px;
 `;
 const Price = styled.Text`
-  font-size: 18px;
+  font-size: 17px;
+  font-family: netmarbleM;
   margin-left: 5%;
+  word-spacing: 3px;
 `;
 const Conv = styled.Text`
-  font-size: 16px;
+  font-size: 14px;
   font-family: sansBold;
   color: ${(props) => props.color}
-  margin-left: 2%;
-  padding: 0 5%
+  margin-left: 3%;
+  padding: 2% 4%
   border-radius: 10px
   background-color: ${(props) => props.bgColor};
 `;
@@ -145,7 +150,7 @@ const ProductsCard = ({ item, likeProducts }) => {
   const [isLike, setIsLike] = useState(false);
   const [isValidImg, setIsValidImg] = useState(undefined);
 
-  // Search 탭에서만 가져오는 param
+  // likeProducts ==> Search 탭에서만 가져오는 param
   if (likeProducts) {
     useEffect(() => {
       const isLikeProduct = likeProducts.find((product) => product.pName === item.pName);
@@ -153,6 +158,7 @@ const ProductsCard = ({ item, likeProducts }) => {
       CheckImgStatus(item);
     }, [likeProducts]);
   } else {
+    // Likes TAB
     useEffect(() => {
       setIsLike(true);
       CheckImgStatus(item);
@@ -165,10 +171,12 @@ const ProductsCard = ({ item, likeProducts }) => {
 
   // 좋아요 버튼 콜백
   const handleLike = () => {
+    // Search TAB
     if (likeProducts) {
       setIsLike(!isLike);
       dispatch(setLikeProducts(item));
     } else {
+      // Likes TAB
       const isDuplicated = tmpProducts.find((product) => product.pName === item.pName);
       if (isDuplicated) {
         tmpProducts = tmpProducts.filter((product) => product.pName !== item.pName);
@@ -179,7 +187,7 @@ const ProductsCard = ({ item, likeProducts }) => {
     }
   };
 
-  // 이미지를 불러올 수 없으면 false
+  // 이미지를 불러올 수 없으면 IsValidImg = false
   const CheckImgStatus = async (item) => {
     setIsValidImg(await utils.CheckImgStatus(item.pImg));
   };
@@ -192,6 +200,7 @@ const ProductsCard = ({ item, likeProducts }) => {
         </SaleTypeContainer>
         <ImageView borderColor={dTypeToColor[item.dType]}>
           <ProductImage
+            resizeMode="contain"
             source={isValidImg ? { uri: item.pImg } : require('../assets/not_image.png')}
           />
         </ImageView>
@@ -201,10 +210,10 @@ const ProductsCard = ({ item, likeProducts }) => {
           <Title>{item.pName}</Title>
         </TitleView>
         <PriceView>
-          <Price>{item.pPrice}원</Price>
+          <Price>{item.pPrice} 원</Price>
         </PriceView>
         <ConvView>
-          <FontAwesome name="map-marker" size={18} color="orange" style={{ marginLeft: '5%' }} />
+          <FontAwesome name="map-marker" size={21} color="orange" style={{ marginLeft: '5%' }} />
           <Conv bgColor={venderToBgColor[item.vender]} color={venderToTextColor[item.vender]}>
             {venderToText[item.vender]}
           </Conv>

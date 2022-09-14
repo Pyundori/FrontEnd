@@ -3,24 +3,16 @@ import { ActivityIndicator } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/native';
 import api from '../../../api';
-import MainLogo from '../../../components/MainLogo';
 import ProductsCard from '../../../components/ProductsCard';
 import SearchOptionBtn from '../../../components/SearchOptionBtn';
-import {
-  setHistory,
-  setOnSearch,
-  setSales,
-  setSearchWord,
-  setVenders,
-} from '../../../redux/productSlice';
+import { setOnSearch, setSales, setVenders } from '../../../redux/productSlice';
 
 function Search() {
   const dispatch = useDispatch();
   const likeProducts = useSelector((state) => state.users.likeProducts, shallowEqual);
-  const { onSearch, history, venders, sales, searchWord } = useSelector(
-    (state) => state.products.search,
-    shallowEqual,
-  );
+  const onSearch = useSelector((state) => state.products.search.onSearch, shallowEqual);
+  const venders = useSelector((state) => state.products.search.venders, shallowEqual);
+  const sales = useSelector((state) => state.products.search.sales, shallowEqual);
 
   const [searchText, setSearchText] = useState('');
   const [venderOptions, setVenderOptions] = useState(['전체']);
@@ -31,10 +23,8 @@ function Search() {
   const [searchDataCnt, setSearchDataCnt] = useState(0);
 
   useEffect(() => {
-    history && setSearchData(history);
     venders && setVenderOptions(venders);
     sales && setSaleOptions(sales);
-    searchWord && setSearchText(searchWord);
   }, []);
 
   const handleVender = (vender) => {
@@ -92,17 +82,15 @@ function Search() {
         덤증정: ['GIFT'],
         할인: ['SALE'],
       };
-
       const vender = venderOptions.map((option) => localVenders[option]);
       const sale = saleOptions.map((option) => localSales[option]);
-      const { data } = await api.search(vender[0].join(','), sale[0].join(','), searchText, page);
+      const { data } = await api.search(vender.join(','), sale.join(','), searchText, page);
       const apiData = data.data;
+      const apiDataCnt = data.data_cnt;
       setSearchData([...searchData, ...apiData]);
-      setSearchDataCnt(data.data_cnt);
+      setSearchDataCnt(apiDataCnt);
       dispatch(setVenders(venderOptions));
       dispatch(setSales(saleOptions));
-      dispatch(setSearchWord(searchText));
-      dispatch(setHistory(apiData));
       dispatch(setOnSearch(false));
       setPage(page + 1);
       setIsLoading(false);
@@ -145,7 +133,6 @@ function Search() {
           <SearchBar
             placeholder="검색어를 입력하세요"
             Value={searchText}
-            defaultValue={searchWord}
             onChangeText={(value) => setSearchText(value)}
             returnKeyType="search"
             onSubmitEditing={onSubmitEditing}
@@ -168,12 +155,12 @@ function Search() {
                   venderOptions={venderOptions}
                 />
                 <SearchOptionBtn
-                  venderText="세븐"
+                  venderText="GS25"
                   handleVender={handleVender}
                   venderOptions={venderOptions}
                 />
                 <SearchOptionBtn
-                  venderText="이마트"
+                  venderText="세븐"
                   handleVender={handleVender}
                   venderOptions={venderOptions}
                 />
@@ -183,7 +170,7 @@ function Search() {
                   venderOptions={venderOptions}
                 />
                 <SearchOptionBtn
-                  venderText="GS25"
+                  venderText="이마트"
                   handleVender={handleVender}
                   venderOptions={venderOptions}
                 />
@@ -281,10 +268,11 @@ const Logo = styled.Image`
 
 const BodyContainer = styled.View`
   width: 93%;
-  height: 81%;
+  height: 80%;
   background-color: #fff;
   align-items: center;
-  border-radius: 25px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
 `;
 
 const HeadContainer = styled.View`
