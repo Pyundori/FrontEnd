@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import api from '../../api';
 import MainModal from '../../components/MainModal';
-import { setToken } from '../../redux/userSlice';
 import utils from '../../utils';
 
 const Container = styled.View`
