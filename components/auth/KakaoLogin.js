@@ -16,7 +16,7 @@ const Container = styled.View`
   height: 100%
 `;
 
-export default KakaoLogin = ({ navigation }) => {
+export default KakaoLogin = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const getCode = async (target) => {

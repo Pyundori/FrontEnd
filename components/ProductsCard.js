@@ -60,7 +60,7 @@ const ProductContainer = styled.View`
   height: 100%;
   justify-content: center;
 `;
-const NameView = styled.View`
+const ProductNameView = styled.View`
   width: 100%;
   height: 40%
   align-items: flex-start;
@@ -68,12 +68,12 @@ const NameView = styled.View`
   margin-top: 10px;
   margin-bottom: 10px
 `;
-const PriceView = styled.View`
+const ProductPriceView = styled.View`
   width: 100%;
   align-items: flex-start;
   margin-bottom: 2px;
 `;
-const ConvView = styled.View`
+const ProductConvView = styled.View`
   flex-direction: row;
   width: 100%;
   align-items: center;
@@ -103,23 +103,14 @@ const Title = styled.Text`
   line-height: 19px;
 `;
 
-const WeightView = styled.View`
-  width: 100%;
-  margin: auto;
-`;
-const Weight = styled.Text`
-  font-size: 15px;
-  font-family: netmarbleM;
-  margin-left: 5%;
-  letter-spacing: 0.5px;
-`;
-
 const Price = styled.Text`
   font-size: 17px;
   font-family: netmarbleM;
   margin-left: 5%;
   word-spacing: 3px;
+  margin-bottom: 3px;
 `;
+
 const Conv = styled.Text`
   font-size: 14px;
   font-family: sansBold;
@@ -237,32 +228,31 @@ const ProductsCard = ({ item, likeProducts }) => {
         </ImageView>
       </ImageContainer>
       <ProductContainer>
-        <NameView>
+        <ProductNameView>
           <BrandView>
-            <Brand>{item.pName.replace(/[)$][\w\W]+$/, '')}</Brand>
+            <Brand>
+              {/[)$][\w\W]+$/.test(item.pName) ? item.pName.replace(/[$()][\w\W]+$/, '') : ''}
+            </Brand>
           </BrandView>
           <TitleView>
             <Title>
-              {item.pName.replace(/[\w가-힣]{1,}[)]/, '').replace(/[0-9]{1,}[\w가-힣]*$/, '\n$&')}
+              {item.pName
+                .replace(/[a-zA-Z가-힣]+([(]*[\w\W][)]|\))/, '')
+                .replace('/', '')
+                .replace(/\($/, '')
+                .replace(/[0-9]+[a-zA-Z]*[()]*$/, '\n$&')}
             </Title>
           </TitleView>
-          <WeightView>
-            <Weight>
-              {item.pName.match(/[^0-9]{1,}[\w]+$/)
-                ? item.pName.replace(/[^0-9]{1,}[\w]+$/, '')
-                : ''}
-            </Weight>
-          </WeightView>
-        </NameView>
-        <PriceView>
+        </ProductNameView>
+        <ProductPriceView>
           <Price>{item.pPrice} 원</Price>
-        </PriceView>
-        <ConvView>
+        </ProductPriceView>
+        <ProductConvView>
           <FontAwesome name="map-marker" size={21} color="orange" style={{ marginLeft: '5%' }} />
           <Conv bgColor={venderToBgColor[item.vender]} color={venderToTextColor[item.vender]}>
             {venderToText[item.vender]}
           </Conv>
-        </ConvView>
+        </ProductConvView>
       </ProductContainer>
       <LikeContainer>
         <LikeBtn onPress={() => handleLike(item)}>

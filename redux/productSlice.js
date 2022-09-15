@@ -1,6 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
-import { setLikeProducts } from './userSlice';
 
 const productSlice = createSlice({
   name: 'products',

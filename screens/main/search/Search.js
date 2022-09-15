@@ -7,6 +7,22 @@ import ProductsCard from '../../../components/ProductsCard';
 import SearchOptionBtn from '../../../components/SearchOptionBtn';
 import { setOnSearch, setSales, setVenders } from '../../../redux/productSlice';
 
+const localVenders = {
+  전체: ['gs25', 'cu', 'seven_eleven', 'emart24'],
+  GS25: ['gs25'],
+  CU: ['cu'],
+  세븐: ['seven_eleven'],
+  이마트: ['emart24'],
+};
+
+const localSales = {
+  전체: ['1N1', '2N1', '3N1', 'SALE'],
+  '1+1': ['1N1'],
+  '2+1': ['2N1'],
+  덤증정: ['GIFT'],
+  할인: ['SALE'],
+};
+
 function Search() {
   const dispatch = useDispatch();
   const likeProducts = useSelector((state) => state.users.likeProducts, shallowEqual);
@@ -67,21 +83,6 @@ function Search() {
 
   const searchProduct = async () => {
     try {
-      const localVenders = {
-        전체: ['gs25', 'cu', 'seven_eleven', 'emart24'],
-        GS25: ['gs25'],
-        CU: ['cu'],
-        세븐: ['seven_eleven'],
-        이마트: ['emart24'],
-      };
-
-      const localSales = {
-        전체: ['1N1', '2N1', '3N1', 'SALE'],
-        '1+1': ['1N1'],
-        '2+1': ['2N1'],
-        덤증정: ['GIFT'],
-        할인: ['SALE'],
-      };
       const vender = venderOptions.map((option) => localVenders[option]);
       const sale = saleOptions.map((option) => localSales[option]);
       const { data } = await api.search(vender.join(','), sale.join(','), searchText, page);
