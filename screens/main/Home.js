@@ -1,12 +1,8 @@
-import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState, useCallback } from 'react';
-import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import { MaterialIcons, Feather } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 import api from '../../api';
-import { Asset } from 'expo-asset';
 import Mainlogo from '../../components/MainLogo';
 import MainCard from '../../components/MainCard';
 
