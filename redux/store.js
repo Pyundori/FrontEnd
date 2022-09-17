@@ -18,8 +18,6 @@ const persistConfig = {
   storage: AsyncStorage,
 };
 
-AsyncStorage.removeItem('persist:root');
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
@@ -30,7 +28,6 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export const persistor = persistStore(store);
