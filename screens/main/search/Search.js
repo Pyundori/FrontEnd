@@ -8,12 +8,12 @@ import SearchOptionBtn from '../../../components/SearchOptionBtn';
 import { setOnSearch, setSales, setVenders } from '../../../redux/productSlice';
 
 const Container = styled.SafeAreaView`
-  width: 100%
-  height: 100%
+  width: 100%;
+  height: 100%;
   background-color: #68c2ff;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 40px
+  padding-top: 40px;
 `;
 
 const LogoContainer = styled.View`
@@ -138,15 +138,15 @@ const LatelySearchBoard = styled.View``;
 const FamousSearchBoard = styled.View``;
 
 const ProductContainer = styled.View`
-  width: 100%
-  height: 100%
+  width: 100%;
+  height: 100%;
   align-items: center;
 `;
 
 const ProductCntContainer = styled.View`
-  width: 95%
-  height: 10%
-  margin-left: 5%
+  width: 95%;
+  height: 10%;
+  margin-left: 5%;
   justify-content: center;
 `;
 
