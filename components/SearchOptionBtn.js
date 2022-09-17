@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 
 const Container = styled.View`
   width: 60px
-  margin-right: 10px;
+  margin-right: 3%;
   border-radius: 15px
   background-color: #0096ff;
   justify-content: center

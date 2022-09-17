@@ -7,6 +7,171 @@ import ProductsCard from '../../../components/ProductsCard';
 import SearchOptionBtn from '../../../components/SearchOptionBtn';
 import { setOnSearch, setSales, setVenders } from '../../../redux/productSlice';
 
+const Container = styled.SafeAreaView`
+  width: 100%
+  height: 100%
+  background-color: #68c2ff;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 40px
+`;
+
+const LogoContainer = styled.View`
+  width: 100%;
+  height: 12%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2%;
+`;
+
+const Logo = styled.Image`
+  width: 170px;
+  height: 60px;
+`;
+
+const BodyContainer = styled.View`
+  width: 93%;
+  height: 80%;
+  background-color: #fff;
+  align-items: center;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+`;
+
+const HeadContainer = styled.View`
+  height: 8%;
+  width: 93%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MiddleContainer = styled.View`
+  width: 90%;
+  height: 35%;
+  align-items: center;
+`;
+
+const BottomContainer = styled.View`
+  width: 100%;
+  height: 65%;
+  justify-content: flex-start;
+  background-color: white;
+  border-radius: 8px;
+`;
+
+const SearchContainer = styled.View`
+  width: 95%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const VenderSearchContainer = styled.View`
+  width: 100%;
+  height: 50%;
+  align-items: flex-start;
+`;
+
+const SaleSearchContainer = styled.View`
+  width: 100%;
+  height: 50%;
+  align-items: flex-start;
+`;
+
+const VenderTitleContainer = styled.View`
+  margin-top: 3%;
+  align-items: flex-start;
+`;
+
+const SaleTitleContainer = styled.View`
+  margin-top: 3%;
+  align-items: flex-start;
+`;
+
+const VenderBtnContainer = styled.View`
+  flex-direction: row;
+  margin-top: 10px;
+`;
+
+const SaleBtnContainer = styled.View`
+  flex-direction: row;
+  margin-top: 10px;
+`;
+
+const LatelySearchViewContainer = styled.View``;
+
+const FamousSearchViewContainer = styled.View``;
+
+const LatelySearchTitle = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 5%;
+  margin-top: 2%;
+`;
+
+const FamousSearchTitle = styled.View`
+  margin-left: 5%;
+  margin-top: 2%;
+`;
+
+const Title = styled.Text`
+  font-size: 30px;
+  color: #68c2ff;
+`;
+
+const SearchBar = styled.TextInput`
+  width: 100%;
+  border-radius: 20px;
+  padding: 7px;
+  padding-left: 15px;
+  background-color: #fff;
+  font-size: 18px;
+  font-family: netmarbleM;
+`;
+
+const ClearBtn = styled.Button`
+  background-color: transparent;
+`;
+
+const LatelySearchBoard = styled.View``;
+
+const FamousSearchBoard = styled.View``;
+
+const ProductContainer = styled.View`
+  width: 100%
+  height: 100%
+  align-items: center;
+`;
+
+const ProductCntContainer = styled.View`
+  width: 95%
+  height: 10%
+  margin-left: 5%
+  justify-content: center;
+`;
+
+const ProductCnt = styled.Text`
+  font-size: 25px;
+  font-family: netmarbleB;
+`;
+
+const ProductLists = styled.FlatList`
+  width: 95%;
+  margin: auto;
+`;
+
+const NoSearchDataView = styled.View`
+  width: 100%;
+  height: 85%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoSearchData = styled.Text`
+  font-size: 25px;
+  color: #c8c8c8;
+`;
+
 const localVenders = {
   전체: ['gs25', 'cu', 'seven_eleven', 'emart24'],
   GS25: ['gs25'],
@@ -244,170 +409,5 @@ function Search() {
     </Container>
   );
 }
-
-const Container = styled.SafeAreaView`
-  width: 100%
-  height: 100%
-  background-color: #68c2ff;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 40px
-`;
-
-const LogoContainer = styled.View`
-  width: 100%;
-  height: 12%;
-  justify-content: center;
-  align-items: center;
-  margin-left: 2%;
-`;
-
-const Logo = styled.Image`
-  width: 170px;
-  height: 60px;
-`;
-
-const BodyContainer = styled.View`
-  width: 93%;
-  height: 80%;
-  background-color: #fff;
-  align-items: center;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-`;
-
-const HeadContainer = styled.View`
-  height: 8%;
-  width: 93%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const MiddleContainer = styled.View`
-  width: 90%;
-  height: 35%;
-  align-items: center;
-`;
-
-const BottomContainer = styled.View`
-  width: 100%;
-  height: 65%;
-  justify-content: flex-start;
-  background-color: white;
-  border-radius: 8px;
-`;
-
-const SearchContainer = styled.View`
-  width: 95%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const VenderSearchContainer = styled.View`
-  width: 100%;
-  height: 50%;
-  align-items: flex-start;
-`;
-
-const SaleSearchContainer = styled.View`
-  width: 100%;
-  height: 50%;
-  align-items: flex-start;
-`;
-
-const VenderTitleContainer = styled.View`
-  margin-top: 3%;
-  align-items: flex-start;
-`;
-
-const SaleTitleContainer = styled.View`
-  margin-top: 3%;
-  align-items: flex-start;
-`;
-
-const VenderBtnContainer = styled.View`
-  flex-direction: row;
-  margin-top: 10px;
-`;
-
-const SaleBtnContainer = styled.View`
-  flex-direction: row;
-  margin-top: 10px;
-`;
-
-const LatelySearchViewContainer = styled.View``;
-
-const FamousSearchViewContainer = styled.View``;
-
-const LatelySearchTitle = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: 5%;
-  margin-top: 2%;
-`;
-
-const FamousSearchTitle = styled.View`
-  margin-left: 5%;
-  margin-top: 2%;
-`;
-
-const Title = styled.Text`
-  font-size: 30px;
-  color: #68c2ff;
-`;
-
-const SearchBar = styled.TextInput`
-  width: 100%;
-  border-radius: 20px;
-  padding: 7px;
-  padding-left: 15px;
-  background-color: #fff;
-  font-size: 18px;
-  font-family: netmarbleM;
-`;
-
-const ClearBtn = styled.Button`
-  background-color: transparent;
-`;
-
-const LatelySearchBoard = styled.View``;
-
-const FamousSearchBoard = styled.View``;
-
-const ProductContainer = styled.View`
-  width: 100%
-  height: 100%
-  align-items: center;
-`;
-
-const ProductCntContainer = styled.View`
-  width: 95%
-  height: 10%
-  margin-left: 5%
-  justify-content: center;
-`;
-
-const ProductCnt = styled.Text`
-  font-size: 25px;
-  font-family: netmarbleB;
-`;
-
-const ProductLists = styled.FlatList`
-  width: 95%;
-  margin: auto;
-`;
-
-const NoSearchDataView = styled.View`
-  width: 100%;
-  height: 85%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const NoSearchData = styled.Text`
-  font-size: 25px;
-  color: #c8c8c8;
-`;
 
 export default Search;
