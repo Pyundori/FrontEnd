@@ -7,6 +7,7 @@ const androidClientId = process.env.androidClientId;
 const webClientId = process.env.webClientId;
 const kakaoRestApiKey = process.env.kakaoRestApiKey;
 const kakaoRedirectUri = process.env.kakaoRedirectUri;
+const UPDATE_URL = 'https://u.expo.dev/8e0f4397-e22a-43bb-8f3a-5ecee3bd4f65';
 
 module.exports = {
   name: 'Pyundori',
@@ -17,7 +18,11 @@ module.exports = {
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
+  runtimeVersion: {
+    policy: 'sdkVersion',
+  },
   updates: {
+    url: UPDATE_URL,
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],

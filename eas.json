@@ -8,13 +8,17 @@
         "buildType": "apk"
       }
     },
-    "staging": {
+    "preview": {
+      "channel": "staging",
       "extends": "production",
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       }
     },
-    "production": { "node": "16.17.0" }
+    "production": {
+      "channel": "production",
+      "node": "16.17.0"
+    }
   }
 }
