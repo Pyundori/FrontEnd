@@ -10,8 +10,11 @@
     },
     "staging": {
       "extends": "production",
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
     },
-    "production": { "node": "16.15.1" }
+    "production": { "node": "16.17.0" }
   }
 }
