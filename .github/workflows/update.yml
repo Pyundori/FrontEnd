@@ -45,7 +45,7 @@ jobs:
           restore-keys: ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: npm ci
 
       - name: Publish update
         run: eas update --auto
