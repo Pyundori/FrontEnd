@@ -44,7 +44,7 @@ jobs:
           restore-keys: ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: npm i --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
       - name: Publish update
         run: eas update --auto
