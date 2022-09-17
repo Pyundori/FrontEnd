@@ -2,9 +2,9 @@ import { useSelector } from 'react-redux';
 import React, { useEffect, useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
-import api from '../../api';
 import Mainlogo from '../../components/MainLogo';
 import MainCard from '../../components/MainCard';
+import { useNavigation } from '@react-navigation/native';
 
 const Container = styled.View`
   width: 100%;
@@ -89,7 +89,7 @@ const BtnView = styled.View`
   position: absolute;
 `;
 
-const AroundBtn = styled.Pressable`
+const AroundBtn = styled.TouchableOpacity`
   width: 100%;
   height: 100%;
   margin: auto;
@@ -134,20 +134,10 @@ const MartLogo = styled.Image`
   border-radius: 12px;
 `;
 
-const LikeView = styled.View`
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-`;
-
 const ServerImage = styled.Image`
   width: 100%;
   height: 80%;
   border-radius: 8px;
-`;
-
-const ServerText = styled.Text`
-  font-size: 15px;
 `;
 
 const LikeList = styled.FlatList`
@@ -156,47 +146,7 @@ const LikeList = styled.FlatList`
 `;
 
 const Home = (focus) => {
-  const [text, onChangeText] = React.useState('');
-  const [Dtype, setDtype] = useState('');
-  const [Image, setImage] = useState(require('../../assets/not_image.png'));
-  const [Pname, setPname] = useState('');
-  const [Pprice, setPprice] = useState('');
-  const [Vender, setVender] = useState('');
-
-  const Run_Api = async () => {
-    const tmp = await api.search('cu', '1N1');
-    setDtype(tmp.data.data[0].dType);
-    setImage({ uri: tmp.data.data[0].pImg });
-    setPname(tmp.data.data[0].pName);
-    setPprice(tmp.data.data[0].pPrice);
-    setVender(tmp.data.data[0].vender);
-  };
-
-  useEffect(() => {
-    Run_Api();
-  }, []);
-
-  const Render_Img = useCallback(() => {
-    return <ServerImage source={Image} />;
-  }, [Image]);
-
-  const Render_All = ({ tmp }) => {
-    return (
-      <LikeView>
-        {Render_Img()}
-        <ServerText>종류: {Dtype}</ServerText>
-        <ServerText>
-          상품명:{'\n'}
-          {Pname}
-        </ServerText>
-        <ServerText>가격: {new String(Pprice).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</ServerText>
-        <ServerText>편의점: {Vender}</ServerText>
-      </LikeView>
-    );
-  };
-
-  const List = [Dtype, Pname, Pprice, Vender];
-
+  const Navigation = useNavigation();
   const likeProducts = useSelector((state) => state.users.likeProducts);
 
   return (
@@ -225,7 +175,11 @@ const Home = (focus) => {
                 <SearchIcon source={require('../../assets/search.png')} />
               </BBBB>
               <BtnView>
-                <AroundBtn>
+                <AroundBtn
+                  onPress={() => {
+                    Navigation.navigate('Map');
+                  }}
+                >
                   <AroundText>찾아보기</AroundText>
                 </AroundBtn>
               </BtnView>

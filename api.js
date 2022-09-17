@@ -1,5 +1,5 @@
 import axios from 'axios';
-import getEnvVars from './environment';
+import Constants from 'expo-constants';
 /**
  *
  * @param {string} method 'get' | 'post' | 'put' | 'delete'
@@ -14,7 +14,7 @@ const callApi = async (method, path, data, jwt, params = {}) => {
     Authorization: `Bearer ${jwt}`,
     'Content-Type': 'application/json',
   };
-  const { baseUrl } = getEnvVars();
+  const { baseUrl } = Constants.manifest.extra;
   const fullUrl = `${baseUrl}${path}`;
 
   if (method === 'get') {

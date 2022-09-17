@@ -5,16 +5,18 @@ import styled from 'styled-components';
 import { WebView } from 'react-native-webview';
 import { useDispatch } from 'react-redux';
 import api from '../../api';
-import getEnvVars from '../../environment';
 import { setIsLogined, setToken } from '../../redux/userSlice';
 import Loading from '../Loading';
-
-const { kakaoRestApiKey, kakaoRedirectUri } = getEnvVars();
+import Constants from 'expo-constants';
 
 const Container = styled.View`
   width: 100%
   height: 100%
 `;
+
+console.log(1, Constants.manifest.extra);
+
+const { kakaoRestApiKey, kakaoRedirectUri } = Constants.manifest.extra;
 
 export default KakaoLogin = () => {
   const dispatch = useDispatch();
