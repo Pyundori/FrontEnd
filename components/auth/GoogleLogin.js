@@ -5,8 +5,7 @@ import { setIsLogined, setToken } from '../../redux/userSlice';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useEffect } from 'react';
-import Loading from '../Loading';
-import getEnvVars from '../../environment';
+import Constants from 'expo-constants';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -16,9 +15,10 @@ const GoogleBtn = styled.Pressable`
 
 const GoogleImg = styled.Image``;
 
+const { expoClientId, iosClientId, androidClientId, webClientId } = Constants.manifest.extra;
+
 const GoogleLogin = ({ setIsLoading }) => {
   const dispatch = useDispatch();
-  const { expoClientId, iosClientId, androidClientId, webClientId } = getEnvVars();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId,
