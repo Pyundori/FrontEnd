@@ -141,7 +141,7 @@ const ServerImage = styled.Image`
 `;
 
 const LikeList = styled.FlatList`
-  width: 100%
+  width: 100%;
   border-radius: 8px;
 `;
 
