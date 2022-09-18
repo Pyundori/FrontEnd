@@ -16,13 +16,16 @@ const GoogleBtn = styled.Pressable`
 
 const GoogleImg = styled.Image``;
 
+const isExpo = Constants.appOwnership === 'expo';
+
 const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@pyundori/pyundori' };
 const NATIVE_REDIRECT_PARAMS = { native: 'com.dltjrrbs2020.pyundori://' };
-const REDIRECT_PARAMS =
-  Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
+const REDIRECT_PARAMS = isExpo ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
 const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
 
-const { expoClientId, iosClientId, androidClientId, webClientId } = Constants.expoConfig.extra;
+const { expoClientId, iosClientId, androidClientId, webClientId } = isExpo
+  ? Constants.expoConfig.extra
+  : Constants.manifest.extra;
 
 const GoogleLogin = ({ setIsLoading }) => {
   const dispatch = useDispatch();

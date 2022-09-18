@@ -14,7 +14,11 @@ const Container = styled.View`
   height: 100%
 `;
 
-const { kakaoRestApiKey, kakaoRedirectUri } = Constants.expoConfig.extra;
+const isExpo = Constants.appOwnership === 'expo';
+
+const { kakaoRestApiKey, kakaoRedirectUri } = isExpo
+  ? Constants.expoConfig.extra
+  : Constants.manifest.extra;
 
 export default KakaoLogin = () => {
   const dispatch = useDispatch();
