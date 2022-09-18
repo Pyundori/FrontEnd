@@ -25,6 +25,7 @@
     "expo-application": "^4.2.2",
     "expo-asset": "^8.6.1",
     "expo-auth-session": "^3.7.1",
+    "expo-constants": "~13.2.4",
     "expo-dev-client": "^1.2.1",
     "expo-font": "^10.2.0",
     "expo-random": "^12.3.0",
