@@ -25,7 +25,7 @@ const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
 
 const { expoClientId, iosClientId, androidClientId, webClientId } = isExpo
   ? Constants.expoConfig.extra
-  : Constants.manifest.extra;
+  : Constants.manifest2.extra;
 
 const GoogleLogin = ({ setIsLoading }) => {
   const dispatch = useDispatch();

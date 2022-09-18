@@ -18,7 +18,7 @@ const isExpo = Constants.appOwnership === 'expo';
 
 const { kakaoRestApiKey, kakaoRedirectUri } = isExpo
   ? Constants.expoConfig.extra
-  : Constants.manifest.extra;
+  : Constants.manifest2.extra;
 
 export default KakaoLogin = () => {
   const dispatch = useDispatch();
