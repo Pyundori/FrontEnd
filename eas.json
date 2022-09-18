@@ -1,6 +1,6 @@
 {
   "build": {
-    "dev": {
+    "expoDev": {
       "extends": "production",
       "developmentClient": true,
       "distribution": "internal",
