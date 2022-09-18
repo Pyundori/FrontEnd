@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setIsLogined, setToken } from '../../redux/userSlice';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import * as AuthSession from 'expo-auth-session';
 import { useEffect } from 'react';
 import Constants from 'expo-constants';
 
@@ -15,7 +16,13 @@ const GoogleBtn = styled.Pressable`
 
 const GoogleImg = styled.Image``;
 
-const { expoClientId, iosClientId, androidClientId, webClientId } = Constants.manifest.extra;
+const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@pyundori/pyundori' };
+const NATIVE_REDIRECT_PARAMS = { native: 'com.dltjrrbs2020.pyundori://' };
+const REDIRECT_PARAMS =
+  Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
+const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
+
+const { expoClientId, iosClientId, androidClientId, webClientId } = Constants.expoConfig.extra;
 
 const GoogleLogin = ({ setIsLoading }) => {
   const dispatch = useDispatch();
@@ -25,6 +32,7 @@ const GoogleLogin = ({ setIsLoading }) => {
     iosClientId,
     androidClientId,
     webClientId,
+    redirectUri,
   });
 
   const googleMainLogin = async (accessToken) => {
@@ -51,7 +59,7 @@ const GoogleLogin = ({ setIsLoading }) => {
   }, [response]);
 
   return (
-    <GoogleBtn disabled={!request} onPress={() => promptAsync()}>
+    <GoogleBtn disabled={!request} onPress={() => promptAsync(REDIRECT_PARAMS)}>
       <GoogleImg source={require('../../assets/google_login.png')} />
     </GoogleBtn>
   );
