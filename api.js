@@ -14,7 +14,7 @@ const callApi = async (method, path, data, jwt, params = {}) => {
     Authorization: `Bearer ${jwt}`,
     'Content-Type': 'application/json',
   };
-  const { baseUrl } = Constants.manifest.extra;
+  const { baseUrl } = Constants.expoConfig.extra;
   const fullUrl = `${baseUrl}${path}`;
 
   if (method === 'get') {

@@ -9,7 +9,7 @@ import utils from '../utils';
 
 const CardContainer = styled.SafeAreaView`
   width: 100%;
-  height: 128px
+  height: 128px;
   border-radius: 10px;
   padding: 0px 5px 5px 5px;
   border: 1.5px solid ${(props) => props.borderColor};
@@ -27,7 +27,7 @@ const ImageContainer = styled.View`
 `;
 
 const SaleTypeContainer = styled.View`
-  width: 90%
+  width: 90%;
   align-items: center;
   justify-content: center;
   background-color: ${(props) => props.bgColor};
@@ -37,13 +37,13 @@ const SaleTypeContainer = styled.View`
 
 const SaleTypeText = styled.Text`
   font-size: 17px;
-  color: #fff
+  color: #fff;
   font-family: sansBold;
 `;
 
 const ImageView = styled.View`
-  width: 100px
-  height: 100px
+  width: 100px;
+  height: 100px;
   border-radius: 10px;
   border: 1px solid ${(props) => props.borderColor};
   margin: auto;
@@ -62,11 +62,11 @@ const ProductContainer = styled.View`
 `;
 const ProductNameView = styled.View`
   width: 100%;
-  height: 40%
+  height: 40%;
   align-items: flex-start;
   justify-content: center;
   margin-top: 10px;
-  margin-bottom: 10px
+  margin-bottom: 10px;
 `;
 const ProductPriceView = styled.View`
   width: 100%;
@@ -96,7 +96,7 @@ const TitleView = styled.View`
   margin: auto;
 `;
 const Title = styled.Text`
-  font-size: 15px;
+  font-size: 14.5px;
   font-family: sansBold;
   margin-left: 5%;
   letter-spacing: 0.5px;
@@ -114,10 +114,10 @@ const Price = styled.Text`
 const Conv = styled.Text`
   font-size: 14px;
   font-family: sansBold;
-  color: ${(props) => props.color}
+  color: ${(props) => props.color};
   margin-left: 3%;
-  padding: 2% 4%
-  border-radius: 10px
+  padding: 2% 4%;
+  border-radius: 10px;
   background-color: ${(props) => props.bgColor};
 `;
 
@@ -240,7 +240,7 @@ const ProductsCard = ({ item, likeProducts }) => {
                 .replace(/[a-zA-Z가-힣]+([(]*[\w\W][)]|\))/, '')
                 .replace('/', '')
                 .replace(/\($/, '')
-                .replace(/[0-9]+[a-zA-Z]*[()]*$/, '\n$&')}
+                .replace(/[0-9]+[a-zA-Z]*[.*]*[0-9a-zA-Z가-힣]*[()]*$/, '\n$&')}
             </Title>
           </TitleView>
         </ProductNameView>

@@ -13,7 +13,7 @@ module.exports = {
   name: 'Pyundori',
   slug: 'pyundori',
   owner: 'pyundori',
-  scheme: 'pyundori',
+  scheme: 'com.dltjrrbs2020.pyundori',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',

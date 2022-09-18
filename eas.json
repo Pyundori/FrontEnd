@@ -8,6 +8,14 @@
         "buildType": "apk"
       }
     },
+    "develop": {
+      "channel": "develop",
+      "extends": "production",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "preview": {
       "channel": "staging",
       "extends": "production",
