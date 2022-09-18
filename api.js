@@ -1,5 +1,8 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
+
+const isExpo = Constants.appOwnership === 'expo';
+
 /**
  *
  * @param {string} method 'get' | 'post' | 'put' | 'delete'
@@ -14,7 +17,7 @@ const callApi = async (method, path, data, jwt, params = {}) => {
     Authorization: `Bearer ${jwt}`,
     'Content-Type': 'application/json',
   };
-  const { baseUrl } = Constants.expoConfig.extra;
+  const { baseUrl } = isExpo ? Constants.expoConfig.extra : Constants.manifest.extra;
   const fullUrl = `${baseUrl}${path}`;
 
   if (method === 'get') {
