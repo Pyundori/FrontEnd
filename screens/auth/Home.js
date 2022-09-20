@@ -63,7 +63,7 @@ const LoginBtn = styled.Pressable`
   opacity: ${(props) => (props.disabled ? 0.6 : 1)};
 `;
 
-const SignUp = styled.Text`
+const SignUpBtnText = styled.Text`
   font-size: 18px;
   color: #fff;
 `;
@@ -104,9 +104,6 @@ const KakaoBtn = styled.Pressable`
 `;
 const KakaoImg = styled.Image``;
 
-const GoogleBtn = styled.Pressable``;
-const GoogleImg = styled.Image``;
-
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const [id, setId] = useState('');
@@ -129,7 +126,6 @@ const Home = ({ navigation }) => {
       const {
         data: { res_code, token },
       } = await api.login(id, pw);
-      console.log(res_code);
       if (res_code === 201) {
         setIsLoading(false);
         dispatch(setToken(token));
@@ -139,7 +135,7 @@ const Home = ({ navigation }) => {
         setModalVisible(true);
       }
     } catch (e) {
-      console.log(e);
+      console.warn(e);
     }
   };
 
@@ -165,7 +161,7 @@ const Home = ({ navigation }) => {
           />
           <LoginBtnContainer>
             <SignUpBtn onPress={() => navigation.navigate('SignUp')}>
-              <SignUp>회원가입</SignUp>
+              <SignUpBtnText>회원가입</SignUpBtnText>
             </SignUpBtn>
             <LoginBtn disabled={!isValid} onPress={login}>
               <Login>로그인</Login>
@@ -184,7 +180,6 @@ const Home = ({ navigation }) => {
           <GoogleLogin setIsLoading={setIsLoading} />
         </ExBtnContainer>
         <MainModal
-          navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           title="로그인 실패"

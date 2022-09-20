@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { Modal } from 'react-native';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -52,8 +53,9 @@ const ModalBtnText = styled.Text`
     font-size: 18px
 `;
 
-const MainModal = ({ navigation, modalVisible, setModalVisible, title, btnText }) => {
+const MainModal = ({ navRouteName, modalVisible, setModalVisible, title, btnText }) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   return (
     <ModalContainer>
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
@@ -64,7 +66,7 @@ const MainModal = ({ navigation, modalVisible, setModalVisible, title, btnText }
               <ModalBtn
                 onPress={() => {
                   setModalVisible(false);
-                  navigation ? navigation.navigate('Home') : dispatch(setIsLogined());
+                  navigation ?? navigation.navigate(navRouteName);
                 }}
               >
                 <ModalBtnText>{btnText}</ModalBtnText>
