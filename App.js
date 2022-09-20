@@ -1,4 +1,3 @@
-import 'expo-dev-client';
 import { StatusBar } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Asset } from 'expo-asset';
@@ -37,6 +36,8 @@ export default function App() {
           netmarbleM: require('./assets/fonts/netmarbleM.ttf'),
         };
         const images = [
+          require('./assets/search.png'),
+          require('./assets/AroundVender.png'),
           require('./assets/google_login.png'),
           require('./assets/google_login_pressed.png'),
           require('./assets/kakao_login.png'),
