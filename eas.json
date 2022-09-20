@@ -1,31 +1,23 @@
 {
   "build": {
-    "expoDev": {
-      "extends": "production",
-      "developmentClient": true,
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
-    },
     "develop": {
       "channel": "develop",
-      "extends": "production",
+      "node": "16.17.0",
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       }
     },
     "preview": {
-      "channel": "staging",
-      "extends": "production",
+      "channel": "preview",
+      "node": "16.17.0",
       "distribution": "internal",
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
-      "channel": "production",
+      "channel": "main",
       "node": "16.17.0"
     }
   }

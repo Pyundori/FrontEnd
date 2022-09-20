@@ -14,4 +14,7 @@ environment.js
 
 # macOS
 .DS_Store
+
+# platform
 android/
+ios/

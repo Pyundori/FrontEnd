@@ -7,27 +7,23 @@ const androidClientId = process.env.androidClientId;
 const webClientId = process.env.webClientId;
 const kakaoRestApiKey = process.env.kakaoRestApiKey;
 const kakaoRedirectUri = process.env.kakaoRedirectUri;
-const UPDATE_URL = 'https://u.expo.dev/8e0f4397-e22a-43bb-8f3a-5ecee3bd4f65';
 
 module.exports = {
-  name: 'Pyundori',
+  name: '편도리',
   slug: 'pyundori',
   owner: 'pyundori',
-  scheme: 'com.dltjrrbs2020.pyundori',
+  scheme: 'pyundori',
   version: '1.0.0',
+  privacy: 'public',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
-    image: './assets/logo.png',
+    image: './assets/splash.png',
     resizeMode: 'contain',
-    backgroundColor: '#68c2ff',
+    backgroundColor: '#ffffff',
   },
   userInterfaceStyle: 'automatic',
-  runtimeVersion: {
-    policy: 'sdkVersion',
-  },
   updates: {
-    url: UPDATE_URL,
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
@@ -38,7 +34,7 @@ module.exports = {
   android: {
     softwareKeyboardLayoutMode: 'pan',
     adaptiveIcon: {
-      foregroundImage: './assets/adaptive-icon.png',
+      foregroundImage: './assets/icon.png',
       backgroundColor: '#FFFFFF',
     },
     package: 'com.dltjrrbs2020.pyundori',
