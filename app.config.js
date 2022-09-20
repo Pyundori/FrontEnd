@@ -14,6 +14,9 @@ module.exports = {
   owner: 'pyundori',
   scheme: 'pyundori',
   version: '1.0.0',
+  runtimeVersion: {
+    policy: 'appVersion',
+  },
   privacy: 'public',
   orientation: 'portrait',
   icon: './assets/icon.png',
