@@ -27,6 +27,7 @@ module.exports = {
   },
   userInterfaceStyle: 'automatic',
   updates: {
+    url: 'https://u.expo.dev/8e0f4397-e22a-43bb-8f3a-5ecee3bd4f65',
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ['**/*'],
