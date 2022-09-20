@@ -23,9 +23,11 @@ const NATIVE_REDIRECT_PARAMS = { native: 'com.dltjrrbs2020.pyundori://' };
 const REDIRECT_PARAMS = isExpo ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
 const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
 
-const { expoClientId, iosClientId, androidClientId, webClientId } = isExpo
-  ? Constants.expoConfig.extra
-  : Constants.manifest2.extra;
+const ENV = Constants.expoConfig.extra;
+const expoClientId = ENV.expoClientId;
+const iosClientId = ENV.iosClientId;
+const androidClientId = ENV.androidClientId;
+const webClientId = ENV.webClientId;
 
 const GoogleLogin = ({ setIsLoading }) => {
   const dispatch = useDispatch();

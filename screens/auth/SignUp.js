@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import api from '../../api';
 import MainModal from '../../components/MainModal';
 import utils from '../../utils';
@@ -31,7 +30,7 @@ const TitleContainer = styled.View`
   border-bottom-width: 2px
   border-bottom-color: #cde6f7
 `;
-const Title = styled.Text`
+const TitleText = styled.Text`
   font-size: 35px;
   color: #68c2ff;
 `;
@@ -49,7 +48,7 @@ const NicknameContainer = styled.View`
   margin-top: 5%;
 `;
 
-const Nickname = styled.Text`
+const NicknameText = styled.Text`
   font-size: 16px;
   color: #333333;
 `;
@@ -74,7 +73,7 @@ const IdContainer = styled.View`
   margin-top: 5%;
 `;
 
-const Id = styled.Text`
+const IdText = styled.Text`
   font-size: 16px;
   color: #333333;
 `;
@@ -99,7 +98,7 @@ const PwContainer = styled.View`
   margin-top: 5%;
 `;
 
-const Pw = styled.Text`
+const PwText = styled.Text`
   font-size: 16px;
   color: #333333;
 `;
@@ -124,7 +123,7 @@ const PwCheckContainer = styled.View`
   margin-top: 5%;
 `;
 
-const PwCheck = styled.Text`
+const PwCheckText = styled.Text`
   font-size: 16px;
   color: #333333;
 `;
@@ -144,29 +143,28 @@ const PwCheckInvalidText = styled.Text`
 `;
 
 const SignUpContainer = styled.View`
-  width: 100%
-  height: 25%
-  align-items: center
-  justify-content: center
-  padding-bottom: 15%
+  width: 100%;
+  height: 25%;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 15%;
 `;
 
-const SignUpBtn = styled.TouchableOpacity`
-  width: 60%
+const SignUpBtn = styled.Pressable`
+  width: 60%;
   background-color: #5ebeff;
   padding: 3%;
   border-radius: 15px;
-  opacity: ${(props) => (props.disabled ? 0.6 : 1)}
+  opacity: ${(props) => (props.disabled ? 0.6 : 1)};
 `;
 
-const SignUpText = styled.Text`
+const SignUpBtnText = styled.Text`
   font-size: 20px;
-  color: white;
+  color: #ffffff;
   text-align: center;
 `;
 
-const SignUp = ({ navigation }) => {
-  const dispatch = useDispatch();
+const SignUp = () => {
   const [nickname, setNickname] = useState('');
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
@@ -181,10 +179,17 @@ const SignUp = ({ navigation }) => {
   const [pwErrorMsg, setPwErrorMsg] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
-  const signUp = async () => {
+  useEffect(() => {
+    if (nickname && id && pw && pwCheck && isValidId && isValidPw && isValidPwCheck) {
+      setIsFilled(true);
+    } else if (isFilled === true) {
+      setIsFilled(false);
+    }
+  }, [isValidId, isValidPw, isValidPwCheck]);
+
+  const handleSignUp = async () => {
     const isDuplicatedId = await api.isDuplicated('id', id);
     const isDuplicatedNickname = await api.isDuplicated('name', nickname);
-    console.log(isDuplicatedId, isDuplicatedNickname);
     if (isDuplicatedId || isDuplicatedNickname) {
       isDuplicatedId && (setIsValidId(false), setIdErrorMsg('중복된 아이디입니다'));
       isDuplicatedNickname &&
@@ -205,23 +210,15 @@ const SignUp = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    if (nickname && id && pw && pwCheck && isValidId && isValidPw && isValidPwCheck) {
-      setIsFilled(true);
-    } else if (isFilled === true) {
-      setIsFilled(false);
-    }
-  }, [isValidId, isValidPw, isValidPwCheck]);
-
   return (
     <Container>
       <BodyContainer>
         <TitleContainer>
-          <Title>회원가입</Title>
+          <TitleText>회원가입</TitleText>
         </TitleContainer>
         <ParamsContainer>
           <NicknameContainer>
-            <Nickname>닉네임</Nickname>
+            <NicknameText>닉네임</NicknameText>
             <NicknameInput
               placeholder={'닉네임을 입력해주세요'}
               value={nickname}
@@ -236,7 +233,7 @@ const SignUp = ({ navigation }) => {
             <NicknameInvalidText>{!isValidNickname && nicknameErrorMsg}</NicknameInvalidText>
           </NicknameContainer>
           <IdContainer>
-            <Id>아이디</Id>
+            <IdText>아이디</IdText>
             <IdInput
               placeholder={'아이디를 입력해주세요'}
               value={id}
@@ -251,7 +248,7 @@ const SignUp = ({ navigation }) => {
             <IdInvalidText>{!isValidId && idErrorMsg}</IdInvalidText>
           </IdContainer>
           <PwContainer>
-            <Pw>비밀번호</Pw>
+            <PwText>비밀번호</PwText>
             <PwInput
               placeholder={'비밀번호를 입력해주세요'}
               value={pw}
@@ -268,7 +265,7 @@ const SignUp = ({ navigation }) => {
             <PwInvalidText>{!isValidPw && pwErrorMsg}</PwInvalidText>
           </PwContainer>
           <PwCheckContainer>
-            <PwCheck>비밀번호 재확인</PwCheck>
+            <PwCheckText>비밀번호 재확인</PwCheckText>
             <PwCheckInput
               placeholder={'비밀번호를 다시 입력해주세요'}
               value={pwCheck}
@@ -286,12 +283,12 @@ const SignUp = ({ navigation }) => {
           </PwCheckContainer>
         </ParamsContainer>
         <SignUpContainer>
-          <SignUpBtn disabled={!isFilled} onPress={() => signUp()}>
-            <SignUpText>회원가입</SignUpText>
+          <SignUpBtn disabled={!isFilled} onPress={() => handleSignUp()}>
+            <SignUpBtnText>회원가입</SignUpBtnText>
           </SignUpBtn>
         </SignUpContainer>
         <MainModal
-          navigation={navigation}
+          navRouteName="Home"
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           title="회원가입이 완료되었습니다"
