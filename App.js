@@ -1,3 +1,4 @@
+import 'expo-dev-client';
 import { StatusBar } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Asset } from 'expo-asset';
@@ -9,6 +10,36 @@ import { PersistGate } from 'redux-persist/integration/react';
 import store, { persistor } from './redux/store';
 import Gate from './navigator/Gate';
 import Loading from './components/Loading';
+import * as Updates from 'expo-updates';
+import { Alert } from 'react-native';
+
+const checkForUpdates = async () => {
+  try {
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      Alert.alert(
+        '알림!',
+        '새로운 버전이 있습니다. 업데이트 하시겠습니까?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          { text: 'OK', onPress: () => runUpdate() },
+        ],
+        { cancelable: false },
+      );
+    }
+  } catch (e) {
+    alert(e);
+  }
+};
+
+const runUpdate = async () => {
+  await Updates.fetchUpdateAsync(); //최신업데이트 동기화
+  await Updates.reloadAsync();
+};
 
 const cacheImages = (images) =>
   images.map((image) => {
@@ -25,7 +56,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const handleFinish = () => setIsLoading(true);
   useEffect(() => {
-    async function loadAssets() {
+    const loadAssets = async () => {
       try {
         const customFonts = {
           sansBold: require('./assets/fonts/GmarketSansBold.otf'),
@@ -57,7 +88,8 @@ export default function App() {
       } finally {
         handleFinish();
       }
-    }
+    };
+    checkForUpdates();
     loadAssets();
   }, []);
 

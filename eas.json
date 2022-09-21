@@ -4,9 +4,7 @@
       "channel": "develop",
       "node": "16.17.0",
       "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
+      "developmentClient": true
     },
     "preview": {
       "channel": "preview",

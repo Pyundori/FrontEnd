@@ -7,15 +7,18 @@ const androidClientId = process.env.androidClientId;
 const webClientId = process.env.webClientId;
 const kakaoRestApiKey = process.env.kakaoRestApiKey;
 const kakaoRedirectUri = process.env.kakaoRedirectUri;
+// 빌드 중에만 로드되는 EAS 내장환경변수
+const easBuildProfile = process.env.EAS_BUILD_PROFILE;
+const isEasProd = easBuildProfile && easBuildProfile === 'production';
 
 module.exports = {
-  name: '편도리',
+  name: `편도리\n${!isEasProd && easBuildProfile}`,
   slug: 'pyundori',
   owner: 'pyundori',
   scheme: 'pyundori',
   version: '1.0.0',
   runtimeVersion: {
-    policy: 'appVersion',
+    policy: 'sdkVersion',
   },
   privacy: 'public',
   orientation: 'portrait',
@@ -33,12 +36,18 @@ module.exports = {
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
+    runtimeVersion: {
+      policy: 'appVersion',
+    },
     bundleIdentifier: 'com.dltjrrbs2020.pyundori',
   },
   android: {
     softwareKeyboardLayoutMode: 'pan',
+    runtimeVersion: {
+      policy: 'appVersion',
+    },
     adaptiveIcon: {
-      foregroundImage: './assets/icon.png',
+      foregroundImage: './assets/icon_2.png',
       backgroundColor: '#FFFFFF',
     },
     package: 'com.dltjrrbs2020.pyundori',
