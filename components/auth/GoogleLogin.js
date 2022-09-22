@@ -23,48 +23,45 @@ const NATIVE_REDIRECT_PARAMS = { native: 'com.dltjrrbs2020.pyundori://' };
 const REDIRECT_PARAMS = isExpo ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
 const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
 
-const ENV = Constants.expoConfig.extra;
-const expoClientId = ENV.expoClientId;
-const iosClientId = ENV.iosClientId;
-const androidClientId = ENV.androidClientId;
-const webClientId = ENV.webClientId;
+const { expoClientId, iosClientId, androidClientId, webClientId } = Constants.expoConfig.extra;
 
-const GoogleLogin = ({ setIsLoading }) => {
-  const dispatch = useDispatch();
+const GoogleLogin = ({ disabled, setIsLoading }) => {
+  if (!disabled) {
+    const dispatch = useDispatch();
+    const [request, response, promptAsync] = Google.useAuthRequest({
+      expoClientId,
+      iosClientId,
+      androidClientId,
+      webClientId,
+      redirectUri,
+    });
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId,
-    iosClientId,
-    androidClientId,
-    webClientId,
-    redirectUri,
-  });
+    const googleMainLogin = async (accessToken) => {
+      try {
+        const {
+          data: { token },
+        } = await api.googleLogin(accessToken);
+        dispatch(setToken(token));
+        dispatch(setIsLogined());
+        setIsLoading(false);
+      } catch (e) {
+        console.log('Local Token Request Error', e);
+      }
+    };
 
-  const googleMainLogin = async (accessToken) => {
-    try {
-      const {
-        data: { token },
-      } = await api.googleLogin(accessToken);
-      dispatch(setToken(token));
-      dispatch(setIsLogined());
-      setIsLoading(false);
-    } catch (e) {
-      console.log('Local Token Request Error', e);
-    }
-  };
-
-  useEffect(() => {
-    if (response?.type === 'success') {
-      setIsLoading(true);
-      const { authentication } = response;
-      const { accessToken } = authentication;
-      console.log(authentication);
-      googleMainLogin(accessToken);
-    }
-  }, [response]);
+    useEffect(() => {
+      if (response?.type === 'success') {
+        setIsLoading(true);
+        const { authentication } = response;
+        const { accessToken } = authentication;
+        console.log(authentication);
+        googleMainLogin(accessToken);
+      }
+    }, [response]);
+  }
 
   return (
-    <GoogleBtn disabled={!request} onPress={() => promptAsync(REDIRECT_PARAMS)}>
+    <GoogleBtn disabled={disabled} onPress={() => promptAsync(REDIRECT_PARAMS)}>
       <GoogleImg source={require('../../assets/google_login.png')} />
     </GoogleBtn>
   );
