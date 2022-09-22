@@ -7,6 +7,7 @@ import api from '../../api';
 import { useEffect, useState } from 'react';
 import MainModal from '../../components/MainModal';
 import Loading from '../../components/Loading';
+import Constants from 'expo-constants';
 
 const Container = styled.View`
   height: 100%;
@@ -101,7 +102,9 @@ const ExBtnContainer = styled.View`
 
 const KakaoBtn = styled.Pressable`
   margin-bottom: 5%;
+  opacity: ${(props) => (props.disabled ? 0.6 : 1)};
 `;
+
 const KakaoImg = styled.Image``;
 
 const Home = ({ navigation }) => {
@@ -111,6 +114,9 @@ const Home = ({ navigation }) => {
   const [isValid, setIsValid] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  // Develop, EAS Updates 환경에서는 secret이 작동하지 않음
+  // isKakaoSecretExist, isGoogleSecretExist 변수로 secret이 모두 있는 지 체크
+  const { isKakaoSecretExist, isGoogleSecretExist } = Constants.expoConfig.extra;
 
   useEffect(() => {
     if (id && pw) {
@@ -174,10 +180,13 @@ const Home = ({ navigation }) => {
           <BoundaryMargin />
         </BoundaryContainer>
         <ExBtnContainer>
-          <KakaoBtn onPress={() => navigation.navigate('KakaoLogin')}>
+          <KakaoBtn
+            disabled={isKakaoSecretExist ? false : true}
+            onPress={() => navigation.navigate('KakaoLogin')}
+          >
             <KakaoImg source={require('../../assets/kakao_login.png')} />
           </KakaoBtn>
-          <GoogleLogin setIsLoading={setIsLoading} />
+          <GoogleLogin disabled={isGoogleSecretExist ? false : true} setIsLoading={setIsLoading} />
         </ExBtnContainer>
         <MainModal
           modalVisible={modalVisible}

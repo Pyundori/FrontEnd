@@ -1,18 +1,24 @@
 import 'dotenv/config';
 
-const baseUrl = process.env.baseUrl;
+// API Server Address
+const baseUrl = 'http://py.pyundori.kro.kr:5000/';
+// Google Secrets
 const expoClientId = process.env.expoClientId;
 const iosClientId = process.env.iosClientId;
 const androidClientId = process.env.androidClientId;
 const webClientId = process.env.webClientId;
+// Kakao Secrets
 const kakaoRestApiKey = process.env.kakaoRestApiKey;
 const kakaoRedirectUri = process.env.kakaoRedirectUri;
+// Check All of Platform Secrets exist
+const isGoogleSecretExist = expoClientId && iosClientId && androidClientId && webClientId;
+const isKakaoSecretExist = kakaoRestApiKey && kakaoRedirectUri;
 // 빌드 중에만 로드되는 EAS 내장환경변수
 const easBuildProfile = process.env.EAS_BUILD_PROFILE;
 const isEasProd = easBuildProfile && easBuildProfile === 'production';
 
 module.exports = {
-  name: `편도리\n${!isEasProd && easBuildProfile}`,
+  name: `편도리${!isEasProd ? '\n' + easBuildProfile : ''}`,
   slug: 'pyundori',
   owner: 'pyundori',
   scheme: 'pyundori',
@@ -63,5 +69,7 @@ module.exports = {
     webClientId,
     kakaoRestApiKey,
     kakaoRedirectUri,
+    isGoogleSecretExist,
+    isKakaoSecretExist,
   },
 };
